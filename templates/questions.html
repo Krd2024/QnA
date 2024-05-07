@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    {% for quest in question %}
+      <div>
+        <div>
+          <a href="/user/info/{{ quest.autor }}">{{ quest.autor }}</a>
+          <a href="https://qna.habr.com/tag/python/questions">{{ quest.teg }}</a>
+          <div>
+            <h3>{{ quest.title }}</h3>
+          </div>
+          <div>{{ quest.text }}</div>
+          <div>Вопрос задан: {{ quest.created_at }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </body>
+</html>

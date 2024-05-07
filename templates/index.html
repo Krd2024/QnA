@@ -1,9 +1,39 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="test" class="lk_html">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
     <title>Document</title>
   </head>
-  <body>hello world</body>
+  <body>
+    <menu>
+      <a href="/lk?x=1" id="lk">ЛК</a>
+      <a href="/reg">Регистрация</a>
+      <a href="/login">Логин</a>
+      <a href="/">Главная</a>
+    </menu>
+    <div>
+      <a href="/add">Регистрация-2</a>
+    </div>
+    <h2>Главная</h2>
+    {% for quest in all_question %}
+      <div>
+        <div class="autor&title">
+          <h4 id="teg">{{ quest.teg }}</h4>
+          <a href="q/{{ quest.id }}"><h3>{{ quest.title }}</h3></a>
+        </div>
+
+        <div id="text">{{ quest.text }}</div>
+        <div class="date">
+          <div>Вопрос задан: {{ quest.created_at }}</div>
+          <div>Изменён: {{ quest.updated_at }}</div>
+        </div>
+        <div id="views">Просмотры: {{ quest.views }}</div>
+      </div>
+    {% endfor %}
+
+    <script></script>
+  </body>
 </html>
