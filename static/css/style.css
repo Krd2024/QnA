@@ -1,9 +1,36 @@
 .lk_html {
-  background-color: rgb(232, 169, 87);
+  background-color: rgb(233, 227, 220);
+}
+
+#teg {
+  color: rgb(87, 81, 21)
 }
 
 .date {
-  color: red;
+  padding: 5px;
+  width: fit-content;
+  border: 1px solid rgb(35, 16, 53);
+  font-size: 15px;
+  color: rgb(84, 47, 47);
+}
+
+#conteiner {
+  border: 1px solid rgba(255, 255, 255);
+  border-radius: 5px;
+  background-color: antiquewhite;
+  width: 80%;
+}
+
+#box {
+  padding: 0 10px 10px 10px;
+}
+
+
+#message {
+  min-width: 70%;
+  max-width: 70%;
+  border: 1px solid grey;
+  border-radius: 5px;
 }
 
 /* ------------------------------------------------------- */

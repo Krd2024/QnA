@@ -19,21 +19,23 @@
     </div>
     <h2>Главная</h2>
     {% for quest in all_question %}
-      <div>
-        <div class="autor&title">
-          <h4 id="teg">{{ quest.teg }}</h4>
-          <a href="q/{{ quest.id }}"><h3>{{ quest.title }}</h3></a>
-        </div>
+      <div id="conteiner">
+        <div id="box">
+          <div class="autor&title">
+            <h4 id="teg">{{ quest.teg }}</h4>
+            <a href="q/{{ quest.id }}"><h3>{{ quest.title }}</h3></a>
+          </div>
 
-        <div id="text">{{ quest.text }}</div>
-        <div class="date">
-          <div>Вопрос задан: {{ quest.created_at }}</div>
-          <div>Изменён: {{ quest.updated_at }}</div>
+          {% comment %} <div id="text">{{ quest.text }}</div> {% endcomment %}
+          <div class="date">
+            <div>Вопрос задан: {{ quest.created_at }}</div>
+            <div>Изменён: {{ quest.updated_at }}</div>
+          </div>
+          <div id="views">Просмотры: {{ quest.views }}</div>
         </div>
-        <div id="views">Просмотры: {{ quest.views }}</div>
       </div>
     {% endfor %}
-
+    {% comment %} <a href="/create">delay</a> {% endcomment %}
     <script></script>
   </body>
 </html>

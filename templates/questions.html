@@ -10,20 +10,27 @@
   </head>
   <body>
     {% for quest in question %}
-      <div>
-        <div>
-          <a href="/user/info/{{ quest.autor }}">{{ quest.autor }}</a>
-          <a href="https://qna.habr.com/tag/python/questions">{{ quest.teg }}</a>
+      <div id="conteiner">
+        <div id="box">
           <div>
-            <h3>{{ quest.title }}</h3>
-          </div>
-          <div>{{ quest.text }}</div>
-          <div class="date">
-            <div>Вопрос задан: {{ quest.created_at }}</div>
-            <div>Изменён: {{ quest.updated_at }}</div>
+            <a href="/user/info/{{ quest.autor }}">{{ quest.autor }}</a>
+            <a href="https://qna.habr.com/tag/python/questions">{{ quest.teg }}</a>
+            <div>
+              <h3>{{ quest.title }}</h3>
+            </div>
+            <div>{{ quest.text }}</div>
+            <div class="date">
+              <div>Вопрос задан: {{ quest.created_at }}</div>
+              <div>Изменён: {{ quest.updated_at }}</div>
+            </div>
           </div>
         </div>
       </div>
     {% endfor %}
+    <form action="/submit" method="post" id="form">
+      <label for="message">Ответить на вопрос:</label><br />
+      <textarea id="message" name="message" rows="8" cols="80"></textarea><br />
+      <input type="submit" value="Отправить" />
+    </form>
   </body>
 </html>

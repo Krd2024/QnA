@@ -55,3 +55,15 @@ class Rection(models.Model):
     )
     value_yes = models.SmallIntegerField()
     value_no = models.SmallIntegerField()
+
+    """
+username: Имя пользователя (username).
+password: Пароль.
+email: Электронная почта.
+first_name: Имя.
+last_name: Фамилия.
+is_active: Флаг, показывающий, активен ли пользователь.
+is_staff: Флаг, указывающий, имеет ли пользователь доступ к административному интерфейсу.
+is_superuser: Флаг, указывающий, является ли пользователь суперпользователем.
+date_joined: Дата и время регистрации пользователя.
+    """

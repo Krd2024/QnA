@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from main.models import Question, Answer, Rection, UserProfile, User
+from main.models import Question, Answer, Rection, User
 
 # from django.contrib.auth.models import User
 
@@ -36,15 +36,20 @@ def info(request, username):
 
 
 def gg(request):
-    user = User.objects.get(username="Sem")
-    lst_q = [
-        "Какие основные методы для работы со строками существуют в Python?",
-        "Что такое исключения (exceptions) в Python, и как их обрабатывать?",
-        "Как создать функцию (def) в Python, и как передать ей аргументы?",
-        "Чем отличаются методы `append()` и `extend()` для списка в Python?",
-        "Каким образом можно выполнить чтение и запись данных в файле в Python?",
-    ]
-    for item in lst_q:
-        zapis = Question.objects.create(autor=user, title="Python", text=item)
-        zapis.save()
+    print("yes")
+    # user = User.objects.get(username="Sem")
+    # lst_q = [
+    #     "Какие основные методы для работы со строками существуют в Python?",
+    #     "Что такое исключения (exceptions) в Python, и как их обрабатывать?",
+    #     "Как создать функцию (def) в Python, и как передать ей аргументы?",
+    #     "Чем отличаются методы `append()` и `extend()` для списка в Python?",
+    #     "Каким образом можно выполнить чтение и запись данных в файле в Python?",
+    # ]
+    # for item in lst_q:
+    #     zapis = Question.objects.create(autor=user, title="Python", text=item)
+    #     zapis.save()
+    # ==============================================
+    # x = User.objects.create(username="new_user", password="12345")
+    # x.save()
+    # print(x)
     return render(request, "index.html")
