@@ -2,6 +2,10 @@
   background-color: rgb(232, 169, 87);
 }
 
+.date {
+  color: red;
+}
+
 /* ------------------------------------------------------- */
 .conteiner_message {
   margin: auto;
