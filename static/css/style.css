@@ -27,8 +27,8 @@
 
 
 #message {
-  min-width: 70%;
-  max-width: 70%;
+
+  width: 70%;
   border: 1px solid grey;
   border-radius: 5px;
 }

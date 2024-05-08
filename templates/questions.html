@@ -27,10 +27,11 @@
         </div>
       </div>
     {% endfor %}
-    <form action="/submit" method="post" id="form">
+    <form action="/answer/1" method="post" id="form">
+      {% csrf_token %}
       <label for="message">Ответить на вопрос:</label><br />
       <textarea id="message" name="message" rows="8" cols="80"></textarea><br />
-      <input type="submit" value="Отправить" />
+      <button type="submit">Отправить</button>
     </form>
   </body>
 </html>

@@ -8,26 +8,7 @@
     <title>Document</title>
   </head>
   <body>
-    <form action="/login/" method="post">
-      {% csrf_token %}
-      <label for="username">Логин:</label><br />
-      <input type="text" id="username" name="username" /><br />
-      <label for="password">Пароль:</label><br />
-      <input type="password" id="password" name="password" /><br /><br />
-      <input type="submit" value="Войти" />
-    </form>
-
-    <menu>
-      <a href="/lk?x=1" id="lk">ЛК</a>
-      <a href="/reg">Регистрация</a>
-      <a href="/login">Логин</a>
-      <a href="/">Главная</a>
-      <div>
-        <a href="/add">Регистрация-2</a>
-      </div>
-    </menu>
-    <h2>Главная</h2>
-    {% for quest in all_question %}
+    {% for quest in user_question %}
       <div id="conteiner">
         <div id="box">
           <div class="autor&title">
@@ -39,8 +20,6 @@
             <div>Изменён: {{ quest.updated_at }}</div>
           </div>
           <div id="views">Просмотры: {{ quest.views }}</div>
-
-          <div id="answer">Ответы: {{ quest.answer|default:'0' }}</div>
         </div>
       </div>
     {% endfor %}

@@ -21,6 +21,13 @@ class Question(models.Model):
     created_at = models.DateField(auto_now_add=True, blank=False)
     updated_at = models.DateField(auto_now=True, blank=False)
     views = models.SmallIntegerField(default=0)
+    answer = models.ForeignKey(
+        "Answer",
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name="answer_in_question",
+    )
 
 
 class Answer(models.Model):
