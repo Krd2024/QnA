@@ -1,9 +1,10 @@
 {% extends 'main.html' %}
 {% block content %}
   {% for quest in all_question %}
+    {% comment %} {{ quest.id }} {% endcomment %}
     <div id="conteiner">
-        <a href="{% url "question_delete" question_id = {{quest.id}}  %}">удалить</a>
-        <a href="{% url "question_" question_id = {{quest.id}}  %}">ред</a>
+      <a href="{% url 'question_delete' question_id=quest.id %}">Удалить</a>
+      <a href="{% url 'question_update' question_id=quest.id %}">Редактировать</a>
       <div id="box">
         <div class="autor&title">
           <h4 id="teg">{{ quest.teg }}</h4>

@@ -9,8 +9,9 @@ urlpatterns = [
     #
     #
     path("q/<int:id_question>/", question, name="question"),
-    path("q/<int:id_question>/delete", delete, name="question_delete"),
-    path("q/<int:id_question>/update", update, name="question_update"),
+    # path("q/<int:id_question>/delete", delete, name="question_delete"),
+    path("q/<int:question_id>/delete/", delete, name="question_delete"),
+    path("q/<int:question_id>/update", update, name="question_update"),
     path("q/create/", create, name="question_create"),
     #
     #

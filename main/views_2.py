@@ -24,7 +24,9 @@ def create(request, **kwargs):
     return render(request, "main/create_qust_form.html", context)
 
 
-def update(request, **kwargs): ...
+def update(request, **kwargs):
+    print(kwargs["question_id"])
+    return render(request, "main/create_qust_form.html")
 
 
 def delete(request, **kwargs): ...
