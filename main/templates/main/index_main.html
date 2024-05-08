@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+{% block content %}
+  {% for quest in all_question %}
+    <div id="conteiner">
+        <a href="{% url "question_delete" question_id = {{quest.id}}  %}">удалить</a>
+        <a href="{% url "question_" question_id = {{quest.id}}  %}">ред</a>
+      <div id="box">
+        <div class="autor&title">
+          <h4 id="teg">{{ quest.teg }}</h4>
+          <a href="q/{{ quest.id }}"><h3>{{ quest.title }}</h3></a>
+        </div>
+        <div class="date">
+          <div>Вопрос задан: {{ quest.created_at }}</div>
+          <div>Изменён: {{ quest.updated_at }}</div>
+        </div>
+        <div id="views">Просмотры: {{ quest.views }}</div>
+
+        <div id="answer">Ответы: {{ quest.answer|default:'0' }}</div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

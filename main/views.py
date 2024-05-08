@@ -6,7 +6,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.views import View
 
-from main.models import Question, Answer, Rection, User
+from main.models import Question, Answer, Rection
+from django.contrib.auth.models import User
 
 
 def answer(request, id_question):
@@ -62,12 +63,12 @@ def index(request):
     # print(user)
     count = 0
     all_question = Question.objects.all()
-    for question in all_question:
-        print(question.autor, ": ", count)
-        count += 1
-        context = {"all_question": all_question}
+    # for question in all_question:
+    #     print(question.autor, ": ", count)
+    #     count += 1
+    context = {"all_question": all_question}
 
-    return render(request, "index.html", context)
+    return render(request, "main/index_main.html", context)
 
 
 def q(request, id_question):

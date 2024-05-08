@@ -2,10 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-
 class Question(models.Model):
     autor = models.ForeignKey(
         User,
@@ -21,13 +17,9 @@ class Question(models.Model):
     created_at = models.DateField(auto_now_add=True, blank=False)
     updated_at = models.DateField(auto_now=True, blank=False)
     views = models.SmallIntegerField(default=0)
-    answer = models.ForeignKey(
-        "Answer",
-        null=True,
-        blank=False,
-        on_delete=models.SET_NULL,
-        related_name="answer_in_question",
-    )
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class Answer(models.Model):
@@ -39,7 +31,7 @@ class Answer(models.Model):
         related_name="answer_set",
     )
     question = models.ForeignKey(
-        User,
+        Question,
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
@@ -54,14 +46,16 @@ class Answer(models.Model):
     )
     correct = models.BooleanField(default=False, blank=True)
 
+    def __str__(self) -> str:
+        return self.text
+
 
 class Rection(models.Model):
     user = models.ForeignKey(User, null=True, blank=False, on_delete=models.SET_NULL)
     answer = models.ForeignKey(
         Answer, null=True, blank=False, on_delete=models.SET_NULL
     )
-    value_yes = models.SmallIntegerField()
-    value_no = models.SmallIntegerField()
+    value = models.IntegerField()
 
     """
 username: Имя пользователя (username).
