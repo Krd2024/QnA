@@ -24,12 +24,14 @@
           </div>
         {% endfor %}
       </div>
+
       <div id="conteiner_other">
         {% for other_quest in other_questions %}
+          {{ username.first.autor }}
           <div id="box_other">
             <div class="autor&title">
               <h4 id="teg">{{ other_quest.teg }}</h4>
-              <a href="/q/{{ other_quest.id }}"><h3>{{ other_quest.title }}</h3></a>
+              <a href="/q/{{ other_quest.id }}/{{ username }}/"><h3>{{ other_quest.title }}</h3></a>
             </div>
             <div class="date">
               <div>Вопрос задан: {{ other_quest.created_at }}</div>

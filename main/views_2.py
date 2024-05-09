@@ -33,10 +33,11 @@ def delete(request, **kwargs): ...
 
 
 def question(request, **kwargs):
-    print(kwargs)
+    print(kwargs, "<<<< ---------- kwargs ----------")
     try:
+        objects_user = kwargs.get("username", None)
         question_obj = Question.objects.filter(id=kwargs["id_question"])
-        context = {"question": question_obj}
+        context = {"question": question_obj, "username": objects_user}
         print(question_obj, "<<< ===== message object")
         return render(request, "questions.html", context)
     except Exception as e:
@@ -51,10 +52,12 @@ def login_in(request):
 def user_profile(request):
     name = request.GET.get("username")
     objects_user = User.objects.get(username=name)
+    print(objects_user, "<<<         obj_user")
 
     user_question = Question.objects.filter(autor=objects_user)
     other_questions = Question.objects.exclude(autor_id=objects_user)
-    context = {"user_question": user_question, "other_questions": other_questions}
+    # context = {"user_question": user_question, "other_questions": other_questions}
+    context = {"other_questions": other_questions, "username": objects_user}
     return render(request, "user_profile.html", context)
     return HttpResponse(f"Это тестовая страница : {name}")
 
@@ -87,12 +90,20 @@ class CustomLoginView(LoginView):
             )
 
 
-def answer(request, id_question):
-    print(request.GET)
-    print(id_question)
+def answer(request, id_question, username):
+    # print(request.GET)
+    print(id_question, "<<< id вопроса")
+    print(username, "<<< Кто ответил")
     if request.method == "POST":
-        print(request.POST.get("message"))
+        print(request.POST.get("message"), "<<< текст ответа")
         # return HttpResponseClientRefresh()
-        # awns = Answer.objects.create(autor=)
+        autor_obj = User.objects.get(username=username)
+        question_obj = Question.objects.get(id=id_question)
+        text = request.POST.get("message")
+        awnswer_add = Answer.objects.create(
+            autor=autor_obj, question=question_obj, text=text
+        )
+        awnswer_add.save()
+
     print(request.POST)
     return render(request, "answer.html")

@@ -28,7 +28,7 @@
         </div>
       </div>
     {% endfor %}
-    <form action="/answer/{{ question.first.id }}" method="post" id="form">
+    <form action="/answer/{{ question.first.id }}/{{ username }}/" method="post" id="form">
       {% csrf_token %}
       <label for="message">Ответить на вопрос:</label><br />
       <textarea id="message" name="message" rows="8" cols="80"></textarea><br />

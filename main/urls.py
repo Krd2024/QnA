@@ -8,7 +8,9 @@ urlpatterns = [
     #
     #
     #
-    path("q/<int:id_question>/", question, name="question"),
+    path("q/<int:id_question>/<str:username>/", question, name="question"),
+    # path("q/<int:id_question>/", question, name="question"),
+    #
     path("q/<int:question_id>/delete/", delete, name="question_delete"),
     path("q/<int:question_id>/update", update, name="question_update"),
     path("q/create/", create, name="question_create"),
@@ -18,7 +20,9 @@ urlpatterns = [
     path("login/", CustomLoginView.as_view(), name="login"),
     path("user_profile/", user_profile, name="user_profile"),
     #
-    path("answer/<int:id_question>", answer, name="answer"),
+    path("answer/<int:id_question>/<str:username>/", answer, name="answer"),
+    # path("answer/<int:id_question>", answer, name="answer"),
+    #
     # path("create/", gg, name="create"),
     path("user/info/<username>/", info, name="info"),
     path("user/<username>/", user, name="user"),

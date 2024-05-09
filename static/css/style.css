@@ -43,7 +43,7 @@
 
 #conteiner {
 
-
+  padding: 10px;
   border: 1px solid rgba(255, 255, 255);
   border-radius: 5px;
   background-color: antiquewhite;
