@@ -14,17 +14,55 @@
   color: rgb(84, 47, 47);
 }
 
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row-reverse;
+  justify-content: space-around;
+}
+
+#box_user {
+  margin: 2px;
+  width: 450px;
+  height: 250px;
+  /* border: 1px solid black; */
+  padding: 10px;
+  border-radius: 7px;
+  background-color: rgba(44, 44, 11, 0.087);
+}
+
+#box_other {
+  margin: 2px;
+  width: 450px;
+  height: 250px;
+  padding: 10px;
+  border-radius: 7px;
+  /* border: 1px solid black; */
+  background-color: rgba(44, 44, 11, 0.087);
+}
+
 #conteiner {
+
+
   border: 1px solid rgba(255, 255, 255);
   border-radius: 5px;
   background-color: antiquewhite;
-  width: 80%;
+  width: 800px;
 }
 
-#box {
+
+
+/* #box_other {
   padding: 0 10px 10px 10px;
+} */
+
+#conteiner_other {
+  width: 450px;
 }
 
+#conteiner_user {
+  width: 450px;
+}
 
 #message {
 

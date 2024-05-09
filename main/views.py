@@ -9,14 +9,17 @@ from django.views import View
 from main.models import Question, Answer, Rection
 from django.contrib.auth.models import User
 
+# from django_htmx.http import HttpResponseClientRefresh
 
-def answer(request, id_question):
-    print(request.GET)
-    print(id_question)
-    if request.method == "POST":
-        print(request.POST.get("message"))
-    print(request.POST)
-    return render(request, "answer.html")
+
+# def answer(request, id_question):
+#     print(request.GET)
+#     print(id_question)
+#     if request.method == "POST":
+#         print(request.POST.get("message"))
+#         # return HttpResponseClientRefresh()
+#     print(request.POST)
+#     return render(request, "answer.html")
 
 
 # from django.contrib.auth.models import User
@@ -69,14 +72,6 @@ def index(request):
     context = {"all_question": all_question}
 
     return render(request, "main/index_main.html", context)
-
-
-def q(request, id_question):
-    print(id_question)
-    question = Question.objects.filter(id=id_question)
-    context = {"question": question}
-
-    return render(request, "questions.html", context)
 
 
 def user(request):

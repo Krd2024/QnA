@@ -8,20 +8,37 @@
     <title>Document</title>
   </head>
   <body>
-    {% for quest in user_question %}
-      <div id="conteiner">
-        <div id="box">
-          <div class="autor&title">
-            <h4 id="teg">{{ quest.teg }}</h4>
-            <a href="q/{{ quest.id }}"><h3>{{ quest.title }}</h3></a>
+    <div class="main">
+      <div id="conteiner_user">
+        {% for quest in user_question %}
+          <div id="box_user">
+            <div class="autor&title">
+              <h4 id="teg">{{ quest.teg }}</h4>
+              <a href="/q/{{ quest.id }}"><h3>{{ quest.title }}</h3></a>
+            </div>
+            <div class="date">
+              <div>Вопрос задан: {{ quest.created_at }}</div>
+              <div>Изменён: {{ quest.updated_at }}</div>
+            </div>
+            <div id="views">Просмотры: {{ quest.views }}</div>
           </div>
-          <div class="date">
-            <div>Вопрос задан: {{ quest.created_at }}</div>
-            <div>Изменён: {{ quest.updated_at }}</div>
-          </div>
-          <div id="views">Просмотры: {{ quest.views }}</div>
-        </div>
+        {% endfor %}
       </div>
-    {% endfor %}
+      <div id="conteiner_other">
+        {% for other_quest in other_questions %}
+          <div id="box_other">
+            <div class="autor&title">
+              <h4 id="teg">{{ other_quest.teg }}</h4>
+              <a href="/q/{{ other_quest.id }}"><h3>{{ other_quest.title }}</h3></a>
+            </div>
+            <div class="date">
+              <div>Вопрос задан: {{ other_quest.created_at }}</div>
+              <div>Изменён: {{ other_quest.updated_at }}</div>
+            </div>
+            <div id="views">Просмотры: {{ other_quest.views }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
   </body>
 </html>
