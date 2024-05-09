@@ -13,7 +13,7 @@ class Question(models.Model):
     )
     teg = models.CharField(max_length=10, blank=False)
     title = models.CharField(max_length=50, blank=False)
-    text = models.TextField(max_length=20, blank=False)
+    text = models.TextField(max_length=200, blank=False)
     created_at = models.DateField(auto_now_add=True, blank=False)
     updated_at = models.DateField(auto_now=True, blank=False)
     views = models.SmallIntegerField(default=0)

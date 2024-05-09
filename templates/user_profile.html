@@ -1,46 +1,50 @@
+{% extends 'main.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en" id="test" class="lk_html">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
     <title>Document</title>
   </head>
   <body>
-    <div class="main">
-      <div id="conteiner_user">
-        {% for quest in user_question %}
-          <div id="box_user">
-            <div class="autor&title">
-              <h4 id="teg">{{ quest.teg }}</h4>
-              <a href="/q/{{ quest.id }}"><h3>{{ quest.title }}</h3></a>
+    {% block content %}
+      <div class="main">
+        <div id="conteiner_user">
+          Мои вопросы{% for quest in user_question %}
+            <div id="box_user">
+              <div class="autor&title">
+                <h4 id="teg">{{ quest.teg }}</h4>
+                {% comment %} <a href="/q/{{ quest.id }}/question_update/"><h3>{{ quest.text }}</h3></a> {% endcomment %}
+                <a href="/q/update/{{ quest.id }}/"><h3>{{ quest.text }}</h3></a>
+              </div>
+              <div class="date">
+                <div>Вопрос задан: {{ quest.created_at }}</div>
+                <div>Изменён: {{ quest.updated_at }}</div>
+              </div>
+              <div id="views">Просмотры: {{ quest.views }}</div>
             </div>
-            <div class="date">
-              <div>Вопрос задан: {{ quest.created_at }}</div>
-              <div>Изменён: {{ quest.updated_at }}</div>
-            </div>
-            <div id="views">Просмотры: {{ quest.views }}</div>
-          </div>
-        {% endfor %}
-      </div>
+          {% endfor %}
+        </div>
 
-      <div id="conteiner_other">
-        {% for other_quest in other_questions %}
-          {{ username.first.autor }}
-          <div id="box_other">
-            <div class="autor&title">
-              <h4 id="teg">{{ other_quest.teg }}</h4>
-              <a href="/q/{{ other_quest.id }}/{{ username }}/"><h3>{{ other_quest.title }}</h3></a>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+        <div id="conteiner_other">
+          Вопросы других{% for other_quest in other_questions %}
+            {{ username.first.autor }}
+            <div id="box_other">
+              <div class="autor&title">
+                <h4 id="teg">{{ other_quest.teg }}</h4>
+                <a href="/q/{{ other_quest.id }}/{{ username }}/"><h3>{{ other_quest.text }}</h3></a>
+              </div>
+              <div class="date">
+                <div>Вопрос задан: {{ other_quest.created_at }}</div>
+                <div>Изменён: {{ other_quest.updated_at }}</div>
+              </div>
+              <div id="views">Просмотры: {{ other_quest.views }}</div>
             </div>
-            <div class="date">
-              <div>Вопрос задан: {{ other_quest.created_at }}</div>
-              <div>Изменён: {{ other_quest.updated_at }}</div>
-            </div>
-            <div id="views">Просмотры: {{ other_quest.views }}</div>
-          </div>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
-    </div>
+    {% endblock %}
   </body>
 </html>

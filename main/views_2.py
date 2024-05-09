@@ -14,7 +14,6 @@ from .forms import QForm
 def create(request, **kwargs):
 
     if request.method == "POST":
-        form = QForm(request.POST)
         if form.is_valid():
             form.save()
         return redirect("index")
@@ -26,7 +25,17 @@ def create(request, **kwargs):
 
 def update(request, **kwargs):
     print(kwargs["question_id"])
-    return render(request, "main/create_qust_form.html")
+    if request.method == "POST":
+        form = QForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect("index")
+
+    question_obj = Question.objects.filter(id=kwargs["question_id"])
+    print(question_obj[0].text, "<<< -----  question_obj[0].text  ")
+    form = QForm(initial={"text": question_obj[0].text, "autor": question_obj[0].autor})
+    context = {"form": form}
+    return render(request, "main/update_qust_form.html", context)
 
 
 def delete(request, **kwargs): ...
@@ -56,8 +65,12 @@ def user_profile(request):
 
     user_question = Question.objects.filter(autor=objects_user)
     other_questions = Question.objects.exclude(autor_id=objects_user)
-    # context = {"user_question": user_question, "other_questions": other_questions}
-    context = {"other_questions": other_questions, "username": objects_user}
+    context = {
+        "user_question": user_question,
+        "other_questions": other_questions,
+        "username": objects_user,
+    }
+    # context = {"other_questions": other_questions, "username": objects_user}
     return render(request, "user_profile.html", context)
     return HttpResponse(f"Это тестовая страница : {name}")
 
