@@ -5,8 +5,6 @@
 
   {% for quest in all_question %}
     <div id="conteiner">
-      {% comment %} <a href="{% url 'question_delete' question_id=quest.id %}">Удалить</a>
-      <a href="{% url 'question_update' question_id=quest.id %}">Редактировать</a> {% endcomment %}
       <div id="box">
         <div class="autor&title">
           <h4 id="teg">{{ quest.teg }}</h4>

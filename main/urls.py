@@ -6,6 +6,8 @@ from django.contrib.auth.views import LoginView
 urlpatterns = [
     path("", index, name="index"),
     #
+    # path("test/", test2, name="test2"),
+    #
     path("q/<int:id_question>/", question, name="question"),
     path("q/<int:id_question>/<str:username>/", question, name="question"),
     #
