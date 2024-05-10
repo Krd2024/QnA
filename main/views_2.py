@@ -94,16 +94,39 @@ def login_in(request):
 def user_profile(request):
     name = request.GET.get("username")
     objects_user = User.objects.get(username=name)
-    print(objects_user, "<<<         obj_user")
+    print(objects_user, "  <<<         obj_user")
 
     user_question = Question.objects.filter(autor=objects_user)
     other_questions = Question.objects.exclude(autor_id=objects_user)
+    answers = Answer.objects.filter(question__in=other_questions)
+    print(answers, " <<< answer")
+    from django.db.models import Count
+
+    # Фильтрация объектов Answer по вопросам в other_questions и группировка по question_id
+    answers = (
+        Answer.objects.filter(question__in=other_questions)
+        .values("question_id")
+        .annotate(total=Count("question_id"))
+    )
+
+    # Теперь в переменной answers у вас будут объекты Answer, сгруппированные по question_id с указанием общего количества для каждого вопроса
+    for answer in answers:
+        question_id = answer["question_id"]
+        total_count = answer["total"]
+        print(question_id, total_count)
+    # Делайте что-то с question_id и total_count
+
+    # for answer in answers:
+    #     print(answer, " <<< answer object")
+    #     print(answer.question.id, " <<< questions id")
+    #
+    #
     context = {
         "user_question": user_question,
         "other_questions": other_questions,
         "username": objects_user,
     }
-    # context = {"other_questions": other_questions, "username": objects_user}
+    #
     return render(request, "user_profile.html", context)
     return HttpResponse(f"Это тестовая страница : {name}")
 

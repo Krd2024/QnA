@@ -18,8 +18,8 @@ class Question(models.Model):
     updated_at = models.DateField(auto_now=True, blank=False)
     views = models.SmallIntegerField(default=0)
 
-    def __str__(self) -> str:
-        return self.title
+    # def __str__(self) -> str:
+    #     return self.title
 
 
 class Answer(models.Model):
@@ -46,8 +46,8 @@ class Answer(models.Model):
     )
     correct = models.BooleanField(default=False, blank=True)
 
-    def __str__(self) -> str:
-        return self.text
+    # def __str__(self) -> str:
+    #     return self.text
 
 
 class Rection(models.Model):

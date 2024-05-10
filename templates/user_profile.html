@@ -36,9 +36,10 @@
             <div>Изменён: {{ other_quest.updated_at }}</div>
           </div>
           <div id="views">Просмотры: {{ other_quest.views }}</div>
+          <div id="views">Ответы: {{ other_quest.answer.text }}</div>
+          {% comment %} <div id="views">Ответы: {{ answer_value }}</div> {% endcomment %}
         </div>
       {% endfor %}
     </div>
   </div>
-  {% comment %} <a href="{% url 'test2' %}">test2</a> {% endcomment %}
 {% endblock %}
