@@ -17,13 +17,14 @@ urlpatterns = [
     path("q/update/<int:question_id>/", update, name="question_update"),
     path("q/create/", create, name="question_create"),
     #
+    path("register/", register, name="register"),
+    path("user_profile/register/", register, name="register"),
     #
     path("login_in/", login_in, name="login_in"),
     path("login/", CustomLoginView.as_view(), name="login"),
     path("user_profile/", user_profile, name="user_profile"),
     #
     path("answer/<int:id_question>/<str:username>/", answer, name="answer"),
-    #
     #
     path("user/info/<username>/", info, name="info"),
     path("user/<username>/", user, name="user"),

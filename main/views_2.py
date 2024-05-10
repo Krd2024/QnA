@@ -10,6 +10,19 @@ from main.models import Question, Answer, Rection
 from django.contrib.auth.models import User
 from .forms import QForm
 
+from .forms import UserRegisterForm
+
+
+def register(request):
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("login_in")
+    else:
+        form = UserRegisterForm()
+    return render(request, "main/register.html", {"form": form})
+
 
 def create(request, **kwargs):
 
