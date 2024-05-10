@@ -23,52 +23,49 @@ from django.contrib.auth.models import User
 
 
 # from django.contrib.auth.models import User
-def user_profile(request):
-    name = request.GET.get("username")
-    objects_user = User.objects.get(username=name)
+# def user_profile(request):
+#     name = request.GET.get("username")
+#     objects_user = User.objects.get(username=name)
 
-    user_question = Question.objects.filter(autor=objects_user)
-    context = {"user_question": user_question}
-    return render(request, "user_profile.html", context)
-    return HttpResponse(f"Это тестовая страница : {name}")
+#     user_question = Question.objects.filter(autor=objects_user)
+#     context = {"user_question": user_question}
+#     return render(request, "user_profile.html", context)
+#     return HttpResponse(f"Это тестовая страница : {name}")
 
 
-class CustomLoginView(LoginView):
-    # def get_success_url(self):
-    #     return reverse_lazy("/")
+# class CustomLoginView(LoginView):
+#     # def get_success_url(self):
+#     #     return reverse_lazy("/")
 
-    def post(self, request):
-        # Обработка отправленной формы
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        print(username, password)
+#     def post(self, request):
+#         # Обработка отправленной формы
+#         username = request.POST.get("username")
+#         password = request.POST.get("password")
+#         print(username, password)
 
-        # Проверка аутентификации пользователя
-        user = authenticate(username=username, password=password)
+#         # Проверка аутентификации пользователя
+#         user = authenticate(username=username, password=password)
 
-        if user is not None:
-            # Если пользователь существует и аутентификация прошла успешно, войти в систему
-            login(request, user)
-            return redirect(
-                "/user_profile?username=" + username
-            )  # Замените 'home' на имя вашего URL-шаблона для главной страницы
-        else:
-            # Если аутентификация не удалась, показать ошибку входа
-            return render(
-                request,
-                "login.html",
-                {"error_message": "Неправильный логин или пароль"},
-            )
+#         if user is not None:
+#             # Если пользователь существует и аутентификация прошла успешно, войти в систему
+#             login(request, user)
+#             return redirect(
+#                 "/user_profile?username=" + username
+#             )  # Замените 'home' на имя вашего URL-шаблона для главной страницы
+#         else:
+#             # Если аутентификация не удалась, показать ошибку входа
+#             return render(
+#                 request,
+#                 "login.html",
+#                 {"error_message": "Неправильный логин или пароль"},
+#             )
 
 
 def index(request):
     user = User.objects.get(username="Den")
-    # print(user)
-    count = 0
+
     all_question = Question.objects.all()
-    # for question in all_question:
-    #     print(question.autor, ": ", count)
-    #     count += 1
+
     context = {"all_question": all_question}
 
     return render(request, "main/index_main.html", context)

@@ -38,7 +38,27 @@ def update(request, **kwargs):
     return render(request, "main/update_qust_form.html", context)
 
 
-def delete(request, **kwargs): ...
+def delete(request, **kwargs):
+    print(kwargs.get("name"), "---1")
+    print(kwargs["name"], "---2")
+
+    try:
+        print(kwargs["question_id"])
+        Question.objects.filter(id=kwargs["question_id"]).delete()
+        # user_profile(request)
+        name = kwargs.get("name")
+        print(name)
+        objects_user = User.objects.get(username=name)
+        user_question = Question.objects.filter(autor=objects_user)
+        other_questions = Question.objects.exclude(autor_id=objects_user)
+        context = {
+            "user_question": user_question,
+            "other_questions": other_questions,
+            "username": objects_user,
+        }
+    except Exception as e:
+        print(e)
+    return render(request, "user_profile.html", context)
 
 
 def question(request, **kwargs):
