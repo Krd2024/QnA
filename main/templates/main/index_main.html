@@ -16,7 +16,14 @@
         </div>
         <div id="views">Просмотры: {{ quest.views }}</div>
 
-        <div id="answer">Ответы: {{ quest.answer|default:'0' }}</div>
+        {% for ans in answers %}
+          {% if ans.question_id == quest.id %}
+            {{ other_quest.id }}
+            <div class="ans">
+              <a href="get_answer/{{ quest.id }}" id="ans">Ответов:</a>{{ ans.total }}
+            </div>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
   {% endfor %}

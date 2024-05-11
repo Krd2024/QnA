@@ -9,8 +9,40 @@ from django.views import View
 from main.models import Question, Answer, Rection
 from django.contrib.auth.models import User
 from .forms import QForm
+from django.db.models import Count
+
 
 from .forms import UserRegisterForm
+
+
+def index(request):
+    answers = (
+        # Answer.objects.filter(question__in=other_questions)
+        Answer.objects.all()
+        .values("question_id")
+        .annotate(total=Count("question_id"))
+    )
+    user = User.objects.get(username="Den")
+
+    all_question = Question.objects.all()
+
+    context = {
+        "all_question": all_question,
+        "answers": answers,
+    }
+
+    return render(request, "main/index_main.html", context)
+
+
+def get_answer(request, **kwargs):
+    print(kwargs["id_question"], "<<<< ----kwargs")
+    question_obj = Question.objects.filter(id=kwargs["id_question"])[0]
+    print(question_obj)
+    answer_obj = Answer.objects.filter(question=question_obj)
+    for answer in answer_obj:
+        print(answer)
+    context = {"answers": answer_obj}
+    return render(request, "answer.html", context)
 
 
 def register(request):
@@ -75,9 +107,10 @@ def delete(request, **kwargs):
 
 
 def question(request, **kwargs):
+
     print(kwargs, "<<<< ---------- kwargs ----------")
     try:
-        objects_user = kwargs.get("username", None)
+        objects_user = kwargs.get("username")
         question_obj = Question.objects.filter(id=kwargs["id_question"])
         context = {"question": question_obj, "username": objects_user}
         print(question_obj, "<<< ===== message object")
@@ -98,37 +131,57 @@ def user_profile(request):
 
     user_question = Question.objects.filter(autor=objects_user)
     other_questions = Question.objects.exclude(autor_id=objects_user)
-    answers = Answer.objects.filter(question__in=other_questions)
-    print(answers, " <<< answer")
-    from django.db.models import Count
+    # answers = Answer.objects.filter(question__in=other_questions)
+    # answers = Answer.objects.all()
+    # print(answers, " <<< answer")
+    # =================================================================
+    """ 1-й Вариант """
 
-    # Фильтрация объектов Answer по вопросам в other_questions и группировка по question_id
+    # answers_with_questions = Answer.objects.select_related("question").all()
+
+    # print(answers_with_questions)
+    # for answer in answers_with_questions:
+    #     print(answer.question.id, "Ответ: ", answer.text)
+    # =================================================================
+    """ 2-й Вариант """
+
+    # # Фильтрация объектов Answer по вопросам в other_questions и группировка по question_id
     answers = (
-        Answer.objects.filter(question__in=other_questions)
+        # Answer.objects.filter(question__in=other_questions)
+        Answer.objects.all()
         .values("question_id")
         .annotate(total=Count("question_id"))
     )
-
-    # Теперь в переменной answers у вас будут объекты Answer, сгруппированные по question_id с указанием общего количества для каждого вопроса
-    for answer in answers:
-        question_id = answer["question_id"]
-        total_count = answer["total"]
-        print(question_id, total_count)
-    # Делайте что-то с question_id и total_count
-
+    # dict_ = {}
     # for answer in answers:
-    #     print(answer, " <<< answer object")
-    #     print(answer.question.id, " <<< questions id")
-    #
-    #
+    #     question_id = answer["question_id"]
+    #     total_count = answer["total"]
+    #     dict_[question_id] = total_count
+    #     print(f"для вопроса с id {question_id}: {total_count} ответа")
+
+    # #
     context = {
         "user_question": user_question,
         "other_questions": other_questions,
         "username": objects_user,
+        "answers": answers,
+        #
+        # "total_count": total_count,
+        # "answers_with_questions": answers_with_questions,
+        # "question_id":
     }
+    # other_questions = list(other_questions.values())
+    # #
+    # for i in range(len(other_questions)):
+    #     for k, v in other_questions[i].items():
+    #         if k == "id" and v in dict_.keys():
+    #             x = dict_.get(v)
+    #             print(k, ":", v, "otvetov - ", x)
+    #             context[str(v)] = x
+    # print(context)
+    # =================================================================
     #
     return render(request, "user_profile.html", context)
-    return HttpResponse(f"Это тестовая страница : {name}")
 
 
 class CustomLoginView(LoginView):

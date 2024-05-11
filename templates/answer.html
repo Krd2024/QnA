@@ -1,1 +1,27 @@
-Answer
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+  {% for answer in answers %}
+    <div id="conteiner">
+      <div id="box">
+        <div>
+          <a href="/user/info/{{ answer.autor }}">Ответил: {{ answer.autor }}</a>
+          <a href="https://qna.habr.com/tag/python/questions">{{ quest.teg }}</a>
+
+          <div>
+            <h5>{{ quest.title }}</h5>
+            <hr />
+            <br />
+            <h4>{{ answer.text }}</h4>
+          </div>
+          <div class="date">
+            <div>Ответ задан: {{ answer.created_at }}</div>
+            <div>Изменён: {{ answer.updated_at }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

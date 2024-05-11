@@ -61,14 +61,14 @@ from django.contrib.auth.models import User
 #             )
 
 
-def index(request):
-    user = User.objects.get(username="Den")
+# def index(request):
+#     user = User.objects.get(username="Den")
 
-    all_question = Question.objects.all()
+#     all_question = Question.objects.all()
 
-    context = {"all_question": all_question}
+#     context = {"all_question": all_question}
 
-    return render(request, "main/index_main.html", context)
+#     return render(request, "main/index_main.html", context)
 
 
 def user(request):

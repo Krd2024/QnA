@@ -4,11 +4,10 @@
 {% block content %}
   <div class="main">
     <div id="conteiner_user">
-      Мои вопросы{% for quest in user_question %}
+      <h3>Мои вопросы</h3>{% for quest in user_question %}
         <div id="box_user">
           <div class="autor&title">
             <h4 id="teg">{{ quest.teg }}</h4>
-            {% comment %} <a href="/q/update/{{ quest.id }}/"><h3>{{ quest.text }}</h3></a> {% endcomment %}
             <a href="{% url 'question_update' question_id=quest.id %}"><h3>{{ quest.text }}</h3></a>
           </div>
           <div class="date">
@@ -16,15 +15,22 @@
             <div>Изменён: {{ quest.updated_at }}</div>
           </div>
           <div id="views">Просмотры: {{ quest.views }}</div>
+          {% for ans in answers %}
+            {% if ans.question_id == quest.id %}
+              {{ other_quest.id }}
+              <div class="ans">
+                <a href="get_answer/{{ quest.id }}" id="ans">Ответов:</a>{{ ans.total }}
+              </div>
+            {% endif %}
+          {% endfor %}
           <a href="{% url 'question_delete' question_id=quest.id name=username %}">Удалить</a>
-          {{ username }}
         </div>
       {% endfor %}
     </div>
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
     <div id="conteiner_other">
-      Вопросы других{% for other_quest in other_questions %}
+      <h3>Вопросы других</h3>{% for other_quest in other_questions %}
         {{ username.first.autor }}
         <div id="box_other">
           <div class="autor&title">
@@ -36,8 +42,13 @@
             <div>Изменён: {{ other_quest.updated_at }}</div>
           </div>
           <div id="views">Просмотры: {{ other_quest.views }}</div>
-          <div id="views">Ответы: {{ other_quest.answer.text }}</div>
-          {% comment %} <div id="views">Ответы: {{ answer_value }}</div> {% endcomment %}
+          {% for ans in answers %}
+            {% if ans.question_id == other_quest.id %}
+              <div class="ans">
+                <a href="get_answer/{{ other_quest.id }}" id="ans">Ответов:</a>{{ ans.total }}
+              </div>
+            {% endif %}
+          {% endfor %}
         </div>
       {% endfor %}
     </div>

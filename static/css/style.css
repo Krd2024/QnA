@@ -2,9 +2,16 @@
   background-color: rgb(233, 227, 220);
 }
 
-#teg {
-  color: rgb(87, 81, 21)
+.body {
+  background-color: rgba(92, 144, 106, 0.421);
 }
+
+
+
+#teg {
+  color: rgba(87, 81, 21, 0.714)
+}
+
 
 .date {
   padding: 5px;
@@ -15,6 +22,7 @@
 }
 
 .main {
+  background-color: rgba(110, 133, 116, 0.196);
   display: flex;
   flex-wrap: wrap;
   flex-direction: row-reverse;
@@ -46,8 +54,12 @@
   padding: 10px;
   border: 1px solid rgba(255, 255, 255);
   border-radius: 5px;
-  background-color: antiquewhite;
+  background-color: rgba(250, 235, 215, 0.508);
   width: 800px;
+}
+
+.ans {
+  font-size: 25px;
 }
 
 
