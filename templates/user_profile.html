@@ -10,11 +10,13 @@
             <h4 id="teg">{{ quest.teg }}</h4>
             <a href="{% url 'question_update' question_id=quest.id %}"><h3>{{ quest.text }}</h3></a>
           </div>
+
           <div class="date">
             <div>Вопрос задан: {{ quest.created_at }}</div>
             <div>Изменён: {{ quest.updated_at }}</div>
           </div>
           <div id="views">Просмотры: {{ quest.views }}</div>
+
           {% for ans in answers %}
             {% if ans.question_id == quest.id %}
               {{ other_quest.id }}
@@ -23,6 +25,7 @@
               </div>
             {% endif %}
           {% endfor %}
+
           <a href="{% url 'question_delete' question_id=quest.id name=username %}">Удалить</a>
         </div>
       {% endfor %}

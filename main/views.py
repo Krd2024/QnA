@@ -75,12 +75,6 @@ def user(request):
     return render(request, "index.html")
 
 
-def info(request, username):
-    print(username)
-
-    return render(request, "index.html")
-
-
 def gg(request):
     print("yes")
     # user = User.objects.get(username="Sem")

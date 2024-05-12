@@ -1,0 +1,33 @@
+{% extends 'main.html' %}
+{% load static %}
+{% block content %}
+  <div>
+    <div>
+      <div>
+        {{ username.username }}
+        <a class="user_info_1" href="{% url 'info_user_choice' choice='questions' name=username.username %}">Вопросы</a>
+        <div>
+          {% for quest in user_quest %}
+            {{ quest.text }}
+          {% endfor %}
+        </div>
+      </div>
+      <div>
+        <a class="user_info_1" href="{% url 'info_user_choice' choice='answer' name=username.username %}">Ответы</a>
+        <div>
+          {% for answer in user_answer %}
+            {{ answer.text }}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .user_info_1 {
+      font-size: 30px;
+      display: flex;
+      justify-content: space-around;
+    }
+  </style>
+{% endblock %}
