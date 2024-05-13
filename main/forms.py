@@ -10,7 +10,14 @@ class QForm(ModelForm):
 
     class Meta:
         model = Question
-        fields = "__all__"
+        fields = ("autor", "teg", "title", "text")
+        # fields = "__all__"
+
+    # def __init__(self, *args, **kwargs):
+    #     autor = kwargs.pop("autor", None)  # Получаем значение autor из kwargs
+    #     super(QForm, self).__init__(*args, **kwargs)
+    #     if autor:
+    #         self.initial["autor"] = autor
 
 
 class UserRegisterForm(UserCreationForm):

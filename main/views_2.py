@@ -101,7 +101,9 @@ def create(request, **kwargs):
             form.save()
         return redirect("index")
 
-    form = QForm()
+    # form = QForm()
+    form = QForm(initial={"autor": request.user})
+
     context = {"form": form}
     return render(request, "main/create_qust_form.html", context)
 
@@ -219,19 +221,26 @@ class CustomLoginView(LoginView):
 
 
 def answer(request, id_question, username):
+    """Ответ на вопрос"""
     # print(request.GET)
-    print(id_question, "<<< id вопроса")
-    print(username, "<<< Кто ответил")
-    if request.method == "POST":
-        print(request.POST.get("message"), "<<< текст ответа")
-        # return HttpResponseClientRefresh()
-        autor_obj = User.objects.get(username=username)
-        question_obj = Question.objects.get(id=id_question)
-        text = request.POST.get("message")
-        awnswer_add = Answer.objects.create(
-            autor=autor_obj, question=question_obj, text=text
-        )
-        awnswer_add.save()
+    try:
+        print(id_question, "<<< id вопроса")
+        print(username, "<<< Кто ответил")
+        if request.method == "POST":
+            print(request.POST.get("message"), "<<< текст ответа")
+            # return HttpResponseClientRefresh()
+            autor_obj = User.objects.get(username=username)
+            question_obj = Question.objects.get(id=id_question)
+            text = request.POST.get("message")
+            awnswer_add = Answer.objects.create(
+                autor=autor_obj, question=question_obj, text=text
+            )
+            awnswer_add.save()
 
-    print(request.POST)
-    return render(request, "answer.html")
+        print(request.POST)
+        return redirect("/user_profile/?username=" + username)
+        # return render(request, "answer.html")
+    except Exception as e:
+        print(e)
+        return render(request, "login.html")
+        return HttpResponse("Наверно нужно сначала войти ")

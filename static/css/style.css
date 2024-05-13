@@ -50,7 +50,6 @@
 }
 
 #conteiner {
-
   padding: 10px;
   border: 1px solid rgba(255, 255, 255);
   border-radius: 5px;
@@ -61,12 +60,6 @@
 .ans {
   font-size: 25px;
 }
-
-
-
-/* #box_other {
-  padding: 0 10px 10px 10px;
-} */
 
 #conteiner_other {
   width: 450px;

@@ -5,6 +5,57 @@
   <form action="" method="post">
     {% csrf_token %}
     {{ form.as_div }}
+
     <input type="submit" value="Отправить" />
   </form>
+
+  <style>
+    form {
+      max-width: 400px; /* Максимальная ширина формы */
+      margin: 0 auto; /* Центрирование формы */
+      padding: 20px; /* Отступы вокруг формы */
+      border: 1px solid #ccc; /* Рамка вокруг формы */
+      border-radius: 5px; /* Скругление углов формы */
+    }
+    
+    /* Стилизация заголовка формы */
+    form h2 {
+      font-size: 24px; /* Размер шрифта */
+      margin-bottom: 20px; /* Отступ снизу */
+    }
+    
+    /* Стилизация ссылки "Назад" */
+    a {
+      display: block; /* Сделать ссылку блочным элементом */
+      margin-bottom: 20px; /* Отступ снизу */
+      color: #007bff; /* Цвет ссылки */
+      text-decoration: none; /* Убрать подчеркивание */
+    }
+    
+    /* Стилизация поля ввода */
+    input[type='text'],
+    textarea {
+      width: 100%; /* Ширина поля */
+      padding: 10px; /* Внутренние отступы */
+      margin-bottom: 20px; /* Отступ снизу */
+      border: 1px solid #ccc; /* Рамка вокруг поля */
+      border-radius: 5px; /* Скругление углов поля */
+      box-sizing: border-box; /* Учитываем внутренние отступы в общей ширине поля */
+    }
+    
+    /* Стилизация кнопки отправки */
+    input[type='submit'] {
+      background-color: #007bff; /* Цвет фона */
+      color: #fff; /* Цвет текста */
+      padding: 10px 20px; /* Внутренние отступы */
+      border: none; /* Убираем рамку */
+      border-radius: 5px; /* Скругление углов */
+      cursor: pointer; /* Изменяем курсор при наведении */
+    }
+    
+    /* Стилизация кнопки отправки при наведении */
+    input[type='submit']:hover {
+      background-color: #0056b3; /* Изменяем цвет фона при наведении */
+    }
+  </style>
 {% endblock %}
