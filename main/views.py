@@ -92,4 +92,8 @@ def gg(request):
     # x = User.objects.create(username="new_user", password="12345")
     # x.save()
     # print(x)
+    # u = User.objects.get(username="Den")
+    # x = Question.objects.filter(autor=u)
+    # for i in x[0]:
+    #     print(i)
     return render(request, "index.html")

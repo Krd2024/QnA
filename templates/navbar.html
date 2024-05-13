@@ -1,12 +1,30 @@
 <menu>
+  <ul>
+    <li>
+      <a href="/switch_user/1"></a>
+    </li>
+    <li>
+      <a href="/switch_user/2"></a>
+    </li>
+    <li>
+      <a href="/switch_user/3"></a>
+    </li>
+    <li>
+      <a href="/switch_user/4"></a>
+    </li>
+  </ul>
   <div>
     <a href="{% url 'question_create' %}">Задать вопрос</a>
   </div>
   <div>
     <a href="/">Главная</a>
-    <a href="/register/">Регистрация</a>
-    <a href="/login_in/">Вход</a>
-    <a href="#">Выход</a>
+    {% if request.user.is_authenticated %}
+      <span>Добро пожаловать{{ request.user.username }}</span>
+      <a href="{% url 'logout' %}">Выход</a>
+    {% else %}
+      <a href="/register/">Регистрация</a>
+      <a href="/login_in/">Вход</a>
+    {% endif %}
   </div>
 </menu>
 

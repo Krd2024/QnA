@@ -21,6 +21,10 @@ class Question(models.Model):
     def __str__(self) -> str:
         return self.title
 
+    @property
+    def answers(self):
+        return Answer.objects.filter(question=self).order_by("-created_at")
+
 
 class Answer(models.Model):
     autor = models.ForeignKey(

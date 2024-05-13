@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
 from django.urls import reverse_lazy
@@ -10,6 +10,7 @@ from main.models import Question, Answer, Rection
 from django.contrib.auth.models import User
 from .forms import QForm
 from django.db.models import Count
+from django.contrib.auth.decorators import login_required
 
 # from rest_framework.views import APIView
 
@@ -73,10 +74,12 @@ def index(request):
 
 
 def get_answer(request, **kwargs):
+
     print(kwargs["id_question"], "<<<< ----kwargs")
     question_obj = Question.objects.filter(id=kwargs["id_question"])[0]
     print(question_obj)
     answer_obj = Answer.objects.filter(question=question_obj)
+
     for answer in answer_obj:
         print(answer)
     context = {"answers": answer_obj}
@@ -94,6 +97,7 @@ def register(request):
     return render(request, "main/register.html", {"form": form})
 
 
+@login_required(login_url="/login")
 def create(request, **kwargs):
 
     if request.method == "POST":
@@ -151,9 +155,10 @@ def question(request, **kwargs):
     print(kwargs, "<<<< ---------- kwargs ----------")
     try:
         objects_user = kwargs.get("username")
-        question_obj = Question.objects.filter(id=kwargs["id_question"])
-        context = {"question": question_obj, "username": objects_user}
+        question_obj = Question.objects.get(id=kwargs["id_question"])
+        context = {"questG": question_obj, "username": objects_user}
         print(question_obj, "<<< ===== message object")
+        print(question_obj.answers)
         return render(request, "questions.html", context)
     except Exception as e:
         print(e, "<<< eeeeee")
@@ -244,3 +249,8 @@ def answer(request, id_question, username):
         print(e)
         return render(request, "login.html")
         return HttpResponse("Наверно нужно сначала войти ")
+
+
+def logoutPage(request):
+    logout(request)
+    return redirect("index")

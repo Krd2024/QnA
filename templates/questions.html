@@ -1,44 +1,41 @@
 {% extends 'main.html' %}
 
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Document</title>
-  </head>
-  <body>
-    {% block content %}
-      <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-      {% for quest in question %}
-        <div id="conteiner">
-          <div id="box">
-            <div>
-              <a href="/user/info/{{ quest.autor }}">{{ quest.autor }}</a>
-              <a href="https://qna.habr.com/tag/python/questions">{{ quest.teg }}</a>
+{% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 
-              <div>
-                <h5>{{ quest.title }}</h5>
-                <hr />
-                <br />
-                <h4>{{ quest.text }}</h4>
-              </div>
-              <div class="date">
-                <div>Вопрос задан: {{ quest.created_at }}</div>
-                <div>Изменён: {{ quest.updated_at }}</div>id: {{ quest.id }}
-              </div>
-            </div>
-          </div>
+  <div id="conteiner">
+    <div id="box">
+      <div>
+        <a href="/user/info/{{ quest.autor }}">{{ quest.autor }}</a>
+        <a href="https://qna.habr.com/tag/python/questions">{{ quest.teg }}</a>
+
+        <div>
+          <h5>{{ quest.title }}</h5>
+          <hr />
+          <br />
+          <h4>{{ quest.text }}</h4>
         </div>
-      {% endfor %}
-      <form action="/answer/{{ question.first.id }}/{{ username }}/" method="post" id="form">
-        {% csrf_token %}
-        <label for="message">Ответить на вопрос:</label><br />
-        <textarea id="message" name="message" rows="8" cols="80"></textarea><br />
-        <button type="submit">Отправить</button>
-      </form>
-    {% endblock %}
-  </body>
-</html>
+        <div class="date">
+          <div>Вопрос задан: {{ quest.created_at }}</div>
+          <div>Изменён: {{ quest.updated_at }}</div>id: {{ quest.id }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <form action="/answer/{{ question.first.id }}/{{ username }}/" method="post" id="form">
+    {% csrf_token %}
+    <label for="message">Ответить на вопрос:</label><br />
+    <textarea id="message" name="message" rows="8" cols="80"></textarea><br />
+    <button type="submit">Отправить</button>
+  </form>
+
+  <div class="answers-container">
+    {% for ans in quest.answers %}
+      {{ ans.text }}
+      <hr />
+    {% endfor %}
+  </div>
+{% endblock %}
