@@ -1,22 +1,32 @@
 {% extends 'main.html' %}
 {% load static %}
 {% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
   <div>
-    <div>
+    <div class="info_box_user_profile">
+      <div id="username">Профиль {{ username.username }}</div>
       <div>
-        {{ username.username }}
         <a class="user_info_1" href="{% url 'info_user_choice' choice='questions' name=username.username %}">Вопросы</a>
+        <a class="user_info_1" href="{% url 'info_user_choice' choice='answer' name=username.username %}">Ответы</a>
+      </div>
+      <div>
         <div>
           {% for quest in user_quest %}
-            {{ quest.text }}
+            <div id="box_user">
+              <div>{{ quest.text }}</div>
+            </div>
           {% endfor %}
         </div>
       </div>
+
+      <div></div>
       <div>
-        <a class="user_info_1" href="{% url 'info_user_choice' choice='answer' name=username.username %}">Ответы</a>
         <div>
           {% for answer in user_answer %}
-            {{ answer.text }}
+            <div id="box_user">
+              <div>{{ answer.text }}</div>
+            </div>
           {% endfor %}
         </div>
       </div>

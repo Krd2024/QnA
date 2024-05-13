@@ -18,8 +18,8 @@ class Question(models.Model):
     updated_at = models.DateField(auto_now=True, blank=False)
     views = models.SmallIntegerField(default=0)
 
-    # def __str__(self) -> str:
-    #     return self.title
+    def __str__(self) -> str:
+        return self.title
 
 
 class Answer(models.Model):
@@ -48,6 +48,9 @@ class Answer(models.Model):
 
     # def __str__(self) -> str:
     #     return self.text
+    def __str__(self) -> str:
+        q = Question.objects.get(id=self.question.id)
+        return f"Вопрос ' _ {q} _ ': {self.text}"
 
 
 class Rection(models.Model):
