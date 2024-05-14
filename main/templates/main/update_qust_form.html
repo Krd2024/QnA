@@ -5,6 +5,8 @@
   <form action="" method="post">
     {% csrf_token %}
     {{ form.as_div }}
+    {{ form.id }}
+
     <input type="submit" value="Отправить" />
   </form>
 {% endblock %}

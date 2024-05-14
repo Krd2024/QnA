@@ -97,31 +97,38 @@ def register(request):
     return render(request, "main/register.html", {"form": form})
 
 
-@login_required(login_url="/login")
+@login_required(login_url="/login_in")
 def create(request, **kwargs):
 
     if request.method == "POST":
         if form.is_valid():
             form.save()
         return redirect("index")
-
     # form = QForm()
     form = QForm(initial={"autor": request.user})
-
     context = {"form": form}
     return render(request, "main/create_qust_form.html", context)
 
 
 def update(request, **kwargs):
-    print(kwargs["question_id"])
+    # print(kwargs["question_id"])
     if request.method == "POST":
         form = QForm(request.POST)
         if form.is_valid():
-            form.save()
-        return redirect("index")
+            instance = form.save(commit=False)
+            # for key, value in request.POST.items():
+            #     print(f"Field: {key}, Value: {value}")
+            question_id = kwargs["question_id"]
+            question = Question.objects.get(id=question_id)
+            question.title = form.cleaned_data["title"]
+            question.text = form.cleaned_data["text"]
+            question.teg = form.cleaned_data["teg"]
+            question.save()
+
+        return redirect(f"/user/{request.user}/")
 
     question_obj = Question.objects.filter(id=kwargs["question_id"])
-    print(question_obj[0].text, "<<< -----  question_obj[0].text  ")
+    # print(question_obj[0].text, "<<< -----  question_obj[0].text  ")
     form = QForm(initial={"text": question_obj[0].text, "autor": question_obj[0].autor})
     context = {"form": form}
     return render(request, "main/update_qust_form.html", context)
@@ -151,14 +158,14 @@ def delete(request, **kwargs):
 
 
 def question(request, **kwargs):
+    """Выводит один вопрос и ответы к нему"""
 
     print(kwargs, "<<<< ---------- kwargs ----------")
     try:
-        objects_user = kwargs.get("username")
         question_obj = Question.objects.get(id=kwargs["id_question"])
-        context = {"questG": question_obj, "username": objects_user}
+        context = {"quest": question_obj}
         print(question_obj, "<<< ===== message object")
-        print(question_obj.answers)
+
         return render(request, "questions.html", context)
     except Exception as e:
         print(e, "<<< eeeeee")
@@ -169,10 +176,10 @@ def login_in(request):
     return render(request, "login.html")
 
 
-def user_profile(request):
-    name = request.GET.get("username")
+def user_profile(request, **kwargs):
+    name = request.user
+    print(name)
     objects_user = User.objects.get(username=name)
-    print(objects_user, "  <<<         obj_user")
 
     user_question = Question.objects.filter(autor=objects_user)
     other_questions = Question.objects.exclude(autor_id=objects_user)
@@ -198,8 +205,6 @@ def user_profile(request):
 
 
 class CustomLoginView(LoginView):
-    # def get_success_url(self):
-    #     return reverse_lazy("/")
 
     def post(self, request):
         # Обработка отправленной формы
@@ -214,7 +219,8 @@ class CustomLoginView(LoginView):
             # Если пользователь существует и аутентификация прошла успешно, войти в систему
             login(request, user)
             return redirect(
-                "/user_profile?username=" + username
+                f"/user/{username}"
+                # f"/user/"
             )  # Замените 'home' на имя вашего URL-шаблона для главной страницы
         else:
             # Если аутентификация не удалась, показать ошибку входа
@@ -225,15 +231,11 @@ class CustomLoginView(LoginView):
             )
 
 
-def answer(request, id_question, username):
+def answer(request, id_question):
     """Ответ на вопрос"""
-    # print(request.GET)
+    username = request.user
     try:
-        print(id_question, "<<< id вопроса")
-        print(username, "<<< Кто ответил")
         if request.method == "POST":
-            print(request.POST.get("message"), "<<< текст ответа")
-            # return HttpResponseClientRefresh()
             autor_obj = User.objects.get(username=username)
             question_obj = Question.objects.get(id=id_question)
             text = request.POST.get("message")
@@ -242,13 +244,11 @@ def answer(request, id_question, username):
             )
             awnswer_add.save()
 
-        print(request.POST)
-        return redirect("/user_profile/?username=" + username)
-        # return render(request, "answer.html")
+        return redirect(f"/user/{request.user}")
+        return redirect(f"/q/{id_question}")
     except Exception as e:
         print(e)
         return render(request, "login.html")
-        return HttpResponse("Наверно нужно сначала войти ")
 
 
 def logoutPage(request):

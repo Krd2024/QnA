@@ -10,8 +10,10 @@ class QForm(ModelForm):
 
     class Meta:
         model = Question
-        fields = ("autor", "teg", "title", "text")
-        # fields = "__all__"
+        exclude = []
+        # fields = ("autor", "teg", "title", "text", "id")
+        fields = "__all__"
+        widgets = {"id": forms.HiddenInput()}
 
     # def __init__(self, *args, **kwargs):
     #     autor = kwargs.pop("autor", None)  # Получаем значение autor из kwargs

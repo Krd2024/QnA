@@ -13,13 +13,13 @@
       <a href="/switch_user/4"></a>
     </li>
   </ul>
+  <div></div>
+  <a href="{% url 'question_create' %}">Задать вопрос</a>
   <div>
-    <a href="{% url 'question_create' %}">Задать вопрос</a>
-  </div>
-  <div>
-    <a href="/">Главная</a>
     {% if request.user.is_authenticated %}
-      <span>Добро пожаловать{{ request.user.username }}</span>
+      <a href="{% url 'user' request.user.username %}">Главная</a>
+
+      <span>Добро пожаловать {{ request.user.username }}</span>
       <a href="{% url 'logout' %}">Выход</a>
     {% else %}
       <a href="/register/">Регистрация</a>
