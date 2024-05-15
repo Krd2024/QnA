@@ -18,10 +18,11 @@ from .forms import UserRegisterForm
 
 
 def info_user_choice(request, **kwargs):
+    username = request.user
     try:
         print(kwargs)
         if kwargs.get("choice") == "questions":
-            username = kwargs.get("name")
+            # username = kwargs.get("name")
             user_obj = User.objects.get(username=username)
             user_quest_obj = Question.objects.filter(autor=user_obj)
             context = {"user_quest": user_quest_obj, "username": user_obj}
@@ -43,7 +44,7 @@ def info_user_choice(request, **kwargs):
 
 
 def info_user(request, **kwargs):
-    print(kwargs)
+    # username = request.user
     try:
         username = kwargs.get("choice")
         user_obj = User.objects.filter(username=username)
@@ -126,31 +127,35 @@ def update(request, **kwargs):
             question.save()
 
         return redirect(f"/user/{request.user}/")
-
-    question_obj = Question.objects.filter(id=kwargs["question_id"])
-    # print(question_obj[0].text, "<<< -----  question_obj[0].text  ")
-    form = QForm(initial={"text": question_obj[0].text, "autor": question_obj[0].autor})
-    context = {"form": form}
-    return render(request, "main/update_qust_form.html", context)
+    else:
+        question_obj = Question.objects.filter(id=kwargs["question_id"])
+        # print(question_obj[0].text, "<<< -----  question_obj[0].text  ")
+        form = QForm(
+            initial={"text": question_obj[0].text, "autor": question_obj[0].autor}
+        )
+        context = {"form": form}
+        return render(request, "main/update_qust_form.html", context)
 
 
 def delete(request, **kwargs):
-    print(kwargs.get("name"), "---1")
-    print(kwargs["name"], "---2")
+    # print(kwargs.get("name"), "---1")
+    # print(kwargs["name"], "---2")
 
     try:
-        print(kwargs["question_id"])
+
         Question.objects.filter(id=kwargs["question_id"]).delete()
         # user_profile(request)
-        name = kwargs.get("name")
-        print(name)
-        objects_user = User.objects.get(username=name)
-        user_question = Question.objects.filter(autor=objects_user)
-        other_questions = Question.objects.exclude(autor_id=objects_user)
+        user = request.user
+        # objects_user = User.objects.get(username=name)
+        # user_question = Question.objects.filter(autor=objects_user)
+        user_question = Question.objects.filter(autor=user)
+        # other_questions = Question.objects.exclude(autor_id=objects_user)
+        other_questions = Question.objects.exclude(autor_id=user)
         context = {
             "user_question": user_question,
             "other_questions": other_questions,
-            "username": objects_user,
+            "username": user,
+            # "username": objects_user,
         }
     except Exception as e:
         print(e)
@@ -177,36 +182,32 @@ def login_in(request):
 
 
 def user_profile(request, **kwargs):
-    name = request.user
-    print(name)
-    objects_user = User.objects.get(username=name)
+    user = kwargs["username"]
+    # user = request.user
+    # login(request, user)
+    objects_user = User.objects.get(username=user)
 
     user_question = Question.objects.filter(autor=objects_user)
-    other_questions = Question.objects.exclude(autor_id=objects_user)
-    # answers = Answer.objects.filter(question__in=other_questions)
-    # answers = Answer.objects.all()
-    answers = (
-        # Answer.objects.filter(question__in=other_questions)
-        Answer.objects.all()
-        .values("question_id")
-        .annotate(total=Count("question_id"))
+    answers_1 = (
+        Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
     )
-
+    answers = Answer.objects.filter(autor=objects_user)
     context = {
-        "user_question": user_question,
-        "other_questions": other_questions,
+        "user_question": len(user_question),
         "username": objects_user,
-        "answers": answers,
+        "answers": len(answers),
     }
 
     # =================================================================
     #
+    return render(request, "profile.html", context)
     return render(request, "user_profile.html", context)
 
 
 class CustomLoginView(LoginView):
 
     def post(self, request):
+        print(request.GET, "<<<<<<< ========")
         # Обработка отправленной формы
         username = request.POST.get("username")
         password = request.POST.get("password")

@@ -1,10 +1,29 @@
 <menu>
   <ul>
     <li>
-      <a href="/switch_user/1"></a>
+      <form id="loginForm" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="username" value="bright_sunshine" />
+        <input type="hidden" name="password" value="1" />
+        <button type="submit">bright_sunshine</button>
+      </form>
     </li>
     <li>
-      <a href="/switch_user/2"></a>
+      <form id="loginForm" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="username" value="abc" />
+        <input type="hidden" name="password" value="g2j-mbj-wbN-zBV" />
+        <button type="submit">abc</button>
+      </form>
+    </li>
+
+    <li>
+      <form id="loginForm" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="username" value="Den" />
+        <input type="hidden" name="password" value="1" />
+        <button type="submit">Den</button>
+      </form>
     </li>
     <li>
       <a href="/switch_user/3"></a>
@@ -17,9 +36,10 @@
   <a href="{% url 'question_create' %}">Задать вопрос</a>
   <div>
     {% if request.user.is_authenticated %}
-      <a href="{% url 'user' request.user.username %}">Главная</a>
+      <a href="{% url 'index' %}">Главная</a>
+      {% comment %} <a href="{% url 'user' request.user.username %}">Главная</a> {% endcomment %}
 
-      <span>Добро пожаловать {{ request.user.username }}</span>
+      <span>Добро пожаловать: {{ request.user.username }}</span>
       <a href="{% url 'logout' %}">Выход</a>
     {% else %}
       <a href="/register/">Регистрация</a>

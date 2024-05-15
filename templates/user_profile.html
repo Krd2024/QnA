@@ -32,13 +32,19 @@
     </div>
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
     <div id="conteiner_other">
       <h3>Вопросы других</h3>{% for other_quest in other_questions %}
-        {{ username.first.autor }}
         <div id="box_other">
           <div class="autor&title">
+            <form id="loginForm" action="{% url 'login' %}" method="post">
+              {% csrf_token %}
+              <input type="hidden" name="username" value="{{ other_quest.autor }}" />
+              <input type="hidden" name="password" value="1" />Автор:<button type="submit">{{ other_quest.autor }}</button>
+            </form>
             <h4 id="teg">{{ other_quest.teg }}</h4>
-            <a href="/q/{{ other_quest.id }}/{{ username }}/"><h3>{{ other_quest.text }}</h3></a>
+
+            <a href="/q/{{ other_quest.id }}/"><h3>{{ other_quest.text }}</h3></a>
           </div>
           <div class="date">
             <div>Вопрос задан: {{ other_quest.created_at }}</div>

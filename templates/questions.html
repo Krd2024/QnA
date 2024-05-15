@@ -8,7 +8,7 @@
   <div id="conteiner">
     <div id="box">
       <div>
-        <a href="/user/info/{{ quest.autor }}">{{ quest.autor }}</a>
+        <a href="/user/{{ quest.autor }}">{{ quest.autor }}</a>
         <a href="https://qna.habr.com/tag/python/questions">{{ quest.teg }}</a>
 
         <div>
@@ -33,9 +33,23 @@
   </form>
 
   <div class="answers-container">
+    <div id="label">Ответы</div>
     {% for ans in quest.answers %}
-      {{ ans.text }}
-      <hr />
+      <div id="answer">
+        <div>
+          <a href="{% url 'info_user' quest.autor %}">{{ quest.autor }}</a>
+        </div>
+        <hr />
+        <hr />
+        <div>{{ ans.text }}</div>
+      </div>
     {% endfor %}
   </div>
+  <style>
+    #answer {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+    }
+  </style>
 {% endblock %}

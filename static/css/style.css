@@ -32,7 +32,8 @@
 #box_user {
   margin: 2px;
   width: 450px;
-  height: 250px;
+  min-height: 100px;
+  height: fit-content;
   /* border: 1px solid black; */
   padding: 10px;
   border-radius: 7px;
@@ -42,7 +43,8 @@
 #box_other {
   margin: 2px;
   width: 450px;
-  height: 250px;
+  min-height: 100px;
+  height: fit-content;
   padding: 10px;
   border-radius: 7px;
   /* border: 1px solid black; */
@@ -50,11 +52,14 @@
 }
 
 #conteiner {
+  border: 5px;
+  /* margin: 10px; */
   padding: 10px;
   border: 1px solid rgba(255, 255, 255);
   border-radius: 5px;
   background-color: rgba(250, 235, 215, 0.508);
-  width: 800px;
+  width: 65%;
+  color: rgb(59, 38, 38);
 }
 
 .ans {
@@ -74,6 +79,24 @@
   width: 70%;
   border: 1px solid grey;
   border-radius: 5px;
+}
+
+#label {
+  font-size: 25px;
+  display: flex;
+  justify-content: center;
+  background-color: rgb(168, 201, 190);
+}
+
+#answer {
+  /* margin: 10px; */
+  margin-top: 5px;
+  padding: 10px;
+  width: 65%;
+  border: 1px solid grey;
+  background-color: rgba(145, 163, 179, 0.376);
+  border-radius: 5px;
+  color: rgb(59, 38, 38);
 }
 
 /* ------------------------------------------------------- */
@@ -113,70 +136,3 @@
 }
 
 /* ------------------------------------------------------------ */
-#html {
-  background-color: rgb(235, 231, 226);
-}
-
-#back {
-  background-color: rgb(214, 198, 189);
-  color: rgb(111, 23, 23);
-  margin-top: 20px;
-  margin-bottom: 0px;
-}
-
-#full_message {
-  border-radius: 7px;
-  margin: auto;
-  position: absolute;
-  top: 10;
-  /* Расположение по верхнему краю */
-  left: 0;
-  /* Расположение по левому краю */
-  right: 0;
-  /* Расположение по правому краю */
-  text-align: center;
-  background-color: rgb(214, 198, 189);
-  font-style: italic;
-  width: 500px;
-  height: fit-content;
-  border: 1px solid black;
-  padding: 30px 30px 10px 30px;
-  word-wrap: break-word;
-
-  color: rgb(111, 23, 23);
-}
-
-#div_out_message {
-  border: 1px solid black;
-  padding: 10px;
-  width: 300px;
-  word-wrap: break-word;
-}
-
-#div_in_message {
-  border: 1px solid black;
-  padding: 10px;
-  width: 300px;
-  word-wrap: break-word;
-}
-
-.mess_info {
-  margin: auto;
-  margin-top: 100px;
-  padding: 10px;
-  border-radius: 7px;
-  display: flex;
-  justify-content: space-between;
-  color: rgb(32, 28, 28);
-  height: fit-content;
-  background-color: rgb(214, 198, 189);
-}
-
-.hr {
-  width: 100px;
-  margin-bottom: 25px;
-}
-
-/* #message {
-  color: chartreuse;
-} */

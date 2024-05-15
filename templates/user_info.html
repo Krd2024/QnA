@@ -7,8 +7,8 @@
     <div class="info_box_user_profile">
       <div id="username">Профиль {{ username.username }}</div>
       <div>
-        <a class="user_info_1" href="{% url 'info_user_choice' choice='questions' name=username.username %}">Вопросы</a>
-        <a class="user_info_1" href="{% url 'info_user_choice' choice='answer' name=username.username %}">Ответы</a>
+        <a class="user_info_1" href="{% url 'info_user_choice' choice='questions' %}">Вопросы</a>
+        <a class="user_info_1" href="{% url 'info_user_choice' choice='answer' %}">Ответы</a>
       </div>
       <div>
         <div>

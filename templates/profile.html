@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+{% block content %}
+  {% load static %}
+  {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" /> {% endcomment %}
+
+  <div class="name">
+    <div>img</div>
+    <div>{{ username }}</div>
+  </div>
+
+  <div>
+    <div class="info">
+      <div id="quest">
+        <h3>{{ user_question }}</h3><a href="">Вопросы</a>
+      </div>
+      <div id="answ">
+        <h3>{{ answers }}</h3><a href="">Ответы</a>
+      </div>
+    </div>
+  </div>
+  <style>
+    #answ {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #quest {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .info {
+      display: flex;
+      justify-content: space-around;
+      font-size: 25px;
+    }
+    .name {
+      display: flex;
+      font-size: 25px;
+      flex-direction: column;
+      align-items: center;
+    }
+  </style>
+{% endblock %}
