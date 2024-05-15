@@ -1,7 +1,7 @@
 {% extends 'main.html' %}
 
 {% block content %}
-  <a href="{{ requst.META.HTTP_REFERER }}">Назад</a>
+  <a href="{{ request.META.HTTP_REFERER }}">Назад</a>
   <form action="" method="post">
     {% csrf_token %}
     {{ form.as_div }}

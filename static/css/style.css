@@ -53,7 +53,7 @@
 
 #conteiner {
   border: 5px;
-  /* margin: 10px; */
+  margin-bottom: 10px;
   padding: 10px;
   border: 1px solid rgba(255, 255, 255);
   border-radius: 5px;

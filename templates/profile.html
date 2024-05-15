@@ -4,20 +4,46 @@
   {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" /> {% endcomment %}
 
   <div class="name">
-    <div>img</div>
+    <div>
+      <img src="{% static 'img/head.png' %}" alt="Заголовок" width="80" height="80" id="img" />
+    </div>
     <div>{{ username }}</div>
   </div>
-
   <div>
     <div class="info">
       <div id="quest">
-        <h3>{{ user_question }}</h3><a href="">Вопросы</a>
+        <h3>{{ user_question }}</h3>
+        <a href="{% url 'info_user_choice' username=username choice='questions' %}">Вопросы</a>
       </div>
       <div id="answ">
         <h3>{{ answers }}</h3><a href="">Ответы</a>
       </div>
     </div>
+    <div>
+      {% for quest in user_quest %}
+        <div>{{ quest.text }}</div>
+      {% endfor %}
+    </div>
+
+    <div id="new">
+      <button id="button1" onclick="fun('questions')">get</button>
+      <button id="button2" onclick="fun('answers')">get</button>
+    </div>
+    <div id="text"></div>
   </div>
+  <script>
+    const butt1 = document.getElementById('button1')
+    const butt2 = document.getElementById('button2')
+    const username = '{{ username }}'
+    const text_1 = document.getElementById('text')
+    
+    async function fun(x) {
+      let data = await fetch(`/user/${username}/?q=${x}`)
+      data = await data.text()
+      text_1.innerHTML = data
+    }
+  </script>
+
   <style>
     #answ {
       display: flex;
@@ -33,6 +59,9 @@
       display: flex;
       justify-content: space-around;
       font-size: 25px;
+    }
+    #img {
+      border-radius: 50px;
     }
     .name {
       display: flex;

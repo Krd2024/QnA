@@ -25,7 +25,7 @@
     </div>
   </div>
 
-  <form action="/{{ quest.id }}/answer/" method="post" id="form">
+  <form action="" method="post" id="form">
     {% csrf_token %}
     <label for="message">Ответить на вопрос:</label><br />
     <textarea id="message" name="message" rows="8" cols="80"></textarea><br />
@@ -37,15 +37,23 @@
     {% for ans in quest.answers %}
       <div id="answer">
         <div>
-          <a href="{% url 'info_user' quest.autor %}">{{ quest.autor }}</a>
+          <a href="{% url 'info_user' ans.autor %}">{{ ans.autor }}</a>
         </div>
         <hr />
         <hr />
         <div>{{ ans.text }}</div>
+        <div id="date">
+          <div>{{ ans.created_at }}</div>
+        </div>
       </div>
     {% endfor %}
   </div>
   <style>
+    #date {
+      display: flex;
+      font-size: 12px;
+      flex-direction: row-reverse;
+    }
     #answer {
       display: flex;
       flex-direction: column;
