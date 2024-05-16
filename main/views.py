@@ -201,7 +201,13 @@ def user_profile(request, *args, **kwargs):
     print(request.GET.get("q"))
     if request.GET.get("q") == "questions":
         print(12345)
-        return render(request, "test.html")
+        objects_user = User.objects.get(username=user)
+        user_question = Question.objects.filter(autor=objects_user)
+        context = {
+            "user_question": user_question,
+        }
+
+        return render(request, "test.html", context)
 
     if request.GET.get("q") == "answers":
         print(12345)

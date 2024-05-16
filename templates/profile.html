@@ -11,12 +11,18 @@
   </div>
   <div>
     <div class="info">
-      <div id="quest">
-        <h3>{{ user_question }}</h3>
-        <a href="{% url 'info_user_choice' username=username choice='questions' %}">Вопросы</a>
+      <div>
+        <button id="button1" onclick="fun('questions')"><h4>Вопросы</h4>{{ user_question }}</button>
       </div>
-      <div id="answ">
-        <h3>{{ answers }}</h3><a href="">Ответы</a>
+      <div>
+        <button id="button3" onclick="fun('answers')"><h4>Пусто</h4></button>
+      </div>
+      <div>
+        <button id="button4" onclick="fun('answers')"><h4>Пусто</h4></button>
+      </div>
+
+      <div>
+        <button id="button2" onclick="fun('answers')"><h4>Ответы</h4>{{ answers }}</button>
       </div>
     </div>
     <div>
@@ -25,26 +31,33 @@
       {% endfor %}
     </div>
 
-    <div id="new">
-      <button id="button1" onclick="fun('questions')">get</button>
-      <button id="button2" onclick="fun('answers')">get</button>
-    </div>
-    <div id="text"></div>
+    <div id="answers_div"></div>
   </div>
   <script>
     const butt1 = document.getElementById('button1')
     const butt2 = document.getElementById('button2')
+    
     const username = '{{ username }}'
-    const text_1 = document.getElementById('text')
+    const ans = document.getElementById('answers_div')
     
     async function fun(x) {
       let data = await fetch(`/user/${username}/?q=${x}`)
       data = await data.text()
-      text_1.innerHTML = data
+      ans.innerHTML = data
     }
   </script>
 
   <style>
+    #button1,
+    #button2,
+    #button3,
+    #button4 {
+      border-color: darkcyan;
+      margin: 20px 0 10px 0;
+      border-radius: 5px;
+      width: 90px;
+      height: 50px;
+    }
     #answ {
       display: flex;
       flex-direction: column;
