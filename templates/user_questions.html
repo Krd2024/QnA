@@ -1,0 +1,34 @@
+{% for quest in user_question %}
+  <div>
+    {% if request.user == quest.autor %}
+      <div id="del_upd">
+        <div id="quest_div">{{ quest }}</div>
+        <div>
+          <button id="">Редактировать</button>
+        </div>
+        <div>
+          <button id="">Удалить</button>
+        </div>
+      </div>
+    {% else %}
+      <div id="quest_div">{{ quest }}</div>
+    {% endif %}
+  </div>
+{% endfor %}
+
+<style>
+  #del_upd {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  #quest_div {
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    width: 70%;
+    min-height: 50px;
+    height: fit-content;
+    background-color: antiquewhite;
+  }
+</style>

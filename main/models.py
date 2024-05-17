@@ -39,7 +39,7 @@ class Answer(models.Model):
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
-        related_name="question",
+        related_name="question_set",
     )
 
     text = models.TextField(max_length=20, blank=False)

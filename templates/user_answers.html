@@ -1,0 +1,50 @@
+<div class="answers-container">
+  <div id="label">Ответы</div>
+  {% for quest in question %}
+    <div id="quest_div">{{ quest.text }}</div>
+
+    <hr />
+    <div id="answer">
+      {% for ans in quest.answers %}
+        {% if ans.autor.username == request.user.username %}
+          <div id="del_upd">
+            <div id="quest_div">{{ ans.text }}</div>
+            <div>
+              <button id="">Редактировать</button>
+            </div>
+            <div>
+              <button id="">Удалить</button>
+            </div>
+          </div>
+        {% endif %}
+
+        {% comment %} <div>
+          <a href="{% url 'info_user' ans.autor %}">{{ ans.autor }}</a>
+        </div>
+        <hr />
+        <hr />
+        <div>{{ ans.text }}</div>
+        <div id="date">
+          <div>{{ ans.created_at }}</div>
+        </div> {% endcomment %}
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+  #del_upd {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  #quest_div {
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+    width: 70%;
+    min-height: 50px;
+    height: fit-content;
+    background-color: antiquewhite;
+  }
+</style>

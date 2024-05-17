@@ -174,18 +174,23 @@ def question(request, **kwargs):
 
             autor_obj = User.objects.get(username=request.user)
             question_obj = Question.objects.get(id=kwargs["question_id"])
-            text = request.POST.get("message")
-            awnswer_add = Answer.objects.create(
-                autor=autor_obj, question=question_obj, text=text
-            )
-            awnswer_add.save()
+            try:
+                proverka_na_dublic = Answer.objects.filter(
+                    autor=autor_obj, question=question_obj
+                )
+                proverka_na_dublic.delete()
+                print(len(proverka_na_dublic))
+            except Exception as e:
+                print(e, "<<<< ======== E")
 
+            text = request.POST.get("message")
+            answer_add = Answer.objects.create(
+                autor=autor_obj, question=question_obj, text=text, correct=0
+            )
+            answer_add.save()
             return redirect("question", kwargs["question_id"])
-        # return redirect(f"/q/{kwargs["question_id"]}")
 
         context = {"quest": question_obj}
-        print(question_obj, "<<< ===== message object")
-
         return render(request, "questions.html", context)
     except Exception as e:
         print(e, "<<< eeeeee")
@@ -199,19 +204,55 @@ def question(request, **kwargs):
 def user_profile(request, *args, **kwargs):
     user = kwargs["username"]
     print(request.GET.get("q"))
+    objects_user = User.objects.get(username=user)
     if request.GET.get("q") == "questions":
-        print(12345)
-        objects_user = User.objects.get(username=user)
+        # print(12345)
         user_question = Question.objects.filter(autor=objects_user)
         context = {
             "user_question": user_question,
         }
 
-        return render(request, "test.html", context)
+        return render(request, "user_questions.html", context)
 
     if request.GET.get("q") == "answers":
-        print(12345)
-        return render(request, "test2.html")
+        try:
+            answers = Answer.objects.filter(autor=objects_user)
+
+            lst = []
+
+            for answer in answers:
+                lst.append(answer.question_id)
+
+            question = Question.objects.filter(id__in=lst)
+            context = {"question": question}
+            for q in question:
+                print("Вопрос: ", q.text)
+                for i in q.answers:
+                    # print(type(i.autor.username))
+                    # print(type(user))
+                    # print(i.autor == user)
+                    if i.autor.username == user:
+                        print("Ответ: ", i.text)
+                        # print("id autor: ", i.autor_id)
+                print("-------------------------------------------------------------")
+
+            # print(new_q, new_ans_for_q, "<<<< ---------------------------")
+
+            # for q in question:
+            #     print(q.id, "<<< id вопрос -QUESTIONS ")
+
+            # for a in answers:
+            #     print(a.question_id, "<<< id вопроса ANSWERS")
+
+            # ---------------------------------------------------------------------
+            if len(answers) == 0:
+                return HttpResponse("Нет ответ")
+
+            # context = {"answer": answers, "question": question}
+            return render(request, "user_answers.html", context)
+        except Exception as e:
+            print(e)
+            return render(render, "user_answers.html", {"out": "Нет ответ"})
 
     objects_user = User.objects.get(username=user)
     user_question = Question.objects.filter(autor=objects_user)
