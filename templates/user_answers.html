@@ -3,30 +3,20 @@
   {% for quest in question %}
     <div id="quest_div">{{ quest.text }}</div>
 
-    <hr />
     <div id="answer">
       {% for ans in quest.answers %}
         {% if ans.autor.username == request.user.username %}
           <div id="del_upd">
-            <div id="quest_div">{{ ans.text }}</div>
+            <div id="quest_div">{{ ans.text }}-id:{{ ans.id }}</div>
+
             <div>
-              <button id="">Редактировать</button>
+              <a href="{% url 'info_user_choice' username=ans.id choice='ans_update' %}"><button id="but">Редактировать</button></a>
             </div>
             <div>
-              <button id="">Удалить</button>
+              <button id="but">Удалить</button>
             </div>
           </div>
         {% endif %}
-
-        {% comment %} <div>
-          <a href="{% url 'info_user' ans.autor %}">{{ ans.autor }}</a>
-        </div>
-        <hr />
-        <hr />
-        <div>{{ ans.text }}</div>
-        <div id="date">
-          <div>{{ ans.created_at }}</div>
-        </div> {% endcomment %}
       {% endfor %}
     </div>
   {% endfor %}

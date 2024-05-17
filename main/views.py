@@ -34,6 +34,25 @@ def info_user_choice(request, **kwargs):
             context = {"user_answer": user_answer_obj, "answers": len(user_answer_obj)}
             return render(request, "profile.html", context)
             # return render(request, "user_info.html", context)
+        if kwargs.get("choice") == "ans_update":
+            print("ans_update")
+            answer_id = kwargs.get("username")  # Всё правильно
+            choice = kwargs.get("choice")
+            update_answer_obj = Answer.objects.get(id=kwargs.get("username"))
+            update_answer_obj.text = "update answer"
+            update_answer_obj.save()
+
+            username = request.user.username
+            print(username)
+            user_obj = User.objects.get(username=username)
+            user_answer_obj = Answer.objects.filter(autor=user_obj)
+            return render(request, "profile.html", {"username": "Den"})
+            # return render(request, "profile.html", context)
+            return HttpResponse(1)
+            # return render(request, "user_answer.html", context)
+
+            # context = {"user_answer": user_answer_obj, "answers": len(user_answer_obj)}
+
     except Exception as e:
         print(e)
         return render(request, "profile.html")
@@ -74,17 +93,17 @@ def index(request):
     return render(request, "main/index_main.html", context)
 
 
-def get_answer(request, **kwargs):
+# def get_answer(request, **kwargs):
 
-    print(kwargs["question_id"], "<<<< ----kwargs")
-    question_obj = Question.objects.filter(id=kwargs["question_id"])[0]
-    print(question_obj)
-    answer_obj = Answer.objects.filter(question=question_obj)
+#     print(kwargs["question_id"], "<<<< ----kwargs")
+#     question_obj = Question.objects.filter(id=kwargs["question_id"])[0]
+#     print(question_obj)
+#     answer_obj = Answer.objects.filter(question=question_obj)
 
-    for answer in answer_obj:
-        print(answer)
-    context = {"answers": answer_obj}
-    return render(request, "answer.html", context)
+#     for answer in answer_obj:
+#         print(answer)
+#     context = {"answers": answer_obj}
+#     return render(request, "answer.html", context)
 
 
 # def register(request):

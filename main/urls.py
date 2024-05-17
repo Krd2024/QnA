@@ -23,13 +23,9 @@ urlpatterns = [
     ),
     #
     # path(
-    #     "q/update/<int:question_id>/", update, name="question_update"
-    # ),  # местами поменять
-    # path("user_profile/register", register, name="register"),  # 0
-    path(
-        "user_profile/get_answer/<int:question_id>", get_answer, name="get_answer"
-    ),  # 0
-    path("get_answer/<int:question_id>", get_answer, name="get_answer"),
+    # "user_profile/get_answer/<int:question_id>", get_answer, name="get_answer"
+    # ),  # 0
+    # path("get_answer/<int:question_id>", get_answer, name="get_answer"),
     #
     #
     #
