@@ -27,6 +27,7 @@ def info_user_choice(request, **kwargs):
 
         if kwargs.get("choice") == "answer":
             username = kwargs.get("name")
+            print(username, "<<< ======= username")
             user_obj = User.objects.get(username=username)
             user_answer_obj = Answer.objects.filter(autor=user_obj)
 
@@ -46,7 +47,7 @@ def info_user_choice(request, **kwargs):
             print(username)
             user_obj = User.objects.get(username=username)
             user_answer_obj = Answer.objects.filter(autor=user_obj)
-            return render(request, "profile.html", {"username": "Den"})
+            return render(request, "profile.html", {"username": username})
             # return render(request, "profile.html", context)
             return HttpResponse(1)
             # return render(request, "user_answer.html", context)
@@ -221,7 +222,13 @@ def question(request, **kwargs):
 
 
 def user_profile(request, *args, **kwargs):
+
     user = kwargs["username"]
+
+    print(request.user.username, "<<< request user")
+
+    print(user, "<<< user")
+
     print(request.GET.get("q"))
     objects_user = User.objects.get(username=user)
     if request.GET.get("q") == "questions":
@@ -236,24 +243,20 @@ def user_profile(request, *args, **kwargs):
     if request.GET.get("q") == "answers":
         try:
             answers = Answer.objects.filter(autor=objects_user)
-
             lst = []
-
             for answer in answers:
                 lst.append(answer.question_id)
 
             question = Question.objects.filter(id__in=lst)
-            context = {"question": question}
-            for q in question:
-                print("Вопрос: ", q.text)
-                for i in q.answers:
-                    # print(type(i.autor.username))
-                    # print(type(user))
-                    # print(i.autor == user)
-                    if i.autor.username == user:
-                        print("Ответ: ", i.text)
-                        # print("id autor: ", i.autor_id)
-                print("-------------------------------------------------------------")
+            context = {"question": question, "user": user}
+            # for q in question:
+            #     print("Вопрос: ", q.text)
+            #     for i in q.answers:
+            #         # print(type(i.autor.username))
+            #         # print(type(user))
+            #         # print(i.autor == user)
+            #         if i.autor.username == user:
+            #             print("Ответ: ", i.text)
 
             # print(new_q, new_ans_for_q, "<<<< ---------------------------")
 
@@ -268,7 +271,13 @@ def user_profile(request, *args, **kwargs):
                 return HttpResponse("Нет ответ")
 
             # context = {"answer": answers, "question": question}
-            return render(request, "user_answers.html", context)
+            if request.user.username == user:
+                print("ravno")
+                return render(request, "user_answers.html", context)
+            else:
+                print("ne ravno")
+                return render(request, "user_answers_kostil.html", context)
+
         except Exception as e:
             print(e)
             return render(render, "user_answers.html", {"out": "Нет ответ"})
