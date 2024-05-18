@@ -16,19 +16,12 @@ urlpatterns = [
     path("logout/", auth_user_view.logoutPage, name="logout"),
     #
     path("user/<str:username>/", user_profile, name="user_profile"),
+    path("user/<int:answer_id>/<str:choice>/", answer_update, name="answer_update"),
     path(
         "user/<str:username>/<str:choice>/",
         info_user_choice,
         name="info_user_choice",
     ),
-    #
-    # path(
-    # "user_profile/get_answer/<int:question_id>", get_answer, name="get_answer"
-    # ),  # 0
-    # path("get_answer/<int:question_id>", get_answer, name="get_answer"),
-    #
-    #
-    #
     path("user/<str:choice>/", info_user, name="info_user"),
     #
 ]

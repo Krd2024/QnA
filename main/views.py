@@ -8,8 +8,23 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 
 
+def answer_update(request, **kwargs):
+    print(111111111111111111111111)
+
+    try:
+        answer_id = kwargs.get("answer_id")
+        answer_obj = Answer.objects.get(id=answer_id)
+        print(answer_obj.question, "<<< ======= question")
+        print(answer_obj.text, "<<< ======= answer")
+        context = {"quest": answer_obj.question, "answer": answer_obj.text}
+        return render(request, "questions.html", context)
+    except Exception as e:
+        print(e)
+    return HttpResponse(1)
+
+
 def info_user_choice(request, **kwargs):
-    # username = request.user
+
     try:
         print(kwargs)
         if kwargs.get("choice") == "questions":
@@ -23,7 +38,6 @@ def info_user_choice(request, **kwargs):
             }
 
             return render(request, "profile.html", context)
-            # return render(request, "user_info.html", context)
 
         if kwargs.get("choice") == "answer":
             username = kwargs.get("name")
@@ -31,40 +45,22 @@ def info_user_choice(request, **kwargs):
             user_obj = User.objects.get(username=username)
             user_answer_obj = Answer.objects.filter(autor=user_obj)
 
-            # context = {"user_answer": user_answer_obj}
             context = {"user_answer": user_answer_obj, "answers": len(user_answer_obj)}
             return render(request, "profile.html", context)
             # return render(request, "user_info.html", context)
-        if kwargs.get("choice") == "ans_update":
-            print("ans_update")
-            answer_id = kwargs.get("username")  # Всё правильно
-            choice = kwargs.get("choice")
-            update_answer_obj = Answer.objects.get(id=kwargs.get("username"))
-            update_answer_obj.text = "update answer"
-            update_answer_obj.save()
-
-            username = request.user.username
-            print(username)
-            user_obj = User.objects.get(username=username)
-            user_answer_obj = Answer.objects.filter(autor=user_obj)
-            return render(request, "profile.html", {"username": username})
-            # return render(request, "profile.html", context)
-            return HttpResponse(1)
-            # return render(request, "user_answer.html", context)
-
-            # context = {"user_answer": user_answer_obj, "answers": len(user_answer_obj)}
 
     except Exception as e:
-        print(e)
-        return render(request, "profile.html")
+        print(e, "<< --- E")
+    return HttpResponse("errrror << --- def(info_user_choice)")
 
-    return HttpResponse("1234")
-    # try:
-    #     if kwargs.get("choice") == "questions":
+    # answer_id = kwargs.get("username")
+    # update_answer_obj = Answer.objects.get(id=27)
+    # question_obj = Question.objects.get(id=1)
+    # context = {"quest": question_obj, "answer": update_answer_obj}
+    # return render(request, "questions.html", context)
 
 
 def info_user(request, **kwargs):
-    # username = request.user
     try:
         username = kwargs.get("choice")
         user_obj = User.objects.filter(username=username)
@@ -82,53 +78,14 @@ def index(request):
         .values("question_id")
         .annotate(total=Count("question_id"))
     )
-    user = User.objects.get(username="Den")
-
+    # user = User.objects.get(username="Den")
     all_question = Question.objects.all()
 
     context = {
         "all_question": all_question,
         "answers": answers,
     }
-
     return render(request, "main/index_main.html", context)
-
-
-# def get_answer(request, **kwargs):
-
-#     print(kwargs["question_id"], "<<<< ----kwargs")
-#     question_obj = Question.objects.filter(id=kwargs["question_id"])[0]
-#     print(question_obj)
-#     answer_obj = Answer.objects.filter(question=question_obj)
-
-#     for answer in answer_obj:
-#         print(answer)
-#     context = {"answers": answer_obj}
-#     return render(request, "answer.html", context)
-
-
-# def register(request):
-#     if request.method == "POST":
-#         form = UserRegisterForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect("login_in")
-#     else:
-#         form = UserRegisterForm()
-#     return render(request, "main/register.html", {"form": form})
-
-
-# @login_required(login_url="/login_in")
-# def create(request, **kwargs):
-
-#     if request.method == "POST":
-#         if form.is_valid():
-#             form.save()
-#         return redirect("index")
-#     # form = QForm()
-#     form = QForm(initial={"autor": request.user})
-#     context = {"form": form}
-#     return render(request, "main/create_qust_form.html", context)
 
 
 def update(request, **kwargs):
@@ -149,7 +106,6 @@ def update(request, **kwargs):
         return redirect(f"/user/{request.user}/")
     else:
         question_obj = Question.objects.filter(id=kwargs["question_id"])
-        # print(question_obj[0].text, "<<< -----  question_obj[0].text  ")
         form = QForm(
             initial={"text": question_obj[0].text, "autor": question_obj[0].autor}
         )
@@ -208,9 +164,11 @@ def question(request, **kwargs):
                 autor=autor_obj, question=question_obj, text=text, correct=0
             )
             answer_add.save()
+            print("дошло до сохранения")
             return redirect("question", kwargs["question_id"])
 
         context = {"quest": question_obj}
+        print("дошло до ..........")
         return render(request, "questions.html", context)
     except Exception as e:
         print(e, "<<< eeeeee")
@@ -224,12 +182,10 @@ def question(request, **kwargs):
 def user_profile(request, *args, **kwargs):
 
     user = kwargs["username"]
-
     print(request.user.username, "<<< request user")
-
     print(user, "<<< user")
-
     print(request.GET.get("q"))
+
     objects_user = User.objects.get(username=user)
     if request.GET.get("q") == "questions":
         # print(12345)
@@ -249,28 +205,11 @@ def user_profile(request, *args, **kwargs):
 
             question = Question.objects.filter(id__in=lst)
             context = {"question": question, "user": user}
-            # for q in question:
-            #     print("Вопрос: ", q.text)
-            #     for i in q.answers:
-            #         # print(type(i.autor.username))
-            #         # print(type(user))
-            #         # print(i.autor == user)
-            #         if i.autor.username == user:
-            #             print("Ответ: ", i.text)
-
-            # print(new_q, new_ans_for_q, "<<<< ---------------------------")
-
-            # for q in question:
-            #     print(q.id, "<<< id вопрос -QUESTIONS ")
-
-            # for a in answers:
-            #     print(a.question_id, "<<< id вопроса ANSWERS")
 
             # ---------------------------------------------------------------------
             if len(answers) == 0:
                 return HttpResponse("Нет ответ")
 
-            # context = {"answer": answers, "question": question}
             if request.user.username == user:
                 print("ravno")
                 return render(request, "user_answers.html", context)
@@ -297,58 +236,7 @@ def user_profile(request, *args, **kwargs):
     }
 
     # =================================================================
-    #
     return render(request, "profile.html", context)
-    return render(request, "user_profile.html", context)
-
-
-# class CustomLoginView(LoginView):
-
-#     def post(self, request):
-#         print(request.GET, "<<<<<<< ========")
-#         # Обработка отправленной формы
-#         username = request.POST.get("username")
-#         password = request.POST.get("password")
-#         print(username, password)
-
-#         # Проверка аутентификации пользователя
-#         user = authenticate(username=username, password=password)
-
-#         if user is not None:
-#             # Если пользователь существует и аутентификация прошла успешно, войти в систему
-#             login(request, user)
-#             return redirect(
-#                 f"/user/{username}"
-#                 # f"/user/"
-#             )  # Замените 'home' на имя вашего URL-шаблона для главной страницы
-#         else:
-#             # Если аутентификация не удалась, показать ошибку входа
-#             return render(
-#                 request,
-#                 "login.html",
-#                 {"error_message": "Неправильный логин или пароль"},
-#             )
-
-
-# def answer(request, question_id):
-#     """Ответ на вопрос"""
-#     username = request.user
-#     print(username)
-#     try:
-#         if request.method == "POST":
-#             autor_obj = User.objects.get(username=username)
-#             question_obj = Question.objects.get(id=question_id)
-#             text = request.POST.get("message")
-#             awnswer_add = Answer.objects.create(
-#                 autor=autor_obj, question=question_obj, text=text
-#             )
-#             awnswer_add.save()
-
-#         # return redirect(f"/user/{request.user}")
-#         return redirect(f"/q/{question_id}")
-#     except Exception as e:
-#         print(e)
-#         return render(request, "login.html")
 
 
 @login_required(login_url="/login_in")
@@ -362,8 +250,3 @@ def create(request, **kwargs):
     form = QForm(initial={"autor": request.user})
     context = {"form": form}
     return render(request, "main/create_qust_form.html", context)
-
-
-# def logoutPage(request):
-#     logout(request)
-#     return redirect("index")

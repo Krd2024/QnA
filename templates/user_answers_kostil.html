@@ -5,7 +5,7 @@
 
     <div id="answer">
       {% for ans in quest.answers %}
-        {% if request.user.username != ans.autor.username %}
+        {% if request.user.username != ans.autor.username and ans.autor.username == user %}
           <div id="del_upd">
             <div id="quest_div">{{ ans.text }}</div>
           </div>
