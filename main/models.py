@@ -63,9 +63,13 @@ class Answer(models.Model):
 class Rection(models.Model):
     user = models.ForeignKey(User, null=True, blank=False, on_delete=models.SET_NULL)
     answer = models.ForeignKey(
-        Answer, null=True, blank=False, on_delete=models.SET_NULL
+        Answer,
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+        related_name="rection_set",
     )
-    value = models.IntegerField()
+    value = models.IntegerField(default=0)
 
     """
 username: Имя пользователя (username).

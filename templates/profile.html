@@ -10,6 +10,13 @@
     <div>{{ username }}</div>
   </div>
   <div>
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          {{ message }}
+        {% endfor %}
+      </ul>
+    {% endif %}
     <div class="info">
       <div>
         <button id="button1" onclick="fun('questions')"><h4>Вопросы</h4>{{ user_question }}</button>

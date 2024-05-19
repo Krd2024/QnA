@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from main.models import Question, Answer
+from main.models import Question, Answer, Rection
 from django.contrib.auth.models import User
 from .forms import QForm
 from django.db.models import Count
@@ -134,6 +134,7 @@ def question(request, **kwargs):
     print(kwargs, "<<<< ---------- kwargs ----------")
     try:
         question_obj = Question.objects.get(id=kwargs["question_id"])
+
         if request.method == "POST":
             if not request.user.is_authenticated:
                 return redirect("login")
@@ -154,13 +155,10 @@ def question(request, **kwargs):
                 autor=autor_obj, question=question_obj, text=text, correct=0
             )
             answer_add.save()
-            print("дошло до сохранения")
             return redirect("question", kwargs["question_id"])
 
         context = {"quest": question_obj}
-        print("дошло до ..........")
         return render(request, "questions.html", context)
-        return redirect(f"/user/{request.user}/")
     except Exception as e:
         print(e, "<<< (e) def question(request, **kwargs)")
         return HttpResponse("err")
@@ -230,16 +228,51 @@ def user_profile(request, *args, **kwargs):
     return render(request, "profile.html", context)
 
 
+import time
+from datetime import datetime
+import main.settings
+from django.contrib import messages
+
+
 @login_required(login_url="/login_in")
 def create(request, **kwargs):
 
+    def limit(request):
+        try:
+            user_id = request.POST.get("autor")
+            user_obj = User.objects.get(id=user_id)
+            question = Question.objects.filter(autor=user_obj)
+            #
+            current_time = time.time()
+            dt_object = datetime.fromtimestamp(current_time)
+            limit_time = dt_object.strftime("%Y-%m-%d")
+            lst_time = []
+            for i in question:
+                str_time = i.created_at
+                x = datetime.fromisoformat(str(str_time))
+                time_question = x.strftime("%Y-%m-%d")
+                if time_question == limit_time:
+                    lst_time.append(time_question)
+            # y = x.strftime("%Y-%m-%d %H:%M")
+            print(len(lst_time))
+            if len(lst_time) >= main.settings.MAX_QUESTIONS:
+                print("Не части с вопросами")
+                return True
+            return False
+        except Exception as e:
+            print(e)
+            messages.success(request, "На сегодня с вопросами всё")
+            return redirect(f"/user/{request.user}/")
+
     if request.method == "POST":
-        print(request.POST)
+        if limit(request):
+            messages.success(request, "На сегодня с вопросами всё")
+            return redirect(f"/user/{request.user}/")
+
         form = QForm(request.POST)
         if form.is_valid():
             form.save()
         return redirect(f"/user/{request.user}/")
-    # form = QForm()
     form = QForm(initial={"autor": request.user})
     context = {"form": form}
     return render(request, "main/create_qust_form.html", context)

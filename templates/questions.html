@@ -42,17 +42,52 @@
         <hr />
         <hr />
         <div>{{ ans.text }}</div>
-        <div id="date">
-          <div>{{ ans.created_at }}</div>
+
+        <div class="footer">
+          <div>
+            {% if ans.rection_set.exists %}
+              {% for rection in ans.rection_set.all %}
+                <a href="#">
+                  <button id="rection">
+                    Не плохо<div>
+                      <hr />
+                      {{ rection.value }}
+                    </div>
+                  </button>
+                </a>
+              {% endfor %}
+            {% else %}
+              <a href="#">
+                <button id="rection">
+                  Не плохо<div>
+                    <hr />
+                    {{ 0 }}
+                  </div>
+                </button>
+              </a>
+            {% endif %}
+          </div>
+          <div id="date">
+            <div>{{ ans.created_at }}</div>
+          </div>
         </div>
       </div>
     {% endfor %}
   </div>
   <style>
-    #date {
+    .footer {
       display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    #rection {
+      border-radius: 5px;
+      font-size: 14px;
+      color: cadetblue;
+      background-color: azure;
+    }
+    #date {
       font-size: 12px;
-      flex-direction: row-reverse;
     }
     #answer {
       display: flex;
