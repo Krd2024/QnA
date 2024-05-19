@@ -18,6 +18,9 @@ class Question(models.Model):
     updated_at = models.DateTimeField(auto_now=True, blank=False)
     views = models.SmallIntegerField(default=0)
 
+    class Meta:
+        ordering = ["-created_at"]
+
     def __str__(self) -> str:
         return self.title
 

@@ -44,7 +44,7 @@ class CustomLoginView(LoginView):
             return redirect(
                 f"/user/{username}"
                 # f"/user/"
-            )  # Замените 'home' на имя вашего URL-шаблона для главной страницы
+            )
         else:
             # Если аутентификация не удалась, показать ошибку входа
             return render(

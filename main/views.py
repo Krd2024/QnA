@@ -8,19 +8,24 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 
 
-def answer_update(request, **kwargs):
-    print(111111111111111111111111)
+def answer_update_delete(request, **kwargs):
 
     try:
+        data = kwargs.get("choice")
         answer_id = kwargs.get("answer_id")
-        answer_obj = Answer.objects.get(id=answer_id)
-        print(answer_obj.question, "<<< ======= question")
-        print(answer_obj.text, "<<< ======= answer")
-        context = {"quest": answer_obj.question, "answer": answer_obj.text}
-        return render(request, "questions.html", context)
+
+        if data == "ans_update":
+            answer_obj = Answer.objects.get(id=answer_id)
+            context = {"quest": answer_obj.question, "answer": answer_obj.text}
+            return render(request, "questions.html", context)
+
+        elif data == "ans_delete":
+            answer_obj = Answer.objects.get(id=answer_id).delete()
+            return redirect(f"/user/{request.user}/")
+
     except Exception as e:
-        print(e)
-    return HttpResponse(1)
+        print(e, "< === def answer_update_delete(request, **kwargs):")
+        return redirect(f"/user/{request.user}/")
 
 
 def info_user_choice(request, **kwargs):
@@ -115,27 +120,12 @@ def update(request, **kwargs):
 
 def delete(request, **kwargs):
     # print(kwargs.get("name"), "---1")
-    # print(kwargs["name"], "---2")
-
     try:
-
         Question.objects.filter(id=kwargs["question_id"]).delete()
-        # user_profile(request)
-        user = request.user
-        # objects_user = User.objects.get(username=name)
-        # user_question = Question.objects.filter(autor=objects_user)
-        user_question = Question.objects.filter(autor=user)
-        # other_questions = Question.objects.exclude(autor_id=objects_user)
-        other_questions = Question.objects.exclude(autor_id=user)
-        context = {
-            "user_question": user_question,
-            "other_questions": other_questions,
-            "username": user,
-            # "username": objects_user,
-        }
+        return redirect(f"/user/{request.user}/")
     except Exception as e:
         print(e)
-    return render(request, "user_profile.html", context)
+    return render(request, "profile.html")
 
 
 def question(request, **kwargs):
@@ -170,8 +160,9 @@ def question(request, **kwargs):
         context = {"quest": question_obj}
         print("дошло до ..........")
         return render(request, "questions.html", context)
+        return redirect(f"/user/{request.user}/")
     except Exception as e:
-        print(e, "<<< eeeeee")
+        print(e, "<<< (e) def question(request, **kwargs)")
         return HttpResponse("err")
 
 
@@ -243,9 +234,11 @@ def user_profile(request, *args, **kwargs):
 def create(request, **kwargs):
 
     if request.method == "POST":
+        print(request.POST)
+        form = QForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect("index")
+        return redirect(f"/user/{request.user}/")
     # form = QForm()
     form = QForm(initial={"autor": request.user})
     context = {"form": form}

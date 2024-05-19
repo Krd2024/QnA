@@ -4,10 +4,10 @@
       <div id="del_upd">
         <div id="quest_div">{{ quest }}</div>
         <div>
-          <button id="">Редактировать</button>
+          <a href="{% url 'question_update' quest.id %}"><button id="">Редактировать</button></a>
         </div>
         <div>
-          <button id="">Удалить</button>
+          <a href="{% url 'question_delete' quest.id %}"><button id="">Удалить</button></a>
         </div>
       </div>
     {% else %}
