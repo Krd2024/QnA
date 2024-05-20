@@ -66,10 +66,14 @@ class Rection(models.Model):
         Answer,
         null=True,
         blank=False,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="rection_set",
     )
     value = models.IntegerField(default=0)
+
+    @property
+    def reaction_count(self):
+        return self.reactions.count()
 
     """
 username: Имя пользователя (username).

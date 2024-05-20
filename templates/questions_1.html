@@ -3,6 +3,8 @@
 {% load static %}
 
 {% block content %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+
   <script>
     async function increaseCounter(answerId) {
       const response = await fetch(`/increase_counter/${answerId}/`, {
@@ -23,7 +25,6 @@
       }
     }
   </script>
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 
   <div id="conteiner">
     <div id="box">

@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
 from main.models import Question, Answer, Rection
@@ -6,6 +6,54 @@ from django.contrib.auth.models import User
 from .forms import QForm
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+
+
+def increase_counter(request, **kwargs):
+    print("пришло")
+
+    # def increase_reaction(request, **kwargs):
+    question_id = kwargs.get("question_id")
+    answer_id = kwargs.get("answer_id")
+    if request.method == "POST":
+        try:
+            answer = Answer.objects.get(id=answer_id)
+            # Предположим, что у вас есть поле в модели Answer для хранения количества реакций
+            # Например, answer.reaction_count
+            # answer.reaction_count += 1
+            # answer.save()
+            reaction = Rection.objects.create(answer=answer)
+            answer.add_reaction(reaction)
+            return JsonResponse({"success": True, "new_value": answer.reaction_count})
+        except Answer.DoesNotExist:
+            return JsonResponse(
+                {"success": False, "error": "Answer not found"}, status=404
+            )
+        # return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
+
+    # try:
+
+    #     # if not question_id:
+    #     #     return HttpResponse("Invalid request: question_id not provided", status=400)
+
+    #     # question = get_object_or_404(Question, id=question_id)
+    #     question = Question.objects.get(id=86)
+    #     answers = question.answers.all()
+
+    #     # Подсчет реакций для каждого ответа
+    #     for answer in answers:
+    #         answer.reaction_count = answer.rection_set.count()
+
+    #     context = {
+    #         "quest": question,
+    #         "answers": answers,
+    #     }
+
+    #     return render(request, "questions_1.html", context)
+
+    # except Exception as e:
+    #     print(e, "<----------------- def rection")
+    # return HttpResponse(1)
 
 
 def answer_update_delete(request, **kwargs):
@@ -57,12 +105,6 @@ def info_user_choice(request, **kwargs):
     except Exception as e:
         print(e, "<< --- E")
     return HttpResponse("errrror << --- def(info_user_choice)")
-
-    # answer_id = kwargs.get("username")
-    # update_answer_obj = Answer.objects.get(id=27)
-    # question_obj = Question.objects.get(id=1)
-    # context = {"quest": question_obj, "answer": update_answer_obj}
-    # return render(request, "questions.html", context)
 
 
 def info_user(request, **kwargs):
@@ -130,6 +172,10 @@ def delete(request, **kwargs):
 
 def question(request, **kwargs):
     """Выводит один вопрос и ответы к нему"""
+    # ----------------------------------------------------------------
+    question_obj = Question.objects.get(id=kwargs["question_id"])
+
+    # ----------------------------------------------------------------
 
     print(kwargs, "<<<< ---------- kwargs ----------")
     try:
@@ -156,8 +202,19 @@ def question(request, **kwargs):
             )
             answer_add.save()
             return redirect("question", kwargs["question_id"])
+        # ---------------------------------------------
+        answers = question_obj.answers.all()
 
-        context = {"quest": question_obj}
+        # Подсчет реакций для каждого ответа
+        for answer in answers:
+            answer.reaction_count = answer.rection_set.count()
+
+        # context = {
+        #     "answers": answers,
+        # }
+
+        # --------------------------------------------
+        context = {"quest": question_obj, "answers": answers}
         return render(request, "questions.html", context)
     except Exception as e:
         print(e, "<<< (e) def question(request, **kwargs)")

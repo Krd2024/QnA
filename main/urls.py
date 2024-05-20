@@ -27,5 +27,12 @@ urlpatterns = [
         name="info_user_choice",
     ),
     path("user/<str:choice>/", info_user, name="info_user"),
-    #
+    # path("answer/<str:choice>/", rection, name="rection"),
+    path(
+        "increase_counter/<int:answer_id>/",
+        increase_counter,
+        name="increase_counter",
+    ),
 ]
+
+# terminal.integrated.fontSize
