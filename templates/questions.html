@@ -1,4 +1,4 @@
-{% extends 'main.html' %}
+{% extends 'wrapper/main.html' %}
 
 {% load static %}
 
@@ -23,26 +23,40 @@
       }
     }
   </script>
+
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
 
-  <div id="conteiner">
-    <div id="box">
-      <div>
-        <a href="/user/{{ quest.autor }}">{{ quest.autor }}</a>
-        <a href="https://qna.habr.com/tag/python/questions">{{ quest.teg }}</a>
+  <div>
+    {% include 'shared/user_witget.html' with user=quest.autor %}
+  </div>
 
-        <div>
-          <h5>{{ quest.title }}</h5>
-          <hr />
-          <br />
-          <h4>{{ quest.text }}</h4>
-        </div>
-        <div class="date">
-          <div>Вопрос задан: {{ quest.created_at }}</div>
-          <div>Изменён: {{ quest.updated_at }}</div>id: {{ quest.id }}
-        </div>
-      </div>
+  <div class="question-container">
+    <div>
+      <p class="teg">{{ quest.teg }}</p>
     </div>
+    <div class="title">{{ quest.title }}</div>
+    <div class="question">{{ quest.text }}</div>
+    <div>Создано {{ quest.created_at|timesince }} назад</div>
+    <div>
+      <button>delete</button>
+      <button>edit</button>
+    </div>
+  </div>
+
+  <div class="solution-container">
+    <div>Решение вопроса(кол-во)</div>
+    {% for answer in answers %}
+      {% include 'shared/user_witget.html' with user=answer.autor %}
+      <div>
+        {{ answer.text }}
+        <button id="rection" onclick="increaseCounter({{ answer.id }})">
+          Не плохо<div>
+            <hr />
+            <span id="counter-{{ answer.id }}">{{ answer.reaction_count }}</span>
+          </div>
+        </button>
+      </div>
+    {% endfor %}
   </div>
 
   <form action="{% url 'question' quest.id %}" method="post" id="form">
@@ -52,7 +66,7 @@
     <button type="submit">Отправить</button>
   </form>
 
-  <div class="answers-container">
+  {% comment %} <div class="answers-container">
     <div id="label">Ответы</div>
     {% for answer in answers %}
       <div id="answer">
@@ -65,7 +79,7 @@
         </button>
       </div>
     {% endfor %}
-  </div>
+  </div> {% endcomment %}
   <style>
     .footer {
       display: flex;

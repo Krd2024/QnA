@@ -7,13 +7,14 @@
     <title>Document</title>
   </head>
   <body>
-    {% include 'navbar.html' %}
+    {% include 'wrapper/navbar.html' %}
+    {% include 'wrapper/aside.html' %}
 
     {% block content %}
 
     {% endblock %}
 
-    {% include 'footer.html' %}
+    {% include 'wrapper/footer.html' %}
   </body>
   <style>
     * {
