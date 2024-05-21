@@ -11,49 +11,19 @@ from django.shortcuts import render, get_object_or_404
 
 def increase_counter(request, **kwargs):
     print("пришло")
-
-    # def increase_reaction(request, **kwargs):
-    question_id = kwargs.get("question_id")
     answer_id = kwargs.get("answer_id")
     if request.method == "POST":
         try:
             answer = Answer.objects.get(id=answer_id)
-            # Предположим, что у вас есть поле в модели Answer для хранения количества реакций
-            # Например, answer.reaction_count
-            # answer.reaction_count += 1
-            # answer.save()
             reaction = Rection.objects.create(answer=answer)
-            answer.add_reaction(reaction)
-            return JsonResponse({"success": True, "new_value": answer.reaction_count})
-        except Answer.DoesNotExist:
-            return JsonResponse(
-                {"success": False, "error": "Answer not found"}, status=404
-            )
-        # return JsonResponse({"success": False, "error": "Invalid request"}, status=400)
-
-    # try:
-
-    #     # if not question_id:
-    #     #     return HttpResponse("Invalid request: question_id not provided", status=400)
-
-    #     # question = get_object_or_404(Question, id=question_id)
-    #     question = Question.objects.get(id=86)
-    #     answers = question.answers.all()
-
-    #     # Подсчет реакций для каждого ответа
-    #     for answer in answers:
-    #         answer.reaction_count = answer.rection_set.count()
-
-    #     context = {
-    #         "quest": question,
-    #         "answers": answers,
-    #     }
-
-    #     return render(request, "questions_1.html", context)
-
-    # except Exception as e:
-    #     print(e, "<----------------- def rection")
-    # return HttpResponse(1)
+            return HttpResponse(1)
+            # return JsonResponse({"success": True, "new_value": answer.reaction_count})
+        # except Answer.DoesNotExist:
+        # return JsonResponse(
+        #     {"success": False, "error": "Answer not found"}, status=404
+        # )
+        except Exception as e:
+            print(e)
 
 
 def answer_update_delete(request, **kwargs):
@@ -192,7 +162,12 @@ def question(request, **kwargs):
                     autor=autor_obj, question=question_obj
                 )
                 proverka_na_dublic.delete()
-                print(len(proverka_na_dublic))
+                print(
+                    proverka_na_dublic,
+                    " --- ",
+                    len(proverka_na_dublic),
+                    "<<<< ------------ proverka_na_dublic",
+                )
             except Exception as e:
                 print(e, "<<<< ======== E")
 

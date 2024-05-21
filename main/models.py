@@ -41,7 +41,7 @@ class Answer(models.Model):
         Question,
         null=True,
         blank=False,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="question",
     )
 
@@ -53,8 +53,6 @@ class Answer(models.Model):
     )
     correct = models.BooleanField(default=False, blank=True)
 
-    # def __str__(self) -> str:
-    #     return self.text
     def __str__(self) -> str:
         q = Question.objects.get(id=self.question.id)
         return f"Вопрос ' _ {q} _ ': {self.text}"

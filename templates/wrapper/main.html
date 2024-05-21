@@ -7,16 +7,21 @@
     <title>Document</title>
   </head>
   <body>
-    {% include 'wrapper/navbar.html' %}
-    {% include 'wrapper/aside.html' %}
+    <div class="body">
+      {% include 'wrapper/navbar.html' %}
+      {% include 'wrapper/aside.html' %}
 
-    {% block content %}
+      {% block content %}
 
-    {% endblock %}
+      {% endblock %}
+    </div>
 
     {% include 'wrapper/footer.html' %}
   </body>
   <style>
+    .body {
+      display: flex;
+    }
     * {
       margin: 0;
       padding: 0;

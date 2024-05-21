@@ -24,81 +24,129 @@
     }
   </script>
 
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+  {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" /> {% endcomment %}
+  <body>
+    <div class="page_box">
+      {% include 'shared/user_witget.html' with user=quest.autor %}
 
-  <div>
-    {% include 'shared/user_witget.html' with user=quest.autor %}
-  </div>
-
-  <div class="question-container">
-    <div>
-      <p class="teg">{{ quest.teg }}</p>
-    </div>
-    <div class="title">{{ quest.title }}</div>
-    <div class="question">{{ quest.text }}</div>
-    <div>Создано {{ quest.created_at|timesince }} назад</div>
-    <div>
-      <button>delete</button>
-      <button>edit</button>
-    </div>
-  </div>
-
-  <div class="solution-container">
-    <div>Решение вопроса(кол-во)</div>
-    {% for answer in answers %}
-      {% include 'shared/user_witget.html' with user=answer.autor %}
-      <div>
-        {{ answer.text }}
-        <button id="rection" onclick="increaseCounter({{ answer.id }})">
-          Не плохо<div>
-            <hr />
-            <span id="counter-{{ answer.id }}">{{ answer.reaction_count }}</span>
-          </div>
-        </button>
+      <div class="question-container">
+        <hr class="hr" />
+        <div>
+          <p class="teg">{{ quest.teg }}</p>
+        </div>
+        <div class="title">{{ quest.title }}</div>
+        <div class="question">{{ quest.text }}</div>
+        <div class="create">Создано {{ quest.created_at|timesince }} назад</div>
+        <hr class="hr" />
+        <div>
+          <button class="btn">delete</button>
+          <button class="btn">edit</button>
+        </div>
       </div>
-    {% endfor %}
-  </div>
 
-  <form action="{% url 'question' quest.id %}" method="post" id="form">
-    {% csrf_token %}
-    <label for="message">Ответить на вопрос:</label><br />
-    <textarea id="message" name="message" rows="8" cols="80">{{ answer }}</textarea><br />
-    <button type="submit">Отправить</button>
-  </form>
+      <div class="solution-container">
+        <div class="text-1">Решение вопроса(кол-во)</div>
+        <hr id="black" />
+        <hr id="black" />
 
-  {% comment %} <div class="answers-container">
-    <div id="label">Ответы</div>
-    {% for answer in answers %}
-      <div id="answer">
-        {{ answer.text }}
-        <button id="rection" onclick="increaseCounter({{ answer.id }})">
-          Не плохо<div>
-            <hr />
-            <span id="counter-{{ answer.id }}">{{ answer.reaction_count }}</span>
+        {% for answer in answers %}
+          {% include 'shared/user_witget.html' with user=answer.autor %}
+
+          <div id="text">
+            <div>{{ answer.text }}</div>
+            <button id="rection" onclick="increaseCounter({{ answer.id }})">
+              <div>
+                <span id="counter-{{ answer.id }}">Не плохо | {{ answer.reaction_count }}</span>
+              </div>
+            </button>
           </div>
-        </button>
+          <hr />
+          <hr />
+        {% endfor %}
       </div>
-    {% endfor %}
-  </div> {% endcomment %}
+
+      <form action="{% url 'question' quest.id %}" method="post" id="form">
+        {% csrf_token %}
+        <label for="message">Ответить на вопрос:</label><br />
+        <textarea id="message" name="message" rows="8" cols="80">{{ answer }}</textarea><br />
+        <button type="submit">Отправить</button>
+      </form>
+    </div>
+    <div class="right-info"></div>
+  </body>
   <style>
-    .footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
+    .page_box {
+      color: #333;
+      background: #dee1e5;
     }
+    .right-info {
+      min-width: 220px;
+      border: 1px solid black;
+      background: #dee1e5;
+    }
+    
     #rection {
+      margin: 10px 0 20px 0;
+      padding: 0 5px 0 5px;
+      background-color: #65c178;
+      color: #fff;
+      border-color: transparent;
       border-radius: 5px;
+      line-height: 30px;
+    }
+    #text {
+      margin-left: 47px;
+    }
+    #user-witget {
+      margin: 5px 0 10px 0;
+    }
+    .page_box {
+      width: 900px;
+      padding: 0 30px 15px;
+      margin: 10px;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      font-size: 100%;
+      vertical-align: baseline;
+      background: 0 0;
+      box-sizing: border-box;
+    }
+    .question-container {
+      padding: 0 0 25px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      font-size: 100%;
+      vertical-align: baseline;
+      background: 0 0;
+    }
+    .text-1 {
+      margin: 20px;
+    }
+    
+    .btn {
+      border-color: #a5acb3;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .title {
+      font-size: 23px;
+      line-height: 26px;
+      font-weight: 700;
+    }
+    .question {
+      font-size: 18px;
+      line-height: 1.5em;
+      overflow: hidden;
+    }
+    .create {
+      margin: 4px 0 3px;
       font-size: 14px;
-      color: cadetblue;
-      background-color: azure;
-    }
-    #date {
-      font-size: 12px;
-    }
-    #answer {
-      display: flex;
-      flex-direction: column;
-      padding: 10px;
+      font-weight: 400;
+      color: #9099a3;
+      line-height: 1em;
     }
   </style>
 {% endblock %}

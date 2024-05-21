@@ -1,7 +1,7 @@
 {% comment %}виджет юзера с его аватаркой именем юзернеймом и должностью{% endcomment %}
 <div class="user-widget">
-  <div class="user-widget-img">
-    <img src="/static/img/head.png" alt="" width="34" />
+  <div>
+    <img class="user-widget-img" src="/static/img/head.png" alt="" width="36" />
   </div>
   <div class="user-widget-info">
     <p class="user-widget-info-name">
@@ -15,7 +15,11 @@
   </div>
 </div>
 <style>
+  .user-widget-img {
+    border-radius: 50px;
+  }
   .user-widget {
+    margin: 10px;
     display: flex;
     align-items: flex-end;
     gap: 2px;
