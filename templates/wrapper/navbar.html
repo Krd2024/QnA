@@ -1,7 +1,8 @@
 <menu>
   <ul>
+    <span>Пользователи</span>
     <li>
-      <form id="loginForm" action="{% url 'login' %}" method="post">
+      <form class="loginForm" action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="username" value="bright_sunshine" />
         <input type="hidden" name="password" value="1" />
@@ -9,7 +10,7 @@
       </form>
     </li>
     <li>
-      <form id="loginForm" action="{% url 'login' %}" method="post">
+      <form class="loginForm" action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="username" value="abc" />
         <input type="hidden" name="password" value="g2j-mbj-wbN-zBV" />
@@ -18,7 +19,7 @@
     </li>
 
     <li>
-      <form id="loginForm" action="{% url 'login' %}" method="post">
+      <form class="loginForm" action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="username" value="Den" />
         <input type="hidden" name="password" value="1" />
@@ -33,8 +34,8 @@
     </li>
   </ul>
   <div></div>
-  <a href="{% url 'index' %}">Главная</a>
-  <a href="{% url 'question_create' %}">Задать вопрос</a>
+  {% comment %} <a href="{% url 'index' %}">Главная</a> {% endcomment %}
+  {% comment %} <a href="{% url 'question_create' %}">Задать вопрос</a> {% endcomment %}
   <div>
     {% if request.user.is_authenticated %}
       {% comment %} <a href="{% url 'user' request.user.username %}">Главная</a> {% endcomment %}
@@ -49,8 +50,13 @@
 </menu>
 
 <style>
+  .loginForm {
+    margin: 5px;
+    width: 15vh;
+    text-align: left;
+  }
   menu {
-    width: 250px;
+    width: 16vw;
     display: flex;
     flex-direction: column;
     align-items: flex-start;

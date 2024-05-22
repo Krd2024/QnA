@@ -1,31 +1,71 @@
 {% extends 'wrapper/main.html' %}
 {% load static %}
 {% block content %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
-
+  {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" /> {% endcomment %}
   {% for quest in all_question %}
     <div id="conteiner">
       <div id="box">
         <div class="autor&title">
+          {% include 'shared/user_witget.html' with user=quest.autor %}
           <h4 id="teg">{{ quest.teg }}</h4>
 
-          <a href="{% url 'question' quest.id %}"><h3>{{ quest.title }}</h3></a>
+          <a href="{% url 'question' quest.id %}"><h3 class="title">{{ quest.title }}</h3></a>
         </div>
         <div class="date">
-          <div>Вопрос задан: {{ quest.created_at }}</div>
-          <div>Изменён: {{ quest.updated_at }}</div>
+          <span>Вопрос задан: {{ quest.created_at|timesince }}</span>
         </div>
         <div id="views">Просмотры: {{ quest.views }}</div>
-
-        {% for ans in answers %}
-          {% if ans.question_id == quest.id %}
-            {{ other_quest.id }}
-            <div class="ans">
-              <a href="{% url 'question' quest.id %}" id="ans">Ответов:</a>{{ ans.total }}
-            </div>
-          {% endif %}
-        {% endfor %}
+        <div class="answer">
+          {% for ans in answers %}
+            {% if ans.question_id == quest.id %}
+              {{ other_quest.id }}
+              <div class="ans">
+                <a href="{% url 'question' quest.id %}" id="ans">{{ ans.total }}</a><p class="total">Ответов</p>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
       </div>
     </div>
+    <hr />
   {% endfor %}
+  <style>
+    a {
+      text-decoration: none;
+    }
+    .date {
+      margin: 4px 0 3px;
+      font-size: 16px;
+      font-weight: 400;
+      color: #9099a3;
+      line-height: 1em;
+    }
+    .title {
+      font-size: 23px;
+      line-height: 26px;
+      font-weight: 700;
+    }
+    #ans {
+      margin-right: 25px;
+      color: #65c178;
+      font-size: 27px;
+      font-weight: 700;
+    }
+    #box {
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+      background-color: white;
+    }
+    .answer {
+      color: #65c178;
+      font-size: 21px;
+      font-weight: 700;
+      text-align: center;
+      line-height: 1em;
+      margin-bottom: 5px;
+    
+      text-align: right;
+    }
+  </style>
 {% endblock %}

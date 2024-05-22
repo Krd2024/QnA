@@ -6,26 +6,105 @@
 
     <title>Document</title>
   </head>
+  {% comment %} {% include 'wrapper/aside.html' %} {% endcomment %}
   <body>
+    <div class="head">
+      <div class="logo">
+        <a href="{% url 'index' %}"><img class="widget-img" src="/static/img/habr_logo.png" alt="" width="136" /></a>
+      </div>
+      <div class="poisk">
+        <input type="search" autocomplete="off" name="q" placeholder="Найти вопрос, ответ, тег или пользователя" value="" />
+      </div>
+      <a href="{% url 'question_create' %}" id="add-answer" class="p">Задать вопрос</a>
+    </div>
     <div class="body">
       {% include 'wrapper/navbar.html' %}
-      {% include 'wrapper/aside.html' %}
+      <div class="content">
+        {% block content %}
 
-      {% block content %}
-
-      {% endblock %}
+        {% endblock %}
+      </div>
+      <div class="right-info"></div>
     </div>
 
     {% include 'wrapper/footer.html' %}
   </body>
   <style>
+    a {
+      text-decoration: none;
+    }
+    .p {
+      color: #dee1e5;
+    }
+    #add-answer {
+      border-radius: 5px;
+      font-size: 2vw;
+      padding: 0 5px 0 5px;
+      background-color: #65c178;
+    }
+    .poisk {
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased !important;
+      box-sizing: border-box;
+      box-shadow: 0 0;
+      outline: none;
+      padding: 7px 5px;
+      position: relative;
+      -webkit-appearance: none;
+      transition: border ease 0.5s;
+      font-family: toster-text, Helvetica, Arial, sans-serif;
+      z-index: 0;
+      width: 60vw;
+      background: #424b5f;
+      padding-left: 15px;
+      padding-right: 15px;
+      border: 0;
+      border-radius: 5px;
+      color: #a7b3cb;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 400;
+      height: 37px;
+      line-height: 1.5em;
+      margin: 0;
+      text-align: left;
+    }
+    .widget-img {
+      width: 10vw;
+      border-radius: 3px;
+      margin-top: 5px;
+    }
+    .head {
+      border: 1 px red;
+    
+      display: inline-flex;
+      justify-content: space-around;
+      align-items: center;
+    
+      padding: 10px;
+      width: 100%;
+      background-color: #4f5a6e;
+      height: 60px;
+    }
+    
+    .right-info {
+      width: 20vw;
+      background: #dee1e5;
+    }
     .body {
+      background: #dee1e5;
       display: flex;
     }
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+    }
+    .content {
+      display: initial;
+      background-color: #9999;
+      width: 65vw;
+      height: 100%%;
     }
   </style>
 </html>

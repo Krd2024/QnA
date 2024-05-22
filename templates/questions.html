@@ -27,6 +27,7 @@
   {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" /> {% endcomment %}
   <body>
     <div class="page_box">
+      {{ quest.autor }}
       {% include 'shared/user_witget.html' with user=quest.autor %}
 
       <div class="question-container">
@@ -72,17 +73,10 @@
         <button type="submit">Отправить</button>
       </form>
     </div>
-    <div class="right-info"></div>
   </body>
   <style>
-    .page_box {
-      color: #333;
-      background: #dee1e5;
-    }
-    .right-info {
-      min-width: 220px;
-      border: 1px solid black;
-      background: #dee1e5;
+    a {
+      text-decoration: none;
     }
     
     #rection {
@@ -101,15 +95,16 @@
       margin: 5px 0 10px 0;
     }
     .page_box {
-      width: 900px;
-      padding: 0 30px 15px;
-      margin: 10px;
-      padding: 0;
+      background-color: white;
+      width: 65vw;
+      padding: 20px;
+      margin: 0px;
+    
       border: 0;
       outline: 0;
       font-size: 100%;
       vertical-align: baseline;
-      background: 0 0;
+    
       box-sizing: border-box;
     }
     .question-container {
@@ -120,7 +115,6 @@
       outline: 0;
       font-size: 100%;
       vertical-align: baseline;
-      background: 0 0;
     }
     .text-1 {
       margin: 20px;
