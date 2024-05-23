@@ -1,47 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-      }
-      
-      form {
-        margin: 20px auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        max-width: 300px;
-      }
-      
-      label {
-        font-weight: bold;
-      }
-      
-      input[type='text'],
-      input[type='password'],
-      input[type='submit'] {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-sizing: border-box;
-      }
-      
-      input[type='submit'] {
-        background-color: #4caf50;
-        color: white;
-        cursor: pointer;
-      }
-      
-      input[type='submit']:hover {
-        background-color: #45a049;
-      }
-    </style>
-  </head>
+{% extends 'wrapper/main.html' %}
+{% block content %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    
+    form {
+      margin: 20px auto;
+      padding: 20px;
+      border: 1px solid #ccc;
+      max-width: 300px;
+    }
+    
+    label {
+      font-weight: bold;
+    }
+    
+    input[type='text'],
+    input[type='password'],
+    input[type='submit'] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+    
+    input[type='submit'] {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+    
+    input[type='submit']:hover {
+      background-color: #45a049;
+    }
+  </style>
+
   <body>
     <form action="/login/" method="post">
       {% csrf_token %}
@@ -52,4 +48,4 @@
       <input type="submit" value="Войти" />
     </form>
   </body>
-</html>
+{% endblock %}

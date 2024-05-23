@@ -39,10 +39,13 @@
         <div class="question">{{ quest.text }}</div>
         <div class="create">Создано {{ quest.created_at|timesince }} назад</div>
         <hr class="hr" />
-        <div>
-          <button class="btn">delete</button>
-          <button class="btn">edit</button>
-        </div>
+        {% if request.user == quest.autor %}
+          <div>
+            <button class="btn">delete</button>
+            <button class="btn">edit</button>
+            <hr />
+          </div>
+        {% endif %}
       </div>
 
       <div class="solution-container">

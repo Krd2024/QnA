@@ -1,5 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from main.models import Question, Answer, Rection
 from django.contrib.auth.models import User
@@ -7,6 +8,30 @@ from .forms import QForm
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
+
+
+def search(request, **kwargs):
+    print(kwargs["search"])
+
+    try:
+        search = kwargs["search"]
+        print(search, "<<<<<<<<<<<<<<<<<<<<<<")
+        question = Question.objects.all()
+        title_question = {}
+        for title in question:
+            title_question[title.id] = title.title.split(" ")
+
+        for key, val in title_question.items():
+            if search in val:
+                sentence = " ".join(val)
+                print(sentence)
+                return HttpResponse(key)
+        return HttpResponse()
+
+    except Exception as e:
+        print(e, "<<<< ------------- E --- def search()")
+    return render(request, "question.html")
 
 
 def increase_counter(request, **kwargs):
@@ -18,10 +43,7 @@ def increase_counter(request, **kwargs):
             reaction = Rection.objects.create(answer=answer)
             return HttpResponse(1)
             # return JsonResponse({"success": True, "new_value": answer.reaction_count})
-        # except Answer.DoesNotExist:
-        # return JsonResponse(
-        #     {"success": False, "error": "Answer not found"}, status=404
-        # )
+
         except Exception as e:
             print(e)
 
@@ -144,12 +166,11 @@ def question(request, **kwargs):
     """Выводит один вопрос и ответы к нему"""
     # ----------------------------------------------------------------
     question_obj = Question.objects.get(id=kwargs["question_id"])
-
     # ----------------------------------------------------------------
-
     print(kwargs, "<<<< ---------- kwargs ----------")
     try:
         question_obj = Question.objects.get(id=kwargs["question_id"])
+        print(question_obj, "<<<< ---------- question_obj ----------")
 
         if request.method == "POST":
             if not request.user.is_authenticated:
@@ -179,17 +200,12 @@ def question(request, **kwargs):
             return redirect("question", kwargs["question_id"])
         # ---------------------------------------------
         answers = question_obj.answers.all()
-
         # Подсчет реакций для каждого ответа
         for answer in answers:
             answer.reaction_count = answer.rection_set.count()
-
-        # context = {
-        #     "answers": answers,
-        # }
-
         # --------------------------------------------
         context = {"quest": question_obj, "answers": answers}
+
         return render(request, "questions.html", context)
     except Exception as e:
         print(e, "<<< (e) def question(request, **kwargs)")
