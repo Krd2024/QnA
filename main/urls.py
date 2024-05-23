@@ -1,9 +1,11 @@
 from django.urls import path
 from .views import *
 from . import auth_user_view
+from main import views
 
 
 urlpatterns = [
+    #
     path("", index, name="index"),
     path("q/create/", create, name="question_create"),  # 1
     path("q/<int:question_id>/", question, name="question"),  # 1

@@ -15,9 +15,10 @@
       })
     
       const data = await response.json()
+      console.log(data.answer)
     
       if (data.success) {
-        document.getElementById(`counter-${answerId}`).innerText = data.new_value
+        document.getElementById(`counter-${answerId}`).innerText = 'Не плохо | ' + data.answer
       } else {
         console.error('Failed to increase counter')
       }
@@ -49,7 +50,7 @@
       </div>
 
       <div class="solution-container">
-        <div class="text-1">Решение вопроса(кол-во)</div>
+        <div class="text-1">Решение вопроса ({{ answers|length }})</div>
         <hr id="black" />
         <hr id="black" />
 

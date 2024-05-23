@@ -2,6 +2,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
+
 from main.models import Question, Answer, Rection
 from django.contrib.auth.models import User
 from .forms import QForm
@@ -9,6 +10,11 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.views.generic import DetailView
+
+
+#
+#
 
 
 def search(request, **kwargs):
@@ -40,12 +46,17 @@ def increase_counter(request, **kwargs):
     if request.method == "POST":
         try:
             answer = Answer.objects.get(id=answer_id)
+            print(answer)
             reaction = Rection.objects.create(answer=answer)
-            return HttpResponse(1)
-            # return JsonResponse({"success": True, "new_value": answer.reaction_count})
+            reaction.save()
+            reac_count = answer.rection_set.count()
+            print(reac_count)
+            # return HttpResponse({"answer": answer})
+            return JsonResponse({"success": True, "answer": reac_count})
 
         except Exception as e:
             print(e)
+    return HttpResponse()
 
 
 def answer_update_delete(request, **kwargs):
