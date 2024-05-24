@@ -3,29 +3,6 @@
 {% load static %}
 
 {% block content %}
-  <script>
-    async function increaseCounter(answerId) {
-      const response = await fetch(`/increase_counter/${answerId}/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({})
-      })
-    
-      const data = await response.json()
-      console.log(data.answer)
-    
-      if (data.success) {
-        document.getElementById(`counter-${answerId}`).innerText = 'Не плохо | ' + data.answer
-      } else {
-        console.error('Failed to increase counter')
-      }
-    }
-  </script>
-
-  {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" /> {% endcomment %}
   <body>
     <div class="page_box">
       {{ quest.autor }}
@@ -50,7 +27,7 @@
       </div>
 
       <div class="solution-container">
-        <div class="text-1">Решение вопроса ({{ answers|length }})</div>
+        <div class="text-1">Ответы на вопрос ({{ answers|length }})</div>
         <hr id="black" />
         <hr id="black" />
 
@@ -64,7 +41,19 @@
                 <span id="counter-{{ answer.id }}">Не плохо | {{ answer.reaction_count }}</span>
               </div>
             </button>
+            {% if request.user == quest.autor %}
+              <button class="correct" onclick="correction({{ answer.id }})">
+                <div>
+                  <span id="{{ answer.id }}">Отметить как правильное</span>
+                </div>
+              </button>
+            {% else %}
+              <div class="correct">
+                <span>Решение | 🥇</span>
+              </div>
+            {% endif %}
           </div>
+
           <hr />
           <hr />
         {% endfor %}
@@ -78,9 +67,54 @@
       </form>
     </div>
   </body>
+  <script>
+    async function increaseCounter(answerId) {
+      const response = await fetch(`/increase_counter/${answerId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({})
+      })
+    
+      const data = await response.json()
+      console.log(data.answer)
+    
+      if (data.success) {
+        document.getElementById(`counter-${answerId}`).innerText = 'Не плохо | ' + data.answer
+      } else {
+        console.error('Failed to increase counter')
+      }
+    }
+    
+    async function correction(answerId) {
+      const response = await fetch(`/correct/${answerId}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({})
+      })
+    
+      const data = await response.json()
+      console.log(data.a)
+    
+      if (data.success) {
+        document.getElementById(`${answerId}`).innerText = 'Решение | ✓'
+      } else {
+        console.error('Failed to increase counter')
+      }
+    }
+  </script>
   <style>
     a {
       text-decoration: none;
+    }
+    .correct {
+      display: inline-block;
+      margin-left: 110px;
     }
     
     #rection {

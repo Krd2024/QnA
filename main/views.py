@@ -15,6 +15,23 @@ from django.views.generic import DetailView
 
 #
 #
+def correct(request, **kwargs):
+    if not request.user.is_authenticated:
+        return HttpResponse()
+    if request.method == "POST":
+        answer_id = kwargs["answer_id"]
+        answer_obj = Answer.objects.get(id=answer_id)
+        if (
+            request.user != answer_obj.question.autor
+            or answer_obj.autor == request.user
+        ):
+            return HttpResponse()
+
+        new_correct = Answer.objects.get(id=answer_id)
+        new_correct.correct = True
+        new_correct.save()
+
+    return JsonResponse({"success": True, "a": f"good-answer"})
 
 
 def search(request, **kwargs):
@@ -42,16 +59,25 @@ def search(request, **kwargs):
 
 def increase_counter(request, **kwargs):
     print("пришло")
+    if not request.user.is_authenticated:
+        return HttpResponse()
     answer_id = kwargs.get("answer_id")
     if request.method == "POST":
         try:
             answer = Answer.objects.get(id=answer_id)
-            print(answer)
-            reaction = Rection.objects.create(answer=answer)
+
+            proverka = Rection.objects.filter(answer=answer, user=request.user)
+            if len(proverka) != 0:
+                proverka.delete()
+                reac_count = answer.rection_set.count()
+                return JsonResponse({"success": True, "answer": reac_count})
+            elif request.user == answer.autor:
+                return HttpResponse()
+
+            reaction = Rection.objects.create(answer=answer, user=request.user)
             reaction.save()
             reac_count = answer.rection_set.count()
             print(reac_count)
-            # return HttpResponse({"answer": answer})
             return JsonResponse({"success": True, "answer": reac_count})
 
         except Exception as e:

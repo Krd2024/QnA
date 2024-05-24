@@ -75,6 +75,7 @@ class Rection(models.Model):
         return self.reactions.count()
 
     """
+    поля класса User 
 username: Имя пользователя (username).
 password: Пароль.
 email: Электронная почта.
