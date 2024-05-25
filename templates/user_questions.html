@@ -2,7 +2,20 @@
   <div>
     {% if request.user == quest.autor %}
       <div id="del_upd">
-        <div id="quest_div">{{ quest }}</div>
+        <div id="quest_div">
+          <div class="question-container">
+            <hr class="hr" />
+            <div>
+              <p class="teg">{{ quest.teg }}</p>
+            </div>
+            <div class="title">
+              <h3>{{ quest.title }}</h3>
+            </div>
+            <div class="question">{{ quest.text }}</div>
+            <div class="create">Создано {{ quest.created_at|timesince }} назад</div>
+            <hr />
+          </div>
+        </div>
         <div>
           <a href="{% url 'question_update' quest.id %}"><button id="">Редактировать</button></a>
         </div>
@@ -18,18 +31,23 @@
 {% endfor %}
 
 <style>
+  .create {
+    margin: 5px 0 2px 0;
+    font-size: 15px;
+    color: cadetblue;
+  }
   #del_upd {
     display: flex;
     align-items: center;
     justify-content: space-around;
   }
   #quest_div {
-    padding: 5px;
+    padding: 10px;
     border-radius: 5px;
     margin: 5px;
     width: 70%;
     min-height: 50px;
     height: fit-content;
-    background-color: ;
+    background-color: silver;
   }
 </style>

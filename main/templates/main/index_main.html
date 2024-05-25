@@ -5,30 +5,38 @@
     <div id="conteiner">
       <div id="box">
         <div class="autor&title">
-          {% include 'shared/user_witget.html' with user=quest.autor %}
-          <h4 id="teg">{{ quest.teg }}</h4>
+          {% comment %} <div id="user">
+            {% include 'shared/user_witget.html' with user=quest.autor %}
+          </div> {% endcomment %}
 
+          <h4 id="teg">{{ quest.teg }}</h4>
           <a href="{% url 'question' quest.id %}"><h3 class="title">{{ quest.title }}</h3></a>
         </div>
         <div class="date">
           <span>Вопрос задан: {{ quest.created_at|timesince }}</span>
         </div>
-        <div id="views">Просмотры: {{ quest.views }}</div>
-        <div class="answer">
-          {% for ans in answers %}
-            {% if ans.question_id == quest.id %}
-              {{ other_quest.id }}
-              <div class="ans">
-                <a href="{% url 'question' quest.id %}" id="ans">{{ ans.total }}</a><p class="total">Ответов</p>
-              </div>
-            {% endif %}
-          {% endfor %}
+        <div id="views">
+          Просмотры: {{ quest.views }}
+          <div class="answer">
+            {% for ans in answers %}
+              {% if ans.question_id == quest.id %}
+                <div class="ans">
+                  <a href="{% url 'question' quest.id %}" id="ans">{{ ans.total }}</a><p class="total">Ответы</p>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
         </div>
       </div>
     </div>
     <hr />
   {% endfor %}
   <style>
+    #views {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
     a {
       text-decoration: none;
     }
@@ -47,7 +55,7 @@
     #ans {
       margin-right: 25px;
       color: #65c178;
-      font-size: 27px;
+      font-size: 25px;
       font-weight: 700;
     }
     #box {

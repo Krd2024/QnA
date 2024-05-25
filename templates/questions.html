@@ -29,7 +29,6 @@
       <div class="solution-container">
         <div class="text-1">Ответы на вопрос ({{ answers|length }})</div>
         <hr id="black" />
-        <hr id="black" />
 
         {% for answer in answers %}
           {% include 'shared/user_witget.html' with user=answer.autor %}
@@ -66,7 +65,6 @@
             {% endif %}
           </div>
 
-          <hr />
           <hr />
         {% endfor %}
       </div>
@@ -124,6 +122,10 @@
     }
   </script>
   <style>
+    #black {
+      height: 4px;
+      background-color: gray;
+    }
     a {
       text-decoration: none;
     }
