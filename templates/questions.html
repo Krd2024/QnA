@@ -19,8 +19,8 @@
         <hr class="hr" />
         {% if request.user == quest.autor %}
           <div>
-            <button class="btn">delete</button>
-            <button class="btn">edit</button>
+            <a href="{% url 'question_delete' quest.id %}"><button class="btn">delete</button></a>
+            <a href="{% url 'question_update' quest.id %}"><button class="btn">edit</button></a>
             <hr />
           </div>
         {% endif %}
@@ -42,15 +42,27 @@
               </div>
             </button>
             {% if request.user == quest.autor %}
-              <button class="correct" onclick="correction({{ answer.id }})">
-                <div>
-                  <span id="{{ answer.id }}">Отметить как правильное</span>
+              {% if answer.correct == True %}
+                <div class="correct">
+                  <span>Решение | ✓</span>
                 </div>
-              </button>
+              {% else %}
+                <button class="correct" onclick="correct({{ answer.id }})">
+                  <div>
+                    <span id="{{ answer.id }}">Отметить как правильное</span>
+                  </div>
+                </button>
+              {% endif %}
             {% else %}
-              <div class="correct">
-                <span>Решение | 🥇</span>
-              </div>
+              {% if answer.correct == True %}
+                <div class="correct">
+                  <span>Решение | 🥇</span>
+                </div>
+              {% else %}
+                <div class="correct">
+                  <span></span>
+                </div>
+              {% endif %}
             {% endif %}
           </div>
 
@@ -58,13 +70,16 @@
           <hr />
         {% endfor %}
       </div>
-
-      <form action="{% url 'question' quest.id %}" method="post" id="form">
-        {% csrf_token %}
-        <label for="message">Ответить на вопрос:</label><br />
-        <textarea id="message" name="message" rows="8" cols="80">{{ answer }}</textarea><br />
-        <button type="submit">Отправить</button>
-      </form>
+      {% if request.user == quest.autor %}
+        <div></div>
+      {% else %}
+        <form action="{% url 'question' quest.id %}" method="post" id="form">
+          {% csrf_token %}
+          <label for="message">Ответить на вопрос:</label><br />
+          <textarea id="message" name="message" rows="8" cols="80">{{ answer }}</textarea><br />
+          <button type="submit">Отправить</button>
+        </form>
+      {% endif %}
     </div>
   </body>
   <script>
@@ -88,7 +103,7 @@
       }
     }
     
-    async function correction(answerId) {
+    async function correct(answerId) {
       const response = await fetch(`/correct/${answerId}/`, {
         method: 'POST',
         headers: {

@@ -1,8 +1,7 @@
-{% extends 'main.html' %}
+{% extends 'wrapper/main.html' %}
 {% load static %}
 
 {% block content %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
   {% for answer in answers %}
     <div id="conteiner">
       <div id="box">

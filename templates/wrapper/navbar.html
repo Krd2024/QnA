@@ -27,7 +27,12 @@
       </form>
     </li>
     <li>
-      <a href="/switch_user/3"></a>
+      <form class="loginForm" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="username" value="peaceful_ocean" />
+        <input type="hidden" name="password" value="1" />
+        <button type="submit">peaceful_ocean</button>
+      </form>
     </li>
     <li>
       <a href="/switch_user/4"></a>

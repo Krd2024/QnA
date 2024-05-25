@@ -106,6 +106,7 @@ def answer_update_delete(request, **kwargs):
 
 
 def info_user_choice(request, **kwargs):
+    """Получить все вопросы или все ответы пользователя для ЛК"""
 
     try:
         print(kwargs)
@@ -279,20 +280,20 @@ def user_profile(request, *args, **kwargs):
 
             question = Question.objects.filter(id__in=lst)
             context = {"question": question, "user": user}
-
             # ---------------------------------------------------------------------
             if len(answers) == 0:
                 return HttpResponse("Нет ответ")
+            return render(request, "user___answers.html", context)
 
-            if request.user.username == user:
-                print("ravno")
-                return render(request, "user_answers.html", context)
-            else:
-                print("ne ravno")
-                return render(request, "user_answers_kostil.html", context)
+            # if request.user.username == user:
+            #     print("ravno")
+            #     return render(request, "user_answers.html", context)
+            # else:
+            #     print("ne ravno")
+            #     return render(request, "user_answers_kostil.html", context)
 
         except Exception as e:
-            print(e)
+            print(e, "<<< ----------- e --- def user_profile()")
             return render(render, "user_answers.html", {"out": "Нет ответ"})
 
     objects_user = User.objects.get(username=user)
@@ -309,8 +310,8 @@ def user_profile(request, *args, **kwargs):
         "answers": len(answers),
     }
 
-    # =================================================================
     return render(request, "profile.html", context)
+    # =================================================================
 
 
 import time

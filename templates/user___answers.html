@@ -1,0 +1,78 @@
+<div class="answers-container">
+  <div id="label">Ответы</div>
+  {% for quest in question %}
+    <div id="quest_div">
+      {{ quest.autor }}
+      {% include 'shared/user_witget.html' with user=quest.autor %}
+
+      <div class="question-container">
+        <hr class="hr" />
+        <div>
+          <p class="teg">{{ quest.teg }}</p>
+        </div>
+        <div class="title">
+          <h3>{{ quest.title }}</h3>
+        </div>
+        <div class="question">{{ quest.text }}</div>
+        <div class="create">Создано {{ quest.created_at|timesince }} назад</div>
+        <hr class="hr" />
+      </div>
+    </div>
+
+    <div id="answer">
+      {% for ans in quest.answers %}
+        {% if request.user.username == user and request.user.username == ans.autor.username %}
+          <div id="del_upd">
+            <div id="quest_div">{{ ans.text }}</div>
+            <div>
+              <a href="{% url 'answer_update_delete' answer_id=ans.id choice='ans_update' %}"><button id="but">Редактировать</button></a>
+            </div>
+            <div>
+              <a href="{% url 'answer_update_delete' answer_id=ans.id choice='ans_delete' %}"><button id="but">Удалить</button></a>
+            </div>
+          </div>
+          <hr />
+        {% else %}
+          {% if ans.autor.username == user %}
+            <div id="quest_div">{{ ans.text }}</div>
+            <hr />
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
+<style>
+  .create {
+    margin-top: 5px;
+    font-size: 15px;
+    color: cadetblue;
+  }
+  .title {
+    margin-bottom: 10px;
+  }
+  .question {
+    background-color: darkgray;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  #answer {
+    margin-left: 100px;
+    margin-top: 20px;
+  }
+  #del_upd {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  #quest_div {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px;
+    width: 70%;
+    min-height: 50px;
+    height: fit-content;
+    background-color: silver;
+  }
+</style>
