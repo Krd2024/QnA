@@ -5,9 +5,9 @@
     <div id="conteiner">
       <div id="box">
         <div class="autor&title">
-          {% comment %} <div id="user">
+          <div id="user">
             {% include 'shared/user_witget.html' with user=quest.autor %}
-          </div> {% endcomment %}
+          </div>
 
           <h4 id="teg">{{ quest.teg }}</h4>
           <a href="{% url 'question' quest.id %}"><h3 class="title">{{ quest.title }}</h3></a>

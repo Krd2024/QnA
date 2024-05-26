@@ -22,7 +22,7 @@
         <button id="button1" onclick="fun('questions')"><h4>Вопросы</h4>{{ user_question }}</button>
       </div>
       <div>
-        <button id="button3" onclick=""><h4>Пусто</h4></button>
+        <button id="button3" onclick=""><h4>Вклад</h4>{{ vklad }}</button>
       </div>
       <div>
         <button id="button4" onclick=""><h4>Пусто</h4></button>
@@ -32,6 +32,7 @@
         <button id="button2" onclick="fun('answers')"><h4>Ответы</h4>{{ answers }}</button>
       </div>
     </div>
+
     <div>
       {% for quest in user_quest %}
         <div>{{ quest.text }}</div>

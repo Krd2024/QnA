@@ -74,6 +74,22 @@ class Rection(models.Model):
     def reaction_count(self):
         return self.reactions.count()
 
+    # class rangs(models.Model):
+
+    #     def __init__(self, username):
+    #         self.username = username
+    #         self.answer_count = Answer.objects.filter(user=username)
+    #         self.reaction_count = Rection.objects.filter(user=username)
+
+    #     def get_rangs(self):
+    #         ans = self.answer_count
+    #         rec = self.reaction_count
+    #         return len(ans), len(rec)
+
+    # @property
+    # def answers(self):
+    # return Answer.objects.filter(question=self).order_by("-created_at")
+
     """
     поля класса User 
 username: Имя пользователя (username).

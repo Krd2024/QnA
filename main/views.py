@@ -1,21 +1,44 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
-
 
 from main.models import Question, Answer, Rection
 from django.contrib.auth.models import User
 from .forms import QForm
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
-from django.views.generic import DetailView
+from django.shortcuts import render
 
 
-#
-#
+class Singleton:
+    _instance = None
+
+    def __new__(cls, **kwargs):
+        if Singleton._instance is None:
+            Singleton._instance = super().__new__(cls)
+        return Singleton._instance
+
+    def __init__(self, **kwargs):
+        self._do_work(**kwargs)
+
+    def _do_work(self, **kwargs):
+        print("Work")
+        print(kwargs)
+
+        # Здесь вы можете выполнять любую инициализацию
+        self.id = kwargs.get("id")
+        self.name = kwargs.get("name")
+
+
+if __name__ == "__main__":
+    first = Singleton(id=1, name="nic", answer_id=15)
+    print(first)
+    print(first.id)
+    print(first.name)
+# ======================================================
+
+
 def correct(request, **kwargs):
+    """Поставить отметку ответу 'корректный'"""
     if not request.user.is_authenticated:
         return HttpResponse()
     if request.method == "POST":
@@ -35,6 +58,7 @@ def correct(request, **kwargs):
 
 
 def search(request, **kwargs):
+    """Поиск по заголовку"""
     print(kwargs["search"])
 
     try:
@@ -42,6 +66,7 @@ def search(request, **kwargs):
         print(search, "<<<<<<<<<<<<<<<<<<<<<<")
         question = Question.objects.all()
         title_question = {}
+
         for title in question:
             title_question[title.id] = title.title.split(" ")
 
@@ -58,6 +83,7 @@ def search(request, **kwargs):
 
 
 def increase_counter(request, **kwargs):
+    """Поставить,убрать like"""
     print("пришло")
     if not request.user.is_authenticated:
         return HttpResponse()
@@ -86,6 +112,7 @@ def increase_counter(request, **kwargs):
 
 
 def answer_update_delete(request, **kwargs):
+    """Редактировать,удалить ответ"""
 
     try:
         data = kwargs.get("choice")
@@ -150,12 +177,8 @@ def info_user(request, **kwargs):
 
 def index(request):
     answers = (
-        # Answer.objects.filter(question__in=other_questions)
-        Answer.objects.all()
-        .values("question_id")
-        .annotate(total=Count("question_id"))
+        Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
     )
-    # user = User.objects.get(username="Den")
     all_question = Question.objects.all()
 
     context = {
@@ -166,7 +189,6 @@ def index(request):
 
 
 def update(request, **kwargs):
-    # print(kwargs["question_id"])
     if request.method == "POST":
         form = QForm(request.POST)
         if form.is_valid():
@@ -257,9 +279,9 @@ def question(request, **kwargs):
 def user_profile(request, *args, **kwargs):
 
     user = kwargs["username"]
-    print(request.user.username, "<<< request user")
-    print(user, "<<< user")
-    print(request.GET.get("q"))
+    # print(request.user.username, "<<< request user")
+    # print(user, "<<< user")
+    # print(request.GET.get("q"))
 
     objects_user = User.objects.get(username=user)
     if request.GET.get("q") == "questions":
@@ -295,19 +317,38 @@ def user_profile(request, *args, **kwargs):
         except Exception as e:
             print(e, "<<< ----------- e --- def user_profile()")
             return render(render, "user_answers.html", {"out": "Нет ответ"})
-
+    # ----------------------------------------------------------------
     objects_user = User.objects.get(username=user)
     user_question = Question.objects.filter(autor=objects_user)
+    answers = Answer.objects.filter(autor=objects_user)
+    #
+    reaction_all = Rection.objects.all()
+    count_react = 0
+    for reaction in reaction_all:
+        if reaction.answer is not None and reaction.answer.autor.username == user:
+            count_react += 3
+            print(reaction.answer.autor)
 
+    print(count_react)
+    #
+    count_true = 0
+    for answer in answers:
+        if answer.correct == True:
+            count_true += 10
+    print(count_true)
+
+    correct_answer = Answer.objects.filter(autor=objects_user, correct=True).count()
+
+    # ----------------------------------------------------------------
     answers_1 = (
         Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
     )
 
-    answers = Answer.objects.filter(autor=objects_user)
     context = {
         "user_question": len(user_question),
         "username": objects_user,
         "answers": len(answers),
+        "vklad": count_react + count_true,
     }
 
     return render(request, "profile.html", context)
