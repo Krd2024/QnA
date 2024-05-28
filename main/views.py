@@ -9,32 +9,65 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 
-class Singleton:
-    _instance = None
+# myapp/views.py
 
-    def __new__(cls, **kwargs):
-        if Singleton._instance is None:
-            Singleton._instance = super().__new__(cls)
-        return Singleton._instance
-
-    def __init__(self, **kwargs):
-        self._do_work(**kwargs)
-
-    def _do_work(self, **kwargs):
-        print("Work")
-        print(kwargs)
-
-        # Здесь вы можете выполнять любую инициализацию
-        self.id = kwargs.get("id")
-        self.name = kwargs.get("name")
+# =============================================================
 
 
-if __name__ == "__main__":
-    first = Singleton(id=1, name="nic", answer_id=15)
-    print(first)
-    print(first.id)
-    print(first.name)
 # ======================================================
+def all_users(request):
+    all_info_users = {}
+    count_answer_users = {}
+    count_questions_users = {}
+
+    count_answer = 0
+    try:
+        users_obj = User.objects.all()
+        question_obj = Question.objects.all()
+        answers_obj = Answer.objects.all()
+        # objects_user = User.objects.get(username=user)
+        # user_question = Question.objects.filter(autor=objects_user)
+        # answers = Answer.objects.filter(autor=objects_user)
+
+        for user in users_obj:
+            question_obj = Question.objects.filter(autor=user)
+            answers_obj = Answer.objects.filter(autor=user)
+            count_answer_users[user] = len(answers_obj)
+            count_questions_users[user] = len(question_obj)
+
+        print(count_answer_users)
+        print(count_questions_users)
+        context = {
+            "count_answer_users": count_answer_users,
+            "count_questions_users": count_questions_users,
+        }
+
+    except Exception as e:
+        print(e, "<<< e -------------- def all_users(request)")
+    # context = {
+    #     "user_question": len(user_question),
+    #     "username": objects_user,
+    #     "answers": len(answers),
+    #     "vklad": raiting_(user),
+    # }
+
+    return render(
+        request,
+        "all_users.html",
+        {
+            "users": users_obj,
+            "count_answer_users": count_answer_users,
+            "count_questions_users": count_questions_users,
+        },
+    )
+    return render(request, "all_users.html", context)
+
+
+def rating(request):
+    text = """ Как увеличивается вклад пользователя
+            Его ответ принят как решение: +10 очков
+            Его ответ нравится: +3 очка """
+    return HttpResponse(text)
 
 
 def correct(request, **kwargs):
@@ -276,6 +309,27 @@ def question(request, **kwargs):
 #     return render(request, "login.html")
 
 
+def raiting_(user):
+    # user = kwargs["username"]
+    objects_user = User.objects.get(username=user)
+    answers = Answer.objects.filter(autor=objects_user)
+    reaction_all = Rection.objects.all()
+    count_react = 0
+    for reaction in reaction_all:
+        if reaction.answer is not None and reaction.answer.autor.username == user:
+            count_react += 3
+            print(reaction.answer.autor)
+
+    print(count_react)
+    #
+    count_true = 0
+    for answer in answers:
+        if answer.correct == True:
+            count_true += 10
+    print(count_true)
+    return count_true + count_react
+
+
 def user_profile(request, *args, **kwargs):
 
     user = kwargs["username"]
@@ -307,13 +361,6 @@ def user_profile(request, *args, **kwargs):
                 return HttpResponse("Нет ответ")
             return render(request, "user___answers.html", context)
 
-            # if request.user.username == user:
-            #     print("ravno")
-            #     return render(request, "user_answers.html", context)
-            # else:
-            #     print("ne ravno")
-            #     return render(request, "user_answers_kostil.html", context)
-
         except Exception as e:
             print(e, "<<< ----------- e --- def user_profile()")
             return render(render, "user_answers.html", {"out": "Нет ответ"})
@@ -321,21 +368,21 @@ def user_profile(request, *args, **kwargs):
     objects_user = User.objects.get(username=user)
     user_question = Question.objects.filter(autor=objects_user)
     answers = Answer.objects.filter(autor=objects_user)
-    #
-    reaction_all = Rection.objects.all()
-    count_react = 0
-    for reaction in reaction_all:
-        if reaction.answer is not None and reaction.answer.autor.username == user:
-            count_react += 3
-            print(reaction.answer.autor)
+    # вычесление рейтинга
+    # reaction_all = Rection.objects.all()
+    # count_react = 0
+    # for reaction in reaction_all:
+    #     if reaction.answer is not None and reaction.answer.autor.username == user:
+    #         count_react += 3
+    #         print(reaction.answer.autor)
 
-    print(count_react)
-    #
-    count_true = 0
-    for answer in answers:
-        if answer.correct == True:
-            count_true += 10
-    print(count_true)
+    # print(count_react)
+    # #
+    # count_true = 0
+    # for answer in answers:
+    #     if answer.correct == True:
+    #         count_true += 10
+    # print(count_true)
 
     correct_answer = Answer.objects.filter(autor=objects_user, correct=True).count()
 
@@ -348,7 +395,7 @@ def user_profile(request, *args, **kwargs):
         "user_question": len(user_question),
         "username": objects_user,
         "answers": len(answers),
-        "vklad": count_react + count_true,
+        "vklad": raiting_(user),
     }
 
     return render(request, "profile.html", context)
@@ -403,3 +450,32 @@ def create(request, **kwargs):
     form = QForm(initial={"autor": request.user})
     context = {"form": form}
     return render(request, "main/create_qust_form.html", context)
+
+
+# =================================================================
+# service.py
+# from employee.models import Employee
+
+
+class EmployeeService:
+    _model = "name_model"
+
+    def add(self, **kwargs):
+        return self._model.objects.create(**kwargs)
+
+    def get_all(self):
+        return self._model.objects.all()
+
+    def get_by_id(self, pk: int):
+        return self._model.objects.get(pk=pk)
+
+    def delete_by_id(self, pk: int):
+        employee = self._model.objects.get(pk=pk)
+        return employee.delete()
+
+
+service = EmployeeService()
+
+# view.py
+# from service import service
+# ===========================================================

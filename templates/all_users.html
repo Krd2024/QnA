@@ -1,0 +1,53 @@
+{% extends 'wrapper/main.html' %}
+{% block content %}
+  <div class="users">Ползователи</div>
+  <div class="container">
+    {% for username in users %}
+      <div class="box">
+        <div class="user-list">
+          <div class="user">
+            {% include 'shared/user_witget.html' with user=username %}
+          </div>
+          <div class="answer-question">
+            {% for key_ans, value_ans in count_answer_users.items %}
+              {% if key_ans == username %}
+                <a href=""><div class="answer">ответы</div>{{ value_ans }}</a>
+                {% for key_quest, value_quest in count_questions_users.items %}
+                  {% if key_quest == username %}
+                    <a href=""><div class="questions">вопросы</div>{{ value_quest }}</a>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+            {% endfor %}
+          </div>
+
+          <div class="rating">рейтинг</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% for users, value in all_info_users.items %}
+    {{ users }},{{ value }}
+  {% endfor %}
+
+  <style>
+    .user {
+      font-size: 15px;
+      background-color: greylathtml;
+    }
+    .container {
+      display: flex;
+      padding: 10px;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+    .box {
+      margin-bottom: 10px;
+      padding: 5px;
+      border: 1px solid black;
+      border-radius: 5px;
+      width: 200px;
+      height: 220px;
+    }
+  </style>
+{% endblock %}

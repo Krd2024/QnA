@@ -1,6 +1,6 @@
 <menu>
   <ul>
-    <span>Пользователи</span>
+    <a href="{% url 'all_users' %}"><span>Пользователи</span></a>
     <li>
       <form class="loginForm" action="{% url 'login' %}" method="post">
         {% csrf_token %}

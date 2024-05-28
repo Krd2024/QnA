@@ -1,4 +1,4 @@
-from django.forms import BaseModelForm, ModelForm
+from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 
@@ -28,3 +28,9 @@ class UserRegisterForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+
+
+class QuestionForm(forms.Form):
+    question = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 4, "cols": 40}), label="Your Question"
+    )

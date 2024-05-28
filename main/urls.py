@@ -37,6 +37,10 @@ urlpatterns = [
         name="increase_counter",
     ),
     path("correct/<int:answer_id>/", correct, name="correct"),
+    #
+    path("all_users/", all_users, name="all_users"),
+    #
+    path("help/rating/", rating, name="rating"),
 ]
 
 # terminal.integrated.fontSize
