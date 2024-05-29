@@ -9,28 +9,50 @@
             {% include 'shared/user_witget.html' with user=username %}
           </div>
           <div class="answer-question">
+            <hr />
             {% for key_ans, value_ans in count_answer_users.items %}
               {% if key_ans == username %}
-                <a href=""><div class="answer">ответы</div>{{ value_ans }}</a>
+                <a href="/user/{{ username }}/"><div class="answer">Ответов | {{ value_ans }}</div></a>
                 {% for key_quest, value_quest in count_questions_users.items %}
                   {% if key_quest == username %}
-                    <a href=""><div class="questions">вопросы</div>{{ value_quest }}</a>
+                    <div>.</div>
+                    <a href=""><div class="questions">Вопросов | {{ value_quest }}</div></a>
                   {% endif %}
                 {% endfor %}
               {% endif %}
             {% endfor %}
           </div>
-
-          <div class="rating">рейтинг</div>
+          <hr />
+          {% for key, value in ratings_users.items %}
+            {% if key == username %}
+              <div class="rating">рейтинг | {{ value }}</div>
+              <hr />
+            {% endif %}
+          {% endfor %}
         </div>
       </div>
     {% endfor %}
   </div>
-  {% for users, value in all_info_users.items %}
-    {{ users }},{{ value }}
-  {% endfor %}
 
   <style>
+    .rating {
+      margin: 10px 0 10px 0;
+    }
+    .user {
+      display: flex;
+    }
+    .answer-question {
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-around;
+      align-items: flex-end;
+    }
+    .answer,
+    .questions {
+      font-size: 15px;
+      font-weight: 700;
+    }
+    
     .user {
       font-size: 15px;
       background-color: greylathtml;
@@ -44,7 +66,7 @@
     .box {
       margin-bottom: 10px;
       padding: 5px;
-      border: 1px solid black;
+      border: 1px solid lightgray;
       border-radius: 5px;
       width: 200px;
       height: 220px;

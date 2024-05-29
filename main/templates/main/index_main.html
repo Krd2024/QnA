@@ -20,9 +20,15 @@
           <div class="answer">
             {% for ans in answers %}
               {% if ans.question_id == quest.id %}
-                <div class="ans">
-                  <a href="{% url 'question' quest.id %}" id="ans">{{ ans.total }}</a><p class="total">Ответы</p>
-                </div>
+                {% if ans.total is not Null %}
+                  <div class="ans">
+                    <a href="{% url 'question' quest.id %}" id="ans">{{ ans.total }}</a><p class="total">Ответы</p>
+                  </div>
+                {% else %}
+                  1111111111111111111111111111<div class="ans">
+                    <p class="total">Ответы</p>
+                  </div>
+                {% endif %}
               {% endif %}
             {% endfor %}
           </div>
@@ -55,6 +61,12 @@
     #ans {
       margin-right: 25px;
       color: #65c178;
+      font-size: 25px;
+      font-weight: 700;
+    }
+    #ans_0 {
+      margin-right: 35px;
+      color: gray;
       font-size: 25px;
       font-weight: 700;
     }

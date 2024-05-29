@@ -9,47 +9,29 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 
-# myapp/views.py
-
-# =============================================================
-
-
 # ======================================================
 def all_users(request):
-    all_info_users = {}
+    """Все пользователи в карточках на странице"""
+
     count_answer_users = {}
     count_questions_users = {}
+    ratings_users = {}
 
-    count_answer = 0
     try:
         users_obj = User.objects.all()
-        question_obj = Question.objects.all()
-        answers_obj = Answer.objects.all()
-        # objects_user = User.objects.get(username=user)
-        # user_question = Question.objects.filter(autor=objects_user)
-        # answers = Answer.objects.filter(autor=objects_user)
 
         for user in users_obj:
             question_obj = Question.objects.filter(autor=user)
             answers_obj = Answer.objects.filter(autor=user)
+            #
             count_answer_users[user] = len(answers_obj)
             count_questions_users[user] = len(question_obj)
-
-        print(count_answer_users)
-        print(count_questions_users)
-        context = {
-            "count_answer_users": count_answer_users,
-            "count_questions_users": count_questions_users,
-        }
+            ratings_users[user] = raiting_(user.username)
 
     except Exception as e:
         print(e, "<<< e -------------- def all_users(request)")
-    # context = {
-    #     "user_question": len(user_question),
-    #     "username": objects_user,
-    #     "answers": len(answers),
-    #     "vklad": raiting_(user),
-    # }
+
+    dict_ = {user: {"users": users_obj}}
 
     return render(
         request,
@@ -58,9 +40,9 @@ def all_users(request):
             "users": users_obj,
             "count_answer_users": count_answer_users,
             "count_questions_users": count_questions_users,
+            "ratings_users": ratings_users,
         },
     )
-    return render(request, "all_users.html", context)
 
 
 def rating(request):
@@ -90,8 +72,26 @@ def correct(request, **kwargs):
     return JsonResponse({"success": True, "a": f"good-answer"})
 
 
+# ======================================================
+def type_(search):
+    """Без особого смысла"""
+
+    def wrapper(*args, **kwargs):
+        res1 = search(*args, **kwargs)
+        if not isinstance(res1, (int)):
+            return res1
+        return 0
+
+    return wrapper
+
+
+# ======================================================
+
+
+@type_
 def search(request, **kwargs):
     """Поиск по заголовку"""
+
     print(kwargs["search"])
 
     try:
@@ -117,6 +117,7 @@ def search(request, **kwargs):
 
 def increase_counter(request, **kwargs):
     """Поставить,убрать like"""
+
     print("пришло")
     if not request.user.is_authenticated:
         return HttpResponse()
@@ -318,19 +319,20 @@ def raiting_(user):
     for reaction in reaction_all:
         if reaction.answer is not None and reaction.answer.autor.username == user:
             count_react += 3
-            print(reaction.answer.autor)
+            # print(reaction.answer.autor)
 
-    print(count_react)
+    # print(count_react)
     #
     count_true = 0
     for answer in answers:
         if answer.correct == True:
             count_true += 10
-    print(count_true)
+    # print(count_true)
+
     return count_true + count_react
 
 
-def user_profile(request, *args, **kwargs):
+def user_profile(request, **kwargs):
 
     user = kwargs["username"]
     # print(request.user.username, "<<< request user")
