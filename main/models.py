@@ -1,7 +1,23 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 # class AppUser()
+
+
+class User(AbstractUser):
+    # REQUIRED_FIELDS = ["email", "username", "password"]
+    profession = models.CharField(max_length=50, default="", blank=True)
+
+    @property
+    def rating(self):
+        answer_true = Answer.objects.filter(autor=self, correct=True).count() * 10
+        reactions_sorted_by_user = Rection.objects.all().order_by("user__self")
+        # reactions_sorted_by_user = Rection.objects.all().order_by("user__username")
+        reaction_count = reactions_sorted_by_user.count() * 3
+
+        # Пример сортировки по другому полю, например, по пользователю
+        return answer_true + reaction_count
+        return answer_true
 
 
 class Question(models.Model):
@@ -36,7 +52,7 @@ class Answer(models.Model):
         User,
         null=True,
         blank=False,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="answer_set",
     )
     question = models.ForeignKey(

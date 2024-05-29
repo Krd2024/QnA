@@ -11,7 +11,9 @@
       </strong>
       <a href="{% url 'user_profile' user %}">@{{ user }}</a>
     </p>
-    <p class="user-widget-info-title">должность</p>
+    {% if user.profession != '' %}
+      <p class="user-widget-info-title">{{ user.profession }}</p>
+    {% endif %}
   </div>
 </div>
 <style>

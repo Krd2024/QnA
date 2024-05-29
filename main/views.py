@@ -1,8 +1,7 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
-from main.models import Question, Answer, Rection
-from django.contrib.auth.models import User
+from main.models import Question, Answer, Rection, User
 from .forms import QForm
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
@@ -175,6 +174,7 @@ def info_user_choice(request, **kwargs):
             username = kwargs.get("username")
             user_obj = User.objects.get(username=username)
             user_quest_obj = Question.objects.filter(autor=user_obj)
+
             context = {
                 "user_quest": user_quest_obj,
                 "user_question": len(user_quest_obj),
@@ -313,6 +313,10 @@ def question(request, **kwargs):
 def raiting_(user):
     # user = kwargs["username"]
     objects_user = User.objects.get(username=user)
+    try:
+        print(objects_user.rating, "<<<<<<<<<<     rating")
+    except Exception as e:
+        print(e)
     answers = Answer.objects.filter(autor=objects_user)
     reaction_all = Rection.objects.all()
     count_react = 0
@@ -398,6 +402,7 @@ def user_profile(request, **kwargs):
         "username": objects_user,
         "answers": len(answers),
         "vklad": raiting_(user),
+        "profession": objects_user.profession,
     }
 
     return render(request, "profile.html", context)

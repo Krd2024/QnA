@@ -8,6 +8,9 @@
       <img src="{% static 'img/head.png' %}" alt="Заголовок" width="80" height="80" id="img" />
     </div>
     <div>{{ username }}</div>
+    {% if profession != '' %}
+      <div>{{ profession }}</div>
+    {% endif %}
   </div>
   <div>
     {% if messages %}

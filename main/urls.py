@@ -3,9 +3,14 @@ from .views import *
 from . import auth_user_view
 from main import views
 
+from . import rrr
 
 urlpatterns = [
     #
+    path(
+        "test/",
+        rrr.test2,
+    ),  # 1
     path("", index, name="index"),
     path("q/create/", create, name="question_create"),  # 1
     path("q/<int:question_id>/", question, name="question"),  # 1
@@ -28,7 +33,7 @@ urlpatterns = [
         info_user_choice,
         name="info_user_choice",
     ),
-    path("user/<str:choice>/", info_user, name="info_user"),
+    # path("user/<str:choice>/", info_user, name="info_user"),
     path("search/<str:search>/", search, name="search"),
     # path("answer/<str:choice>/", rection, name="rection"),
     path(
