@@ -4,9 +4,16 @@
   {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" /> {% endcomment %}
 
   <div class="name">
-    <div>
-      <img src="{% static 'img/head.png' %}" alt="Заголовок" width="80" height="80" id="img" />
-    </div>
+    {% if user.image_url %}
+      <div>
+        <img src="/static/profile/picture/{{ user.image_url }}/messi_.jpg" alt="" width="100" id="img1" />
+      </div>
+    {% else %}
+      <div class="name">
+        <img src="{% static 'img/head.png' %}" alt="Заголовок" width="80" height="80" id="img" />
+      </div>
+    {% endif %}
+
     <div>{{ username }}</div>
     {% if profession != '' %}
       <div>{{ profession }}</div>
@@ -85,7 +92,8 @@
       justify-content: space-around;
       font-size: 25px;
     }
-    #img {
+    #img,
+    #img1 {
       border-radius: 50px;
     }
     .name {

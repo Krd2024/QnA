@@ -8,6 +8,44 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+from .forms import ImageForm
+
+# =================================================================
+#                 НЕ ИСПОЛЬЗУЕТСЯ
+import os
+import uuid
+
+
+def generate_filename(instance, filename):
+    # Получить расширение файла
+    extension = os.path.splitext(filename)[1]
+    # Генерировать уникальное имя файла с помощью uuid
+    new_filename = str(uuid.uuid4()) + extension
+    # Вернуть путь для сохранения файла
+    return os.path.join("static", "profile", "picture", new_filename)
+
+
+# =================================================================
+
+
+def image_upload_view(request):
+    """Process images uploaded by users"""
+    if request.method == "POST":
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            print(form.cleaned_data["image"])
+            # Get the current instance object to display in the template
+            img_obj = form.instance
+            User.objects.filter(
+                username=request.user.username,
+            ).update(image_url=str(img_obj.image)[23:59])
+
+            return render(request, "load_img.html", {"form": form, "img_obj": img_obj})
+    else:
+        form = ImageForm()
+        return render(request, "load_img.html", {"form": form})
+
 
 # ======================================================
 def all_users(request, **kwargs):

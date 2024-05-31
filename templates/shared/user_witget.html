@@ -1,8 +1,17 @@
 {% comment %}виджет юзера с его аватаркой именем юзернеймом и должностью{% endcomment %}
 <div class="user-widget">
-  <div>
-    <img class="user-widget-img" src="/static/img/head.png" alt="" width="36" />
-  </div>
+  {% comment %} <div>
+    <img class="user-widget-img" src="/static/profile/picture/{{ user.image_url }}/messi_.jpg" alt="" width="64" />
+  </div> {% endcomment %}
+  {% if user.image_url %}
+    <div>
+      <img class="user-widget-img" src="/static/profile/picture/{{ user.image_url }}/messi_.jpg" alt="" width="36" />
+    </div>
+  {% else %}
+    <div>
+      <img class="user-widget-img" src="/static/img/head.png" alt="" width="36" />
+    </div>
+  {% endif %}
   <div class="user-widget-info">
     <p class="user-widget-info-name">
       <strong>

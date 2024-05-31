@@ -15,12 +15,6 @@ class QForm(ModelForm):
         fields = "__all__"
         widgets = {"id": forms.HiddenInput()}
 
-    # def __init__(self, *args, **kwargs):
-    #     autor = kwargs.pop("autor", None)  # Получаем значение autor из kwargs
-    #     super(QForm, self).__init__(*args, **kwargs)
-    #     if autor:
-    #         self.initial["autor"] = autor
-
 
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=False)
@@ -34,3 +28,15 @@ class QuestionForm(forms.Form):
     question = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 4, "cols": 40}), label="Your Question"
     )
+
+
+from django import forms
+from .models import Image
+
+
+class ImageForm(forms.ModelForm):
+    """Form for the image model"""
+
+    class Meta:
+        model = Image
+        fields = ("title", "image")

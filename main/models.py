@@ -1,4 +1,6 @@
 from datetime import timedelta
+import uuid
+import os
 
 from django.utils import timezone
 
@@ -7,14 +9,14 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .settings import CACH_UPDATE_MIN
 
-# class AppUser()
-
 
 class User(AbstractUser):
     # REQUIRED_FIELDS = ["email", "username", "password"]
     profession = models.CharField(max_length=50, default="", blank=True)
     rating_cache = models.IntegerField(default=-1)
     rating_cache_updated_at = models.DateTimeField(auto_now_add=True)
+    #
+    image_url = models.CharField(max_length=50, blank=True)
 
     @property
     def rating(self):
@@ -99,6 +101,23 @@ class Rection(models.Model):
         related_name="rection_set",
     )
     value = models.IntegerField(default=0)
+
+    from django.db import models
+
+
+def user_directory_path(instance, filename) -> str:
+    # file will be uploaded to MEDIA_ROOT/users/<uuid4>/<filename>
+    return "static/profile/picture/{0}/{1}".format(uuid.uuid4(), filename)
+
+
+class Image(models.Model):
+
+    title = models.CharField(max_length=200)
+    # image = models.ImageField(upload_to="images")
+    image = models.ImageField(upload_to=user_directory_path, blank=True)
+
+    def __str__(self):
+        return self.title
 
     # @property
     # def reaction_count(self):

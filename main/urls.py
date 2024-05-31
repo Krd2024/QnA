@@ -47,6 +47,8 @@ urlpatterns = [
     path("users/page/<str:page>", all_users, name="users_page"),
     #
     path("help/rating/", rating, name="rating"),
+    #
+    path("upload/", image_upload_view),
 ]
 
 # terminal.integrated.fontSize
