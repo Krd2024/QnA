@@ -1,38 +1,55 @@
 {% extends 'wrapper/main.html' %}
 {% block content %}
-  <div class="users">Ползователи</div>
-  <div class="container">
-    {% for username in users %}
-      <div class="box">
-        <div class="user-list">
-          <div class="user">
-            {% include 'shared/user_witget.html' with user=username %}
-          </div>
-          <div class="answer-question">
-            <hr />
-            {% for key_ans, value_ans in count_answer_users.items %}
-              {% if key_ans == username %}
-                <a href="/user/{{ username }}/"><div class="answer">Ответов | {{ value_ans }}</div></a>
-                {% for key_quest, value_quest in count_questions_users.items %}
-                  {% if key_quest == username %}
-                    <div>.</div>
-                    <a href=""><div class="questions">Вопросов | {{ value_quest }}</div></a>
-                  {% endif %}
-                {% endfor %}
-              {% endif %}
-            {% endfor %}
-          </div>
-          <hr />
-          {% for key, value in ratings_users.items %}
-            {% if key == username %}
-              <div class="rating">рейтинг | {{ value }}</div>
+  <div class="users-container">
+    <div class="users">Ползователи</div>
+    <div class="container">
+      {% for username in users %}
+        <div class="box">
+          <div class="user-list">
+            <div class="user">
+              {% include 'shared/user_witget.html' with user=username %}
+            </div>
+            <div class="answer-question">
               <hr />
-            {% endif %}
-          {% endfor %}
+              {% for key_ans, value_ans in count_answer_users.items %}
+                {% if key_ans == username %}
+                  <a href="/user/{{ username }}/"><div class="answer">Ответов | {{ value_ans }}</div></a>
+                  {% for key_quest, value_quest in count_questions_users.items %}
+                    {% if key_quest == username %}
+                      <div>.</div>
+                      <a href=""><div class="questions">Вопросов | {{ value_quest }}</div></a>
+                    {% endif %}
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            </div>
+            <hr />
+
+            <div class="rating">рейтинг | {{ username.rating }}</div>
+            <hr />
+          </div>
         </div>
-      </div>
-    {% endfor %}
+      {% endfor %}
+    </div>
+
+    {% comment %}в шалон{% endcomment %}
+    <div>
+      {% for num in pages_range %}
+        {% if page_number != num %}
+          <a href="{% url 'users_page' num %}">{{ num }}</a>
+        {% else %}
+          <span class="current">{{ num }}</span>
+        {% endif %}
+      {% endfor %}
+    </div>
   </div>
+
+  <style>
+    .current {
+      color: red;
+    }
+  </style>
+  {% comment %} {% endcomment %}
 
   <style>
     .rating {

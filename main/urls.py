@@ -7,10 +7,10 @@ from . import rrr
 
 urlpatterns = [
     #
-    path(
-        "test/",
-        rrr.test2,
-    ),  # 1
+    # path(
+    #     "test/",
+    #     rrr.test2,
+    # ),  # 1
     path("", index, name="index"),
     path("q/create/", create, name="question_create"),  # 1
     path("q/<int:question_id>/", question, name="question"),  # 1
@@ -43,7 +43,8 @@ urlpatterns = [
     ),
     path("correct/<int:answer_id>/", correct, name="correct"),
     #
-    path("all_users/", all_users, name="all_users"),
+    path("users/", all_users, name="all_users"),
+    path("users/page/<str:page>", all_users, name="users_page"),
     #
     path("help/rating/", rating, name="rating"),
 ]

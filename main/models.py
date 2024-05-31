@@ -1,5 +1,11 @@
+from datetime import timedelta
+
+from django.utils import timezone
+
+import time
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from .settings import CACH_UPDATE_MIN
 
 # class AppUser()
 
@@ -7,17 +13,23 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     # REQUIRED_FIELDS = ["email", "username", "password"]
     profession = models.CharField(max_length=50, default="", blank=True)
+    rating_cache = models.IntegerField(default=-1)
+    rating_cache_updated_at = models.DateTimeField(auto_now_add=True)
 
     @property
     def rating(self):
-        answer_true = Answer.objects.filter(autor=self, correct=True).count() * 10
-        reactions_sorted_by_user = Rection.objects.all().order_by("user__self")
-        # reactions_sorted_by_user = Rection.objects.all().order_by("user__username")
-        reaction_count = reactions_sorted_by_user.count() * 3
+        if (
+            self.rating_cache_updated_at + timedelta(minutes=CACH_UPDATE_MIN)
+            < timezone.now()
+        ):
+            answer_true = Answer.objects.filter(autor=self, correct=True).count() * 10
+            reaction_count = Rection.objects.filter(user=self).count() * 3
 
-        # Пример сортировки по другому полю, например, по пользователю
-        return answer_true + reaction_count
-        return answer_true
+            self.rating_cache = answer_true + reaction_count
+            self.rating_cache_updated_at = timezone.now()
+            self.save()
+
+        return self.rating_cache
 
 
 class Question(models.Model):
@@ -66,6 +78,7 @@ class Answer(models.Model):
     text = models.TextField(max_length=20, blank=False)
     created_at = models.DateTimeField(auto_now_add=True, blank=False)
     updated_at = models.DateTimeField(auto_now=True, blank=False)
+
     parent = models.ForeignKey(
         "self", null=True, blank=False, on_delete=models.SET_NULL
     )
@@ -87,9 +100,9 @@ class Rection(models.Model):
     )
     value = models.IntegerField(default=0)
 
-    @property
-    def reaction_count(self):
-        return self.reactions.count()
+    # @property
+    # def reaction_count(self):
+    #     return self.answer.count()
 
     # class rangs(models.Model):
 

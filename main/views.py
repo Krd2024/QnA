@@ -1,3 +1,4 @@
+import math
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
@@ -9,15 +10,42 @@ from django.shortcuts import render
 
 
 # ======================================================
-def all_users(request):
+def all_users(request, **kwargs):
+    react = Rection.objects.all()
+    print(react)
+    for r in react:
+        print(r.user, "/////", r.answer.autor, "///")
+
     """Все пользователи в карточках на странице"""
+    page = kwargs.get("page")
+    if page is not None:
+        try:
+            page = int(page)
+            if page < 2:
+                raise ValueError()
+        except:
+            return redirect("all_users")
+    else:
+        page = 1
+
+    users_obj = User.objects.all()
+    for user in users_obj:
+        print(user.rating)
+
+    sorted_users = sorted(users_obj, key=lambda u: u.rating, reverse=True)
+    sorted_users = sorted_users[
+        (page - 1)
+        * main.settings.LIMIT_OF_USERS_ON_PAGE : (page)
+        * main.settings.LIMIT_OF_USERS_ON_PAGE
+    ]
+
+    num_pages = int(math.ceil(len(users_obj) / main.settings.LIMIT_OF_USERS_ON_PAGE))
+    users_obj = users_obj
 
     count_answer_users = {}
     count_questions_users = {}
-    ratings_users = {}
 
     try:
-        users_obj = User.objects.all()
 
         for user in users_obj:
             question_obj = Question.objects.filter(autor=user)
@@ -25,21 +53,19 @@ def all_users(request):
             #
             count_answer_users[user] = len(answers_obj)
             count_questions_users[user] = len(question_obj)
-            ratings_users[user] = raiting_(user.username)
 
     except Exception as e:
         print(e, "<<< e -------------- def all_users(request)")
-
-    dict_ = {user: {"users": users_obj}}
 
     return render(
         request,
         "all_users.html",
         {
-            "users": users_obj,
+            "users": sorted_users,
+            "pages_range": range(1, num_pages + 1),
+            "page_number": page,
             "count_answer_users": count_answer_users,
             "count_questions_users": count_questions_users,
-            "ratings_users": ratings_users,
         },
     )
 
@@ -125,7 +151,7 @@ def increase_counter(request, **kwargs):
         try:
             answer = Answer.objects.get(id=answer_id)
 
-            proverka = Rection.objects.filter(answer=answer, user=request.user)
+            proverka = Rection.objects.filter(answer=answer, user=answer.autor)
             if len(proverka) != 0:
                 proverka.delete()
                 reac_count = answer.rection_set.count()
@@ -133,7 +159,7 @@ def increase_counter(request, **kwargs):
             elif request.user == answer.autor:
                 return HttpResponse()
 
-            reaction = Rection.objects.create(answer=answer, user=request.user)
+            reaction = Rection.objects.create(answer=answer, user=answer.autor)
             reaction.save()
             reac_count = answer.rection_set.count()
             print(reac_count)
@@ -247,7 +273,6 @@ def update(request, **kwargs):
 
 
 def delete(request, **kwargs):
-    # print(kwargs.get("name"), "---1")
     try:
         Question.objects.filter(id=kwargs["question_id"]).delete()
         return redirect(f"/user/{request.user}/")
@@ -306,42 +331,9 @@ def question(request, **kwargs):
         return HttpResponse("err")
 
 
-# def login_in(request):
-#     return render(request, "login.html")
-
-
-def raiting_(user):
-    # user = kwargs["username"]
-    objects_user = User.objects.get(username=user)
-    try:
-        print(objects_user.rating, "<<<<<<<<<<     rating")
-    except Exception as e:
-        print(e)
-    answers = Answer.objects.filter(autor=objects_user)
-    reaction_all = Rection.objects.all()
-    count_react = 0
-    for reaction in reaction_all:
-        if reaction.answer is not None and reaction.answer.autor.username == user:
-            count_react += 3
-            # print(reaction.answer.autor)
-
-    # print(count_react)
-    #
-    count_true = 0
-    for answer in answers:
-        if answer.correct == True:
-            count_true += 10
-    # print(count_true)
-
-    return count_true + count_react
-
-
 def user_profile(request, **kwargs):
 
     user = kwargs["username"]
-    # print(request.user.username, "<<< request user")
-    # print(user, "<<< user")
-    # print(request.GET.get("q"))
 
     objects_user = User.objects.get(username=user)
     if request.GET.get("q") == "questions":
@@ -374,21 +366,6 @@ def user_profile(request, **kwargs):
     objects_user = User.objects.get(username=user)
     user_question = Question.objects.filter(autor=objects_user)
     answers = Answer.objects.filter(autor=objects_user)
-    # вычесление рейтинга
-    # reaction_all = Rection.objects.all()
-    # count_react = 0
-    # for reaction in reaction_all:
-    #     if reaction.answer is not None and reaction.answer.autor.username == user:
-    #         count_react += 3
-    #         print(reaction.answer.autor)
-
-    # print(count_react)
-    # #
-    # count_true = 0
-    # for answer in answers:
-    #     if answer.correct == True:
-    #         count_true += 10
-    # print(count_true)
 
     correct_answer = Answer.objects.filter(autor=objects_user, correct=True).count()
 
@@ -401,8 +378,6 @@ def user_profile(request, **kwargs):
         "user_question": len(user_question),
         "username": objects_user,
         "answers": len(answers),
-        "vklad": raiting_(user),
-        "profession": objects_user.profession,
     }
 
     return render(request, "profile.html", context)

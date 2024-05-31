@@ -25,7 +25,7 @@
         <button id="button1" onclick="fun('questions')"><h4>Вопросы</h4>{{ user_question }}</button>
       </div>
       <div>
-        <a href="{% url 'rating' %}"><button id="button3" onclick=""><h4>Вклад</h4>{{ vklad }}</button></a>
+        <a href="{% url 'rating' %}"><button id="button3" onclick=""><h4>Вклад</h4>{{ username.rating }}</button></a>
       </div>
       <div>
         <button id="button4" onclick=""><h4>Пусто</h4></button>
