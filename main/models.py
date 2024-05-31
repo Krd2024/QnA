@@ -1,10 +1,8 @@
 from datetime import timedelta
 import uuid
-import os
 
 from django.utils import timezone
 
-import time
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .settings import CACH_UPDATE_MIN
@@ -107,7 +105,10 @@ class Rection(models.Model):
 
 def user_directory_path(instance, filename) -> str:
     # file will be uploaded to MEDIA_ROOT/users/<uuid4>/<filename>
-    return "static/profile/picture/{0}/{1}".format(uuid.uuid4(), filename)
+    # base_filename =
+    # new_filename = f"{base_filename}.jpg"
+
+    return "static/profile/picture/{0}/{1}".format(uuid.uuid4(), "file-1.jpg")
 
 
 class Image(models.Model):
@@ -119,25 +120,21 @@ class Image(models.Model):
     def __str__(self):
         return self.title
 
-    # @property
-    # def reaction_count(self):
-    #     return self.answer.count()
+    # def save(self, *args, **kwargs):
+    #     # Сначала сохраняем изображение
+    #     super().save(*args, **kwargs)
 
-    # class rangs(models.Model):
+    #     # Открываем изображение с использованием Pillow
+    #     img_path = self.image.path
+    #     img = Image.open(img_path)
 
-    #     def __init__(self, username):
-    #         self.username = username
-    #         self.answer_count = Answer.objects.filter(user=username)
-    #         self.reaction_count = Rection.objects.filter(user=username)
+    #     # Если изображение в формате JPEG, изменяем его качество
+    #     if img.format == "JPEG":
+    #         img.save(img_path, quality=85)  # Устанавливаем качество изображения на 85%
 
-    #     def get_rangs(self):
-    #         ans = self.answer_count
-    #         rec = self.reaction_count
-    #         return len(ans), len(rec)
-
-    # @property
-    # def answers(self):
-    # return Answer.objects.filter(question=self).order_by("-created_at")
+    #     # Если изображение не в формате JPEG, сохраняем его без изменения качества
+    #     else:
+    #         img.save(img_path)
 
     """
     поля класса User 
