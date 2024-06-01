@@ -7,6 +7,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .settings import CACH_UPDATE_MIN
 
+from PIL import Image as PilImage
+
 
 class User(AbstractUser):
     # REQUIRED_FIELDS = ["email", "username", "password"]
@@ -104,37 +106,30 @@ class Rection(models.Model):
 
 
 def user_directory_path(instance, filename) -> str:
-    # file will be uploaded to MEDIA_ROOT/users/<uuid4>/<filename>
-    # base_filename =
-    # new_filename = f"{base_filename}.jpg"
-
     return "static/profile/picture/{0}/{1}".format(uuid.uuid4(), "file-1.jpg")
 
 
 class Image(models.Model):
 
     title = models.CharField(max_length=200)
-    # image = models.ImageField(upload_to="images")
     image = models.ImageField(upload_to=user_directory_path, blank=True)
 
     def __str__(self):
         return self.title
 
-    # def save(self, *args, **kwargs):
-    #     # Сначала сохраняем изображение
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        super().save(
+            *args, **kwargs
+        )  # Сначала сохраните изображение, чтобы получить доступ к полю `image`
 
-    #     # Открываем изображение с использованием Pillow
-    #     img_path = self.image.path
-    #     img = Image.open(img_path)
+        if self.image:
+            img = PilImage.open(self.image.path)
 
-    #     # Если изображение в формате JPEG, изменяем его качество
-    #     if img.format == "JPEG":
-    #         img.save(img_path, quality=85)  # Устанавливаем качество изображения на 85%
+            # Измените размер изображения
+            max_size = (128, 128)
+            img.thumbnail(max_size, PilImage.Resampling.LANCZOS)
 
-    #     # Если изображение не в формате JPEG, сохраняем его без изменения качества
-    #     else:
-    #         img.save(img_path)
+            img.save(self.image.path)
 
     """
     поля класса User 

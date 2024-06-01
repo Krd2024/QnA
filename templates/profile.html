@@ -1,12 +1,12 @@
 {% extends 'wrapper/main.html' %}
 {% block content %}
   {% load static %}
-  {% comment %} <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" /> {% endcomment %}
 
   <div class="name">
-    {% if user.image_url %}
+    {% if username.image_url != '' %}
+      {{ username.image_url }}
       <div>
-        <img src="/static/profile/picture/{{ user.image_url }}/file-1.jpg" alt="" width="100" id="img1" />
+        <img src="/static/profile/picture/{{ username.image_url }}/file-1.jpg" alt="" width="100" id="img1" />
       </div>
     {% else %}
       <div class="name">
@@ -48,9 +48,13 @@
         <div>{{ quest.text }}</div>
       {% endfor %}
     </div>
-
     <div id="answers_div"></div>
   </div>
+  {% if user == username %}
+    <div class="add_foto">
+      <a href="{% url 'upload' %}"><button id="button_add_foto">Добавить фото</button></a>
+    </div>
+  {% endif %}
 
   <script>
     const butt1 = document.getElementById('button1')
@@ -67,6 +71,15 @@
   </script>
 
   <style>
+    .add_foto {
+      margin-top: 50px;
+      text-align: center;
+    }
+    #button_add_foto {
+      width: fit-content;
+      height: 60px;
+      padding: 10px;
+    }
     #button1,
     #button2,
     #button3,

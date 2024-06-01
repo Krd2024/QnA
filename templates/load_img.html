@@ -1,8 +1,20 @@
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %} {{ form.as_p }}
-  <button type="submit">Upload</button>
-</form>
-{% if img_obj %}
-  <h3>Succesfully uploaded : {{ img_obj.title }}</h3>
-  <img src="{{ img_obj.image.url }}" alt="connect" style="max-height:132px" />
-{% endif %}
+{% extends 'wrapper/main.html' %}
+{% block content %}
+  <div class="upload">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Загрузить</button>
+    </form>
+    {% if img_obj %}
+      <h3>Succesfully uploaded : {{ img_obj.title }}</h3>
+      <img src="{{ img_obj.image.url }}" alt="connect" style="max-height:132px" />
+    {% endif %}
+  </div>
+  <style>
+    .upload {
+      margin-top: 50px;
+      text-align: center;
+      line-height: 2.5;
+    }
+  </style>
+{% endblock %}

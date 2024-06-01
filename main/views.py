@@ -26,33 +26,59 @@ def generate_filename(instance, filename):
 
 
 # =================================================================
+import shutil
+import os
+
+
+def delete_folder(folder_path):
+    # Проверка, существует ли папка
+    if os.path.exists(folder_path):
+        # Удаление папки и всех её содержимого
+        shutil.rmtree(folder_path)
+        print(f"Папка '{folder_path}' успешно удалена.")
+    else:
+        print(f"Папка '{folder_path}' не существует.")
 
 
 def image_upload_view(request):
     """Process images uploaded by users"""
+
     if request.method == "POST":
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             print(form.cleaned_data["image"])
-            # Get the current instance object to display in the template
+            if form.cleaned_data["image"] is None:
+                return render(request, "load_img.html", {"form": form})
             img_obj = form.instance
+
+            # Получить имя папки для удаления перед созданием новой (uuid)
+            user_obj = User.objects.get(username=request.user.username)
+            dir_uuid = user_obj.image_url
+            print(dir_uuid)
+            folder_path = f"static/profile/picture/{dir_uuid}"
+            delete_folder(folder_path)
+            #
             User.objects.filter(
                 username=request.user.username,
             ).update(image_url=str(img_obj.image)[23:59])
-
+        try:
             return render(request, "load_img.html", {"form": form, "img_obj": img_obj})
+        except Exception as e:
+            print(e)
+            # form = ImageForm()
     else:
         form = ImageForm()
-        return render(request, "load_img.html", {"form": form})
+    return render(request, "load_img.html", {"form": form})
 
 
 # ======================================================
 def all_users(request, **kwargs):
-    react = Rection.objects.all()
-    print(react)
-    for r in react:
-        print(r.user, "/////", r.answer.autor, "///")
+    answer_obj = Answer.objects.prefetch_related("rection_set")
+    for answer in answer_obj:
+        ans_react = answer.rection_set.all()
+        for related in ans_react:
+            print(related.user)
 
     """Все пользователи в карточках на странице"""
     page = kwargs.get("page")
@@ -67,8 +93,6 @@ def all_users(request, **kwargs):
         page = 1
 
     users_obj = User.objects.all()
-    for user in users_obj:
-        print(user.rating)
 
     sorted_users = sorted(users_obj, key=lambda u: u.rating, reverse=True)
     sorted_users = sorted_users[
@@ -200,7 +224,7 @@ def increase_counter(request, **kwargs):
             reaction = Rection.objects.create(answer=answer, user=answer.autor)
             reaction.save()
             reac_count = answer.rection_set.count()
-            print(reac_count)
+            # print(reac_count)
             return JsonResponse({"success": True, "answer": reac_count})
 
         except Exception as e:

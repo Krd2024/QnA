@@ -48,7 +48,7 @@ urlpatterns = [
     #
     path("help/rating/", rating, name="rating"),
     #
-    path("upload/", image_upload_view),
+    path("upload/", image_upload_view, name="upload"),
 ]
 
 # terminal.integrated.fontSize

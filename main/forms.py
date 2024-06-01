@@ -1,6 +1,8 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
+from .models import Image
+from PIL import Image as PilImage
 
 from .models import Question, User
 
@@ -40,3 +42,18 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ("title", "image")
+
+    def clean_image(self):
+        image = self.cleaned_data.get("image")
+        if image:
+            # Открываем изображение с помощью Pillow
+            pil_image = PilImage.open(image)
+
+            # Проверяем режим изображения
+            if pil_image.mode in ["RGBA", "LA"] or (
+                pil_image.mode == "P" and "transparency" in pil_image.info
+            ):
+                raise forms.ValidationError(
+                    "Изображение содержит альфа-канал и не может быть загружено.Это не JPG"
+                )
+        return image
