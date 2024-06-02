@@ -2,7 +2,7 @@ import math
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
-from main.models import Question, Answer, Rection, User
+from main.models import Question, Answer, Rection, User, Image
 from .forms import QForm
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
@@ -10,9 +10,11 @@ from django.shortcuts import render
 
 from .forms import ImageForm
 
+import os
+import shutil
+
 # =================================================================
 #                 НЕ ИСПОЛЬЗУЕТСЯ
-import os
 import uuid
 
 
@@ -26,14 +28,11 @@ def generate_filename(instance, filename):
 
 
 # =================================================================
-import shutil
-import os
 
 
 def delete_folder(folder_path):
-    # Проверка, существует ли папка
+    """Удалить текущую папку uuid перед созданием новой"""
     if os.path.exists(folder_path):
-        # Удаление папки и всех её содержимого
         shutil.rmtree(folder_path)
         print(f"Папка '{folder_path}' успешно удалена.")
     else:
@@ -41,32 +40,51 @@ def delete_folder(folder_path):
 
 
 def image_upload_view(request):
-    """Process images uploaded by users"""
+    """Загрузка фото пользователя"""
+
+    def save_image_url_user(img_obj):
+        User.objects.filter(
+            username=request.user.username,
+        ).update(image_url=str(img_obj)[23:59])
 
     if request.method == "POST":
         form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            img_obj = Image.objects.filter(user_id=request.user)
+            if img_obj is not None:
+                img_obj.delete()
+
+            image = form.save(commit=False)
+            image.user = request.user
+            image.save()
+
+            # img_obj.user = request.user
+            print(form)
+            # image.image = img_obj.image
+            #
+            img_obj = form.instance
+            #
             print(form.cleaned_data["image"])
+            #
             if form.cleaned_data["image"] is None:
                 return render(request, "load_img.html", {"form": form})
-            img_obj = form.instance
 
             # Получить имя папки для удаления перед созданием новой (uuid)
-            user_obj = User.objects.get(username=request.user.username)
+            user_obj = User.objects.filter(username=request.user.username).first()
             dir_uuid = user_obj.image_url
-            print(dir_uuid)
+            print(dir_uuid, "<<<<<< ---------- user_obj")
+
+            if dir_uuid == "":
+                save_image_url_user(img_obj.image)
+                return redirect("user_profile", request.user.username)
+
             folder_path = f"static/profile/picture/{dir_uuid}"
             delete_folder(folder_path)
+
+            save_image_url_user(img_obj.image)
             #
-            User.objects.filter(
-                username=request.user.username,
-            ).update(image_url=str(img_obj.image)[23:59])
-        try:
-            return render(request, "load_img.html", {"form": form, "img_obj": img_obj})
-        except Exception as e:
-            print(e)
-            # form = ImageForm()
+        return redirect("user_profile", request.user.username)
+        # form = ImageForm()
     else:
         form = ImageForm()
     return render(request, "load_img.html", {"form": form})
@@ -74,13 +92,16 @@ def image_upload_view(request):
 
 # ======================================================
 def all_users(request, **kwargs):
+    """Показать всех пользователей"""
+    # ======================================================
+
     answer_obj = Answer.objects.prefetch_related("rection_set")
     for answer in answer_obj:
         ans_react = answer.rection_set.all()
         for related in ans_react:
             print(related.user)
+    # ======================================================
 
-    """Все пользователи в карточках на странице"""
     page = kwargs.get("page")
     if page is not None:
         try:

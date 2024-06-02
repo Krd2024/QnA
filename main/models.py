@@ -16,7 +16,7 @@ class User(AbstractUser):
     rating_cache = models.IntegerField(default=-1)
     rating_cache_updated_at = models.DateTimeField(auto_now_add=True)
     #
-    image_url = models.CharField(max_length=50, blank=True)
+    image_url = models.CharField(max_length=50, blank=True, editable=False)
 
     @property
     def rating(self):
@@ -110,6 +110,7 @@ def user_directory_path(instance, filename) -> str:
 
 
 class Image(models.Model):
+    user = models.ForeignKey(User, related_name="images_user", on_delete=models.CASCADE)
 
     title = models.CharField(max_length=200)
     image = models.ImageField(upload_to=user_directory_path, blank=True)
@@ -131,8 +132,11 @@ class Image(models.Model):
 
             img.save(self.image.path)
 
+        # Image.objects.all().delete()
+        # Image.objects.filter(id=self.id).delete()
+
     """
-    поля класса User 
+поля класса User 
 username: Имя пользователя (username).
 password: Пароль.
 email: Электронная почта.
@@ -142,4 +146,5 @@ is_active: Флаг, показывающий, активен ли пользо�
 is_staff: Флаг, указывающий, имеет ли пользователь доступ к административному интерфейсу.
 is_superuser: Флаг, указывающий, является ли пользователь суперпользователем.
 date_joined: Дата и время регистрации пользователя.
+
     """
