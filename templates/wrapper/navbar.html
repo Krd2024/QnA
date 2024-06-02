@@ -1,20 +1,11 @@
 <menu>
   <ul>
-    <a href="{% url 'all_users' %}"><span>Пользователи</span></a>
     <li>
       <form class="loginForm" action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="username" value="bright_sunshine" />
         <input type="hidden" name="password" value="1" />
         <button type="submit">bright_sunshine</button>
-      </form>
-    </li>
-    <li>
-      <form class="loginForm" action="{% url 'login' %}" method="post">
-        {% csrf_token %}
-        <input type="hidden" name="username" value="abc" />
-        <input type="hidden" name="password" value="g2j-mbj-wbN-zBV" />
-        <button type="submit">abc</button>
       </form>
     </li>
 
@@ -39,24 +30,35 @@
     </li>
   </ul>
   <div></div>
-  {% comment %} <a href="{% url 'index' %}">Главная</a> {% endcomment %}
-  {% comment %} <a href="{% url 'question_create' %}">Задать вопрос</a> {% endcomment %}
+  <a class="a" href="{% url 'all_users' %}"><span>Пользователи</span></a>
+
   <div>
     {% if request.user.is_authenticated %}
-      {% comment %} <a href="{% url 'user' request.user.username %}">Главная</a> {% endcomment %}
-
-      <span>Добро пожаловать: {{ request.user.username }}</span>
+      <span id="name">{{ request.user.username }}</span>
       <a href="{% url 'logout' %}">Выход</a>
     {% else %}
-      <a href="/register/">Регистрация</a>
-      <a href="/login_in/">Вход</a>
+      <a class="a" href="/signup/">Регистрация через Email</a>
+      <hr />
+      <a class="a" href="/register/">Регистрация</a>
+      <hr />
+      <p>
+        <a class="a" href="/login_in/">Вход</a>
+      </p>
+      <hr />
     {% endif %}
   </div>
 </menu>
 
 <style>
+  #name {
+    font-size: 25px;
+  }
+  .a {
+    margin: 10px;
+    color: antiquewhite;
+  }
   .loginForm {
-    margin: 5px;
+    margin: 10px;
     width: 15vh;
     text-align: left;
   }

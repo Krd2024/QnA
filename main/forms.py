@@ -25,6 +25,14 @@ class UserRegisterForm(UserCreationForm):
         model = User
         fields = ["username", "email", "password1", "password2"]
 
+    def save(self, commit=True):
+        user = super(UserRegisterForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password1"])
+        user.is_active = False  # Делает аккаунт неактивным до подтверждения email
+        if commit:
+            user.save()
+        return user
+
 
 class QuestionForm(forms.Form):
     question = forms.CharField(

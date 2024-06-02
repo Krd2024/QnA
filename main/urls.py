@@ -49,6 +49,15 @@ urlpatterns = [
     path("help/rating/", rating, name="rating"),
     #
     path("upload/", image_upload_view, name="upload"),
+    #
+    #
+    path("signup/", signup, name="signup"),
+    path(
+        "account_activation_sent/",
+        account_activation_sent,
+        name="account_activation_sent",
+    ),
+    path("activate/<uidb64>/<token>/", activate, name="activate"),
 ]
 
 # terminal.integrated.fontSize
