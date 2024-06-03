@@ -34,8 +34,9 @@
 
   <div>
     {% if request.user.is_authenticated %}
-      <span id="name">{{ request.user.username }}</span>
-      <a href="{% url 'logout' %}">Выход</a>
+      <a href="{% url 'user_profile' request.user.username %}"><span id="name">{{ request.user.username }}</span></a>
+      <hr />
+      <a id="exit" href="{% url 'logout' %}">Выход</a>
     {% else %}
       <a class="a" href="/signup/">Регистрация через Email</a>
       <hr />
@@ -50,8 +51,12 @@
 </menu>
 
 <style>
+  #exit {
+    color: beige;
+  }
   #name {
-    font-size: 25px;
+    font-size: 30px;
+    color: beige;
   }
   .a {
     margin: 10px;

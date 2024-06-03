@@ -13,6 +13,11 @@ from .forms import ImageForm
 import os
 import shutil
 
+import time
+from datetime import datetime
+import main.settings
+from django.contrib import messages
+
 # =================================================================
 # views.py
 
@@ -46,7 +51,7 @@ def signup(request):
                 },
             )
             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
-            return redirect("email/account_activation_sent")
+            return redirect("account_activation_sent")
     else:
         form = UserRegisterForm()
     return render(request, "email/signup.html", {"form": form})
@@ -532,12 +537,6 @@ def user_profile(request, **kwargs):
     # =================================================================
 
 
-import time
-from datetime import datetime
-import main.settings
-from django.contrib import messages
-
-
 @login_required(login_url="/login_in")
 def create(request, **kwargs):
 
@@ -583,8 +582,6 @@ def create(request, **kwargs):
 
 
 # =================================================================
-# service.py
-# from employee.models import Employee
 
 
 class EmployeeService:
