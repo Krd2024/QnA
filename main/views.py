@@ -8,7 +8,7 @@ from django.db.models import Count
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
-from .forms import ImageForm
+from .forms import ImageForm, ProfileEditForm
 
 import os
 import shutil
@@ -30,6 +30,25 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import UserRegisterForm
+
+
+# =================================================================
+def edit_profile(request, **kwargs):
+    if request.method == "POST":
+        form = ProfileEditForm(request.POST)
+        if form.is_valid():
+            print(form.cleaned_data["first_name"])
+            print(form.cleaned_data["last_name"])
+
+            user=form.save(commit=False)
+            return redirect("user_profile", request.user)
+            # return HttpResponse(1)
+
+        print()
+    form = ProfileEditForm
+
+    return render(request, "editProfile.html", {"form": form})
+
 
 # from django.contrib.auth.models import User
 
@@ -128,10 +147,6 @@ def image_upload_view(request):
             image.user = request.user
             image.save()
 
-            # img_obj.user = request.user
-            print(form)
-            # image.image = img_obj.image
-            #
             img_obj = form.instance
             #
             print(form.cleaned_data["image"])
@@ -154,7 +169,6 @@ def image_upload_view(request):
             save_image_url_user(img_obj.image)
             #
         return redirect("user_profile", request.user.username)
-        # form = ImageForm()
     else:
         form = ImageForm()
     return render(request, "load_img.html", {"form": form})
@@ -164,12 +178,17 @@ def image_upload_view(request):
 def all_users(request, **kwargs):
     """Показать всех пользователей"""
     # ======================================================
+    answer_obj_1 = Rection.objects.select_related("answer")
+    for obj in answer_obj_1:
+        print(obj.answer.text)
+    # ======================================================
 
     answer_obj = Answer.objects.prefetch_related("rection_set")
     for answer in answer_obj:
         ans_react = answer.rection_set.all()
         for related in ans_react:
             print(related.user)
+    # ======================================================
     # ======================================================
 
     page = kwargs.get("page")
