@@ -1,18 +1,48 @@
-<body>
-  <form action="/user/{{ request.user }}/edit_profile/" method="post">
-    {% csrf_token %}
-    <label for="first_name">Имя:</label><br />
-    <input type="text" id="first_name" name="first_name" /><br />
+{% extends 'wrapper/main.html' %}
+{% block content %}
+  <body>
+    <div class="form">
+      <form action="/user/{{ request.user }}/edit_profile/" method="post">
+        {% csrf_token %}
+        <label for="first_name">Имя:</label><br />
+        <input type="text" id="first_name" name="first_name" /><br />
 
-    <label for="last_name">Фамилия:</label><br />
-    <input type="last_name" id="last_name" name="last_name" /><br /><br />
+        <label for="last_name">Фамилия:</label><br />
+        <input type="last_name" id="last_name" name="last_name" /><br /><br />
 
-    <label for="email">email:</label><br />
-    <input type="email" id="email" name="email" /><br /><br />
+        <label for="email">email:</label><br />
+        <input type="email" id="email" name="email" /><br /><br />
 
-    <label for="profession">Профессия:</label><br />
-    <input type="profession" id="profession" name="profession" /><br /><br />
+        <label for="profession">Профессия:</label><br />
+        <input type="profession" id="profession" name="profession" /><br /><br />
 
-    <input type="submit" value="Ушло" />
-  </form>
-</body>
+        <input type="submit" value="Ушло" />
+      </form>
+    </div>
+
+    <div class="add_foto">
+      <a href="{% url 'upload' %}"><button id="button_add_foto">Добавить фото</button></a>
+    </div>
+  </body>
+  <style>
+    #button_add_foto {
+      border: 1px solid gray;
+      border-radius: 5px;
+      padding: 3px;
+      font-size: 20px;
+      width: fit-content;
+      height: 30px;
+    }
+    .add_foto {
+      margin: 20px;
+    }
+    .form {
+      border-radius: 5px;
+      margin: 20px;
+      padding: 20px;
+    }
+    .form {
+      background-color: darkgrey;
+    }
+  </style>
+{% endblock %}

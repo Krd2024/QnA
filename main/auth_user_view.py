@@ -34,7 +34,7 @@ class CustomLoginView(LoginView):
         # Обработка отправленной формы
         username = request.POST.get("username")
         password = request.POST.get("password")
-        print(username, password)
+        # print(username, password)
 
         # Проверка аутентификации пользователя
         user = authenticate(username=username, password=password)

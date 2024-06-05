@@ -9,7 +9,7 @@
               <p class="teg">{{ quest.teg }}</p>
             </div>
             <div class="title">
-              <h3>{{ quest.title }}</h3>
+              <a href="{% url 'question' quest.id %}"><h3>{{ quest.title }}</h3></a>
             </div>
             <div class="question">{{ quest.text }}</div>
             <div class="create">Создано {{ quest.created_at|timesince }} назад</div>

@@ -119,19 +119,22 @@ class Image(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        super().save(
-            *args, **kwargs
-        )  # Сначала сохраните изображение, чтобы получить доступ к полю `image`
+        try:
 
-        if self.image:
-            img = PilImage.open(self.image.path)
+            super().save(
+                *args, **kwargs
+            )  # Сначала сохраните изображение, чтобы получить доступ к полю `image`
 
-            # Измените размер изображения
-            max_size = (128, 128)
-            img.thumbnail(max_size, PilImage.Resampling.LANCZOS)
+            if self.image:
+                img = PilImage.open(self.image.path)
 
-            img.save(self.image.path)
+                # Измените размер изображения
+                max_size = (128, 128)
+                img.thumbnail(max_size, PilImage.Resampling.LANCZOS)
 
+                img.save(self.image.path)
+        except Exception as e:
+            return e
         # Image.objects.all().delete()
         # Image.objects.filter(id=self.id).delete()
 

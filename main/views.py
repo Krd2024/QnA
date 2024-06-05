@@ -37,11 +37,25 @@ def edit_profile(request, **kwargs):
     if request.method == "POST":
         form = ProfileEditForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data["first_name"])
-            print(form.cleaned_data["last_name"])
+            form.save(commit=False)
 
-            user=form.save(commit=False)
-            return redirect("user_profile", request.user)
+            first = form.cleaned_data["first_name"]
+            last = form.cleaned_data["last_name"]
+            email = form.cleaned_data["email"]
+            pro = form.cleaned_data["profession"]
+
+            edit_user = User.objects.get(pk=request.user.id)
+            if first != "":
+                edit_user.first_name = first
+            if last != "":
+                edit_user.last_name = last
+            if email != "":
+                edit_user.email = email
+            if pro != "":
+                edit_user.profession = pro
+            edit_user.save()
+
+            return redirect("user_profile", request.user.username)
             # return HttpResponse(1)
 
         print()
@@ -55,9 +69,12 @@ def edit_profile(request, **kwargs):
 
 def signup(request):
     if request.method == "POST":
+
         form = UserRegisterForm(request.POST)
+        # form = ProfileEditForm(request.POST)
         if form.is_valid():
             user = form.save()
+
             current_site = get_current_site(request)
             subject = "Activate Your Account"
             message = render_to_string(
@@ -396,15 +413,15 @@ def info_user_choice(request, **kwargs):
     return HttpResponse("errrror << --- def(info_user_choice)")
 
 
-def info_user(request, **kwargs):
-    try:
-        username = kwargs.get("choice")
-        user_obj = User.objects.filter(username=username)
-        context = {"username": user_obj[0]}
-        return render(request, "user_info.html", context)
-    except Exception as e:
-        print(e)
-        return HttpResponse("1234")
+# def info_user(request, **kwargs):
+#     try:
+#         username = kwargs.get("choice")
+#         user_obj = User.objects.filter(username=username)
+#         context = {"username": user_obj[0]}
+#         return render(request, "user_info.html", context)
+#     except Exception as e:
+#         print(e)
+#         return HttpResponse("1234")
 
 
 def index(request):
@@ -506,8 +523,8 @@ def question(request, **kwargs):
 def user_profile(request, **kwargs):
 
     user = kwargs["username"]
-
     objects_user = User.objects.get(username=user)
+
     if request.GET.get("q") == "questions":
         # print(12345)
         user_question = Question.objects.filter(autor=objects_user)
@@ -518,6 +535,7 @@ def user_profile(request, **kwargs):
         return render(request, "user_questions.html", context)
 
     if request.GET.get("q") == "answers":
+
         try:
             answers = Answer.objects.filter(autor=objects_user)
             lst = []
@@ -533,7 +551,7 @@ def user_profile(request, **kwargs):
 
         except Exception as e:
             print(e, "<<< ----------- e --- def user_profile()")
-            return render(render, "user_answers.html", {"out": "Нет ответ"})
+            return render(render, "user__answers.html", {"out": "Нет ответ"})
     # ----------------------------------------------------------------
     objects_user = User.objects.get(username=user)
     user_question = Question.objects.filter(autor=objects_user)

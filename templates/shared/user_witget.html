@@ -5,18 +5,18 @@
   </div> {% endcomment %}
   {% if user.image_url %}
     <div>
-      <img class="user-widget-img" src="/static/profile/picture/{{ user.image_url }}/file-1.jpg" alt="" width="36" />
+      <img class="user-widget-img" src="/static/profile/picture/{{ user.image_url }}/file-1.jpg" alt="фото" width="36" />
     </div>
   {% else %}
     <div>
-      <img class="user-widget-img" src="/static/img/head.png" alt="" width="36" />
+      <img class="user-widget-img" src="/static/img/head.png" alt="фото" width="36" />
     </div>
   {% endif %}
   <div class="user-widget-info">
     <p class="user-widget-info-name">
       <strong>
         <span>{{ name }}</span>
-        <span>lastname</span>
+        <span>{{ user.first_name }}</span>
       </strong>
       <a href="{% url 'user_profile' user %}">@{{ user }}</a>
     </p>

@@ -7,7 +7,7 @@ from PIL import Image as PilImage
 from .models import Question, User
 
 
-# class QForm(BaseModelForm):
+# class ProfileEditForm(UserCreationForm):
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = User
@@ -55,7 +55,7 @@ class ImageForm(forms.ModelForm):
 
     class Meta:
         model = Image
-        fields = ("title", "image")
+        fields = ("image",)
 
     def clean_image(self):
         image = self.cleaned_data.get("image")

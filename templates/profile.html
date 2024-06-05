@@ -15,8 +15,8 @@
     {% endif %}
 
     <div>{{ username }}</div>
-    {% if profession != '' %}
-      <div>{{ profession }}</div>
+    {% if username.profession != '' %}
+      <div>{{ username.profession }}</div>
     {% endif %}
   </div>
   <div>
@@ -51,11 +51,8 @@
     <div id="answers_div"></div>
   </div>
   {% if user == username %}
-    <div class="add_foto">
-      <a href="{% url 'upload' %}"><button id="button_add_foto">Добавить фото</button></a>
-    </div>
     <div class="edit">
-      <a href="{% url 'edit_profile' username %}"><button id="button_add_foto">Добавить инфо</button></a>
+      <a href="{% url 'edit_profile' username %}"><button id="button_add">Добавить инфо</button></a>
     </div>
   {% endif %}
 
@@ -74,15 +71,16 @@
   </script>
 
   <style>
-    .add_foto {
+    #button_add {
+      padding: 5px;
+      height: 30px;
+    }
+    .edit {
+      height: 100px;
       margin-top: 50px;
       text-align: center;
     }
-    #button_add_foto {
-      width: fit-content;
-      height: 60px;
-      padding: 10px;
-    }
+    
     #button1,
     #button2,
     #button3,
