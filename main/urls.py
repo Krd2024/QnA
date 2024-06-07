@@ -30,17 +30,19 @@ urlpatterns = [
         answer_update_delete,
         name="answer_update_delete",
     ),
-    path(
-        "user/<str:username>/<str:choice>/",
-        info_user_choice,
-        name="info_user_choice",
-    ),
+    # path(
+    #     "user/<str:username>/<str:choice>/",
+    #     info_user_choice,
+    #     name="info_user_choice",
+    # ),
     path("search/<str:search>/", search, name="search"),
+    #
     path(
         "increase_counter/<int:answer_id>/",
         increase_counter,
         name="increase_counter",
     ),
+    #
     path("correct/<int:answer_id>/", correct, name="correct"),
     #
     path("users/", all_users, name="all_users"),
@@ -59,7 +61,7 @@ urlpatterns = [
     ),
     path("activate/<uidb64>/<token>/", activate, name="activate"),
     #
-    path("pars_up/", pars_up, name="pars_up"),  # 1
+    path("pars_up/<str:value>", pars_up, name="pars_up"),  # 1
 ]
 
 # terminal.integrated.fontSize

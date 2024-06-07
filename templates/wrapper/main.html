@@ -22,14 +22,19 @@
     </div>
     <div class="body">
       {% include 'wrapper/navbar.html' %}
-      <div class="content">
-        {% block content %}
+      {% block main %}
+        <div class="content">
+          {% block content %}
 
-        {% endblock %}
-      </div>
-      <div class="right-info">
-        {% include 'wrapper/right_info.html' %}
-      </div>
+          {% endblock %}
+        </div>
+        <div class="right-info">
+          {% block content1 %}
+
+          {% endblock %}
+          {% comment %} {% include 'wrapper/right_pars.html' %} {% endcomment %}
+        </div>
+      {% endblock %}
     </div>
 
     {% include 'wrapper/footer.html' %}

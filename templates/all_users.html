@@ -1,7 +1,7 @@
 {% extends 'wrapper/main.html' %}
 {% block content %}
   <div class="users-container">
-    <div class="users">Ползователи</div>
+    <div class="title">Пользователи</div>
     <div class="container">
       {% for username in users %}
         <div class="box">
@@ -48,10 +48,11 @@
     .current {
       color: red;
     }
-  </style>
-  {% comment %} {% endcomment %}
-
-  <style>
+    .title {
+      padding: 10px;
+      font-size: 25px;
+      text-align: center;
+    }
     .rating {
       margin: 10px 0 10px 0;
     }

@@ -36,23 +36,52 @@ from bs4 import BeautifulSoup
 import requests
 
 
-def pars_up(request):
-    url = "http://qna.habr.com/"
-    page = requests.get(url)
-    if page.status_code != 200:
-        return False
-    soup = BeautifulSoup(page.text, "html.parser")
-    allNews = soup.findAll("li", class_="content-list__item")
-    links = {}
-    for news_item in allNews:
-        link = news_item.find("a", class_="question__title-link question__title_thin")
-        if link:
-            text = " ".join(link.text.split()).strip()
-            links[text] = link["href"]
-    print(links)
+def pars_up(request, **kwargs):
+    print(kwargs)
+    try:
+        if kwargs.get("value") == "samoe":
+
+            url = "http://qna.habr.com/"
+            page = requests.get(url)
+            if page.status_code != 200:
+                return False
+            soup = BeautifulSoup(page.text, "html.parser")
+            allNews = soup.findAll("li", class_="content-list__item")
+            links = {}
+            for news_item in allNews:
+                link = news_item.find(
+                    "a", class_="question__title-link question__title_thin"
+                )
+                if link:
+                    text = " ".join(link.text.split()).strip()
+                    links[text] = link["href"]
+
+        if kwargs.get("value") == "it":
+
+            url = "http://habr.com/ru/news/"
+            page = requests.get(url)
+            if page.status_code != 200:
+                return False
+            soup = BeautifulSoup(page.text, "html.parser")
+            allNewsIt = soup.findAll("article", class_="tm-articles-list__item")
+            links = {}
+            for news_item in allNewsIt:
+                h2 = news_item.find("h2", class_="tm-title tm-title_h2")
+                a = news_item.find("a", class_="tm-title__link")
+                # print(h2.text)
+                # print("------------")
+                # print(a["href"])
+                # print("==============================================")
+                url = a["href"]
+                link = f"HTTPS://habr.com{url}"
+                text = h2.text
+                links[text] = link
+            # print(links)
+
+    except Exception as e:
+        print(e)
 
     return render(request, "wrapper/right_pars.html", {"links": links})
-    return HttpResponse(allNews)
 
 
 # =================================================================
@@ -404,37 +433,39 @@ def answer_update_delete(request, **kwargs):
         return redirect(f"/user/{request.user}/")
 
 
-def info_user_choice(request, **kwargs):
-    """Получить все вопросы или все ответы пользователя для ЛК"""
+# def info_user_choice(request, **kwargs):
+#     # def info_user_choice(request, **kwargs):
+#     """Получить все вопросы или все ответы пользователя для ЛК"""
+#     print(111111111111111111111)
+#     try:
+#         print(kwargs)
+#         if kwargs.get("choice") == "questions":
+#             username = kwargs.get("username")
+#             user_obj = User.objects.get(username=username)
+#             user_quest_obj = Question.objects.filter(autor=user_obj)
 
-    try:
-        print(kwargs)
-        if kwargs.get("choice") == "questions":
-            username = kwargs.get("username")
-            user_obj = User.objects.get(username=username)
-            user_quest_obj = Question.objects.filter(autor=user_obj)
+#             context = {
+#                 "user_quest": user_quest_obj,
+#                 "user_question": len(user_quest_obj),
+#                 "username": username,
+#             }
 
-            context = {
-                "user_quest": user_quest_obj,
-                "user_question": len(user_quest_obj),
-                "username": username,
-            }
+#             return render(request, "profile.html", context)
 
-            return render(request, "profile.html", context)
+#         if kwargs.get("choice") == "answer":
+#             print(111111111111111111111)
+#             username = kwargs.get("name")
+#             print(username, "<<< ======= username")
+#             user_obj = User.objects.get(username=username)
+#             user_answer_obj = Answer.objects.filter(autor=user_obj)
 
-        if kwargs.get("choice") == "answer":
-            username = kwargs.get("name")
-            print(username, "<<< ======= username")
-            user_obj = User.objects.get(username=username)
-            user_answer_obj = Answer.objects.filter(autor=user_obj)
+#             context = {"user_answer": user_answer_obj, "answers": len(user_answer_obj)}
+#             return render(request, "profile.html", context)
+#             # return render(request, "user_info.html", context)
 
-            context = {"user_answer": user_answer_obj, "answers": len(user_answer_obj)}
-            return render(request, "profile.html", context)
-            # return render(request, "user_info.html", context)
-
-    except Exception as e:
-        print(e, "<< --- E")
-    return HttpResponse("errrror << --- def(info_user_choice)")
+#     except Exception as e:
+#         print(e, "<< --- E")
+#     return HttpResponse("errrror << --- def(info_user_choice)")
 
 
 # def info_user(request, **kwargs):
@@ -545,7 +576,7 @@ def question(request, **kwargs):
         return HttpResponse("err")
 
 
-def user_profile(request, **kwargs):
+def user_profile(request, *args, **kwargs):
 
     user = kwargs["username"]
     objects_user = User.objects.get(username=user)

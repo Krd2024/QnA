@@ -1,4 +1,30 @@
-{% for text, url_ in links.items %}
-  <a href="{{ url_ }}">{{ text }}</a>
+{% extends 'wrapper/main.html' %}
+{% load static %}
+{% block content %}
+  <p>Самое интересное за 24 часа</p>
   <hr />
-{% endfor %}
+  <div class="box">
+    {% for text, url_ in links.items %}
+      <div class="info">
+        <a href="{{ url_ }}">{{ text }}</a>
+      </div>
+      <hr />
+    {% endfor %}
+  </div>
+  {% comment %} <a href="{% url 'pars_up' %}"><button>pars_up</button></a> {% endcomment %}
+  <style>
+    p {
+      padding: 5px;
+      text-align: center;
+    }
+    .info {
+      padding: 5px;
+    }
+    .box {
+      padding: 10px;
+    }
+    a {
+      text-decoration: none;
+    }
+  </style>
+{% endblock %}

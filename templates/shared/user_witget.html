@@ -1,8 +1,4 @@
-{% comment %}виджет юзера с его аватаркой именем юзернеймом и должностью{% endcomment %}
 <div class="user-widget">
-  {% comment %} <div>
-    <img class="user-widget-img" src="/static/profile/picture/{{ user.image_url }}/messi_.jpg" alt="" width="64" />
-  </div> {% endcomment %}
   {% if user.image_url %}
     <div>
       <img class="user-widget-img" src="/static/profile/picture/{{ user.image_url }}/file-1.jpg" alt="фото" width="36" />
