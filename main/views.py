@@ -2,7 +2,7 @@ import math
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
-from main.models import Question, Answer, Rection, User, Image
+from main.models import Question, Answer, Rection, Teg, User, Image
 from .forms import QForm
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
@@ -30,6 +30,29 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.conf import settings
 from .forms import UserRegisterForm
+
+# =================================================================
+from bs4 import BeautifulSoup
+import requests
+
+
+def pars_up(request):
+    url = "http://qna.habr.com/"
+    page = requests.get(url)
+    if page.status_code != 200:
+        return False
+    soup = BeautifulSoup(page.text, "html.parser")
+    allNews = soup.findAll("li", class_="content-list__item")
+    links = {}
+    for news_item in allNews:
+        link = news_item.find("a", class_="question__title-link question__title_thin")
+        if link:
+            text = " ".join(link.text.split()).strip()
+            links[text] = link["href"]
+    print(links)
+
+    return render(request, "wrapper/right_pars.html", {"links": links})
+    return HttpResponse(allNews)
 
 
 # =================================================================
@@ -304,7 +327,7 @@ def type_(search):
 
 @type_
 def search(request, **kwargs):
-    """Поиск по заголовку"""
+    """Поиск по заголовку и тегу"""
 
     print(kwargs["search"])
 
@@ -312,6 +335,7 @@ def search(request, **kwargs):
         search = kwargs["search"]
         print(search, "<<<<<<<<<<<<<<<<<<<<<<")
         question = Question.objects.all()
+        tegs = Teg.objects.all()
         title_question = {}
 
         for title in question:
@@ -448,7 +472,8 @@ def update(request, **kwargs):
             question = Question.objects.get(id=question_id)
             question.title = form.cleaned_data["title"]
             question.text = form.cleaned_data["text"]
-            question.teg = form.cleaned_data["teg"]
+            question.tegs = form.cleaned_data["tegs"]
+            print(question.tegs, "<<<< ======= tags")
             question.save()
 
         return redirect(f"/user/{request.user}/")
@@ -579,13 +604,16 @@ def create(request, **kwargs):
 
     def limit(request):
         try:
-            user_id = request.POST.get("autor")
-            user_obj = User.objects.get(id=user_id)
+
+            user_obj = User.objects.get(id=request.user.id)
             question = Question.objects.filter(autor=user_obj)
+            print(user_obj)
+            print(question)
             #
             current_time = time.time()
             dt_object = datetime.fromtimestamp(current_time)
             limit_time = dt_object.strftime("%Y-%m-%d")
+
             lst_time = []
             for i in question:
                 str_time = i.created_at
@@ -600,21 +628,29 @@ def create(request, **kwargs):
                 return True
             return False
         except Exception as e:
-            print(e)
+            print(e, "<<< ---  def limit")
             messages.success(request, "На сегодня с вопросами всё")
             return redirect(f"/user/{request.user}/")
 
     if request.method == "POST":
         if limit(request):
-            messages.success(request, "На сегодня с вопросами всё")
+            # messages.success(request, "На сегодня с вопросами всё")
             return redirect(f"/user/{request.user}/")
 
         form = QForm(request.POST)
         if form.is_valid():
+            user = form.cleaned_data["autor"]
+            print(user)
             form.save()
         return redirect(f"/user/{request.user}/")
+    #
+    #
+    # tegs = Teg.objects.all()
+
     form = QForm(initial={"autor": request.user})
     context = {"form": form}
+    # context = {"form": form, "tegs": tegs}
+
     return render(request, "main/create_qust_form.html", context)
 
 

@@ -58,6 +58,8 @@ urlpatterns = [
         name="account_activation_sent",
     ),
     path("activate/<uidb64>/<token>/", activate, name="activate"),
+    #
+    path("pars_up/", pars_up, name="pars_up"),  # 1
 ]
 
 # terminal.integrated.fontSize

@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import Image
+from .models import Image, Teg
 from PIL import Image as PilImage
 
 from .models import Question, User
@@ -15,13 +15,24 @@ class ProfileEditForm(forms.ModelForm):
 
 
 class QForm(ModelForm):
+    # teg = forms.ModelChoiceField(
+    #     queryset=Teg.objects.all(), required=True, label="Выбор тега"
+    # )
 
     class Meta:
         model = Question
         exclude = []
-        # fields = ("autor", "teg", "title", "text", "id")
-        fields = "__all__"
-        widgets = {"id": forms.HiddenInput()}
+        fields = (
+            "autor",
+            "tegs",
+            "title",
+            "text",
+        )
+        # fields = "__all__"
+        widgets = {
+            "id": forms.HiddenInput(),
+            "autor": forms.HiddenInput(),
+        }
 
 
 class UserRegisterForm(UserCreationForm):

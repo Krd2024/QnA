@@ -10,6 +10,14 @@ from .settings import CACH_UPDATE_MIN
 from PIL import Image as PilImage
 
 
+class Teg(models.Model):
+    name = models.CharField(max_length=10)
+
+    # @property
+    def __str__(self):
+        return self.name
+
+
 class User(AbstractUser):
     # REQUIRED_FIELDS = ["email", "username", "password"]
     profession = models.CharField(max_length=50, default="", blank=True)
@@ -43,7 +51,8 @@ class Question(models.Model):
         on_delete=models.SET_NULL,
         related_name="question_set",
     )
-    teg = models.CharField(max_length=10, blank=False)
+    # teg = models.CharField(max_length=10, blank=False)
+    tegs = models.ForeignKey(Teg, on_delete=models.SET_NULL, null=True, blank=True)
     title = models.CharField(max_length=50, blank=False)
     text = models.TextField(max_length=200, blank=False)
     created_at = models.DateTimeField(auto_now_add=True, blank=False)

@@ -9,7 +9,7 @@
             {% include 'shared/user_witget.html' with user=quest.autor %}
           </div>
 
-          <h4 id="teg">{{ quest.teg }}</h4>
+          <h4 id="teg">{{ quest.tegs }}</h4>
           <a href="{% url 'question' quest.id %}"><h3 class="title">{{ quest.title }}</h3></a>
         </div>
         <div class="date">
@@ -20,7 +20,7 @@
           <div class="answer">
             {% for ans in answers %}
               {% if ans.question_id == quest.id %}
-                {% if ans.total is not Null %}
+                {% if ans.total is not None %}
                   <div class="ans">
                     <a href="{% url 'question' quest.id %}" id="ans">{{ ans.total }}</a><p class="total">Ответы</p>
                   </div>

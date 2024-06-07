@@ -1,1 +1,5 @@
 Django
+PIL
+beautifulsoup4 
+lxml
+requests
