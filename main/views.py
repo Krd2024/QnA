@@ -56,8 +56,7 @@ def pars_up(request, **kwargs):
                     text = " ".join(link.text.split()).strip()
                     links[text] = link["href"]
 
-        if kwargs.get("value") == "it":
-
+        elif kwargs.get("value") == "it":
             url = "http://habr.com/ru/news/"
             page = requests.get(url)
             if page.status_code != 200:
@@ -65,18 +64,51 @@ def pars_up(request, **kwargs):
             soup = BeautifulSoup(page.text, "html.parser")
             allNewsIt = soup.findAll("article", class_="tm-articles-list__item")
             links = {}
+
             for news_item in allNewsIt:
                 h2 = news_item.find("h2", class_="tm-title tm-title_h2")
                 a = news_item.find("a", class_="tm-title__link")
-                # print(h2.text)
-                # print("------------")
-                # print(a["href"])
-                # print("==============================================")
+
                 url = a["href"]
                 link = f"HTTPS://habr.com{url}"
                 text = h2.text
                 links[text] = link
-            # print(links)
+
+        elif kwargs.get("value") == "avito":
+            url = "https://www.avito.ru/krasnodar/predlozheniya_uslug/IT_marketing/cozdanie_sajtov_i_prilozhenij-ASgBAgICAkSYC6afAbYVxKSOAw/"
+            print(1)
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
+            }
+            response = requests.get(url, headers=headers)
+            print(2)
+            print(response.status_code)
+            if response.headers.get("X-Frame-Options") is not None:
+                print("X-Frame-Options header is present")
+            else:
+                print("X-Frame-Options header is not present")
+            if response.status_code != 200:
+                return False
+            print(3)
+            soup = BeautifulSoup(response.text, "html.parser")
+            print(soup)
+
+            allNewsIt = soup.findAll(
+                "div",
+                class_="index-root-KVurS",
+            )
+            print(allNewsIt.text)
+            links = {}
+
+            for news_item in allNewsIt:
+                # h2 = news_item.find("h2", class_="tm-title tm-title_h2")
+                a = news_item.find("a", class_="styles-link-cQMwi")
+                print(a)
+
+                # url = a["href"]
+                # link = f"HTTPS://habr.com{url}"
+                # text = h2.text
+                # links[text] = link
 
     except Exception as e:
         print(e)
@@ -261,6 +293,7 @@ def all_users(request, **kwargs):
     # ======================================================
 
     page = kwargs.get("page")
+
     if page is not None:
         try:
             page = int(page)
@@ -297,6 +330,8 @@ def all_users(request, **kwargs):
 
     except Exception as e:
         print(e, "<<< e -------------- def all_users(request)")
+
+    # print(sorted_users, "<<<< sorted_users")
 
     return render(
         request,
@@ -362,7 +397,7 @@ def search(request, **kwargs):
 
     try:
         search = kwargs["search"]
-        print(search, "<<<<<<<<<<<<<<<<<<<<<<")
+        # print(search, "<<<<<<<<<<<<<<<<<<<<<<")
         question = Question.objects.all()
         tegs = Teg.objects.all()
         title_question = {}
@@ -373,7 +408,7 @@ def search(request, **kwargs):
         for key, val in title_question.items():
             if search in val:
                 sentence = " ".join(val)
-                print(sentence)
+                # print(sentence)
                 return HttpResponse(key)
         return HttpResponse()
 

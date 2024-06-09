@@ -14,9 +14,9 @@
       </div>
     {% endif %}
 
-    <div>{{ username }}</div>
+    <div>{{ username }} ({{ username.first_name }})</div>
     {% if username.profession != '' %}
-      <div>{{ username.profession }}</div>
+      <div>Специальность: {{ username.profession }}</div>
     {% endif %}
   </div>
   <div>
