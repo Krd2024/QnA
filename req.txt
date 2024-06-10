@@ -3,4 +3,4 @@ pillow
 beautifulsoup4 
 lxml
 requests
-decouple
+python-decouple
