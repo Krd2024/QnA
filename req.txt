@@ -1,5 +1,5 @@
 Django
-PIL
+pillow
 beautifulsoup4 
 lxml
 requests
