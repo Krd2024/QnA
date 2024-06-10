@@ -2,12 +2,23 @@
 
 {% block content %}
   <a href="{{ request.META.HTTP_REFERER }}">Назад</a>
+  
+    <input type="text" name="example" list="exampleList">
+<datalist id="exampleList">
+  {% for teg in  tegs %}
+  <option value="{{teg}}">  
+    {% endfor %}
+  
+</datalist>
+
   <form action="" method="post">
     {% csrf_token %}
     {{ form.as_div }}
 
     <input type="submit" value="Отправить" />
   </form>
+
+
   {% comment %} <select name="fruits" id="fruits">
     {% for teg in tegs %}
       <option value="{{ teg.id }}">{{ teg }}</option>

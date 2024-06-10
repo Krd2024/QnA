@@ -55,6 +55,7 @@ def pars_up(request, **kwargs):
                 if link:
                     text = " ".join(link.text.split()).strip()
                     links[text] = link["href"]
+            return render(request, "wrapper/right_pars.html", {"links": links})
 
         elif kwargs.get("value") == "it":
             url = "http://habr.com/ru/news/"
@@ -73,47 +74,49 @@ def pars_up(request, **kwargs):
                 link = f"HTTPS://habr.com{url}"
                 text = h2.text
                 links[text] = link
+            return render(request, "wrapper/right_pars.html", {"links": links})
 
-        elif kwargs.get("value") == "avito":
-            url = "https://www.avito.ru/krasnodar/predlozheniya_uslug/IT_marketing/cozdanie_sajtov_i_prilozhenij-ASgBAgICAkSYC6afAbYVxKSOAw/"
-            print(1)
-            headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36"
-            }
-            response = requests.get(url, headers=headers)
-            print(2)
-            print(response.status_code)
-            if response.headers.get("X-Frame-Options") is not None:
-                print("X-Frame-Options header is present")
-            else:
-                print("X-Frame-Options header is not present")
-            if response.status_code != 200:
+        elif kwargs.get("value") == "yandex":
+            url_1 = "https://market.yandex.ru/"
+
+            page = requests.get(url_1)
+            if page.status_code != 200:
                 return False
-            print(3)
-            soup = BeautifulSoup(response.text, "html.parser")
-            print(soup)
 
-            allNewsIt = soup.findAll(
-                "div",
-                class_="index-root-KVurS",
-            )
-            print(allNewsIt.text)
-            links = {}
+            soup = BeautifulSoup(page.text, "html.parser")
+            allNews = soup.findAll("div", class_="_2rw4E _14Y_C")
+            links1 = {}
+            for news_item in allNews:
 
-            for news_item in allNewsIt:
-                # h2 = news_item.find("h2", class_="tm-title tm-title_h2")
-                a = news_item.find("a", class_="styles-link-cQMwi")
-                print(a)
+                link = news_item.find(
+                    "h3", class_="G_TNq _2SUA6 _33utW IFARr _2a1rW _1A5yJ"
+                )
+                link2 = news_item.find("span", class_="_3gYEe")
+                #   ==========================================================
+                link3 = news_item.find("img", class_="_2Tepm")
+                photograph = (
+                    link3["src"] if link3["src"].startswith("https://avatars") else ""
+                )
+                #  ============================================================
 
-                # url = a["href"]
-                # link = f"HTTPS://habr.com{url}"
-                # text = h2.text
-                # links[text] = link
+                if link:
+                    text1 = " ".join(link.text.split()).strip()
+                    print(text1)
+                    print("--------------------------------")
+                    # links[text] = link["href"]
+                if link2:
+                    text2 = " ".join(link2.text.split()).strip()
+                    print(text2)
+                    print("================================")
+                links1[text1] = text2
+
+            return render(request, "wrapper/right_pars.html", {"links1": links1})
 
     except Exception as e:
         print(e)
+        return redirect("index")
 
-    return render(request, "wrapper/right_pars.html", {"links": links})
+    # return render(request, "wrapper/right_pars.html", {"links": links})
 
 
 # =================================================================
@@ -468,52 +471,6 @@ def answer_update_delete(request, **kwargs):
         return redirect(f"/user/{request.user}/")
 
 
-# def info_user_choice(request, **kwargs):
-#     # def info_user_choice(request, **kwargs):
-#     """Получить все вопросы или все ответы пользователя для ЛК"""
-#     print(111111111111111111111)
-#     try:
-#         print(kwargs)
-#         if kwargs.get("choice") == "questions":
-#             username = kwargs.get("username")
-#             user_obj = User.objects.get(username=username)
-#             user_quest_obj = Question.objects.filter(autor=user_obj)
-
-#             context = {
-#                 "user_quest": user_quest_obj,
-#                 "user_question": len(user_quest_obj),
-#                 "username": username,
-#             }
-
-#             return render(request, "profile.html", context)
-
-#         if kwargs.get("choice") == "answer":
-#             print(111111111111111111111)
-#             username = kwargs.get("name")
-#             print(username, "<<< ======= username")
-#             user_obj = User.objects.get(username=username)
-#             user_answer_obj = Answer.objects.filter(autor=user_obj)
-
-#             context = {"user_answer": user_answer_obj, "answers": len(user_answer_obj)}
-#             return render(request, "profile.html", context)
-#             # return render(request, "user_info.html", context)
-
-#     except Exception as e:
-#         print(e, "<< --- E")
-#     return HttpResponse("errrror << --- def(info_user_choice)")
-
-
-# def info_user(request, **kwargs):
-#     try:
-#         username = kwargs.get("choice")
-#         user_obj = User.objects.filter(username=username)
-#         context = {"username": user_obj[0]}
-#         return render(request, "user_info.html", context)
-#     except Exception as e:
-#         print(e)
-#         return HttpResponse("1234")
-
-
 def index(request):
     answers = (
         Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
@@ -704,6 +661,7 @@ def create(request, **kwargs):
             return redirect(f"/user/{request.user}/")
 
         form = QForm(request.POST)
+
         if form.is_valid():
             user = form.cleaned_data["autor"]
             print(user)
@@ -714,7 +672,9 @@ def create(request, **kwargs):
     # tegs = Teg.objects.all()
 
     form = QForm(initial={"autor": request.user})
-    context = {"form": form}
+    tegs = Teg.objects.all()
+    context = {"form": form, "tegs": tegs}
+
     # context = {"form": form, "tegs": tegs}
 
     return render(request, "main/create_qust_form.html", context)
@@ -745,3 +705,9 @@ service = EmployeeService()
 # view.py
 # from service import service
 # ===========================================================
+
+
+# t = Teg.objects.all()
+# for i in t:
+#     i.name = i.name.replace("#", "").replace("'", "")
+#     i.save()

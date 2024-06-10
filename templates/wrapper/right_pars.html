@@ -1,9 +1,9 @@
 {% extends 'wrapper/main.html' %}
 {% load static %}
 {% block content %}
-  <p>Самое интересное за 24 часа</p>
   <hr />
   <div class="box">
+    <p>Самое интересное за 24 часа</p>
     {% for text, url_ in links.items %}
       <div class="info">
         <a href="{{ url_ }}">{{ text }}</a>
@@ -11,8 +11,20 @@
       <hr />
     {% endfor %}
   </div>
+  <div>
+    {% for text1, text2 in links1.items %}
+      <div class="info">
+        <p class="tovar">{{ text1 }}</p>
+        <p>{{ text2 }}</p>
+      </div>
+      <hr />
+    {% endfor %}
+  </div>
   {% comment %} <a href="{% url 'pars_up' %}"><button>pars_up</button></a> {% endcomment %}
   <style>
+    .tovar {
+      font-weight: 600;
+    }
     p {
       padding: 5px;
       text-align: center;
