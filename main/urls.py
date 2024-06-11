@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from . import auth_user_view
-from main import views
+from main import views, auth_user_view
 
 from . import rrr
 
@@ -53,13 +53,13 @@ urlpatterns = [
     path("upload/", views.image_upload_view, name="upload"),
     #
     #
-    path("signup/", views.signup, name="signup"),
+    path("signup/", auth_user_view.signup, name="signup"),
     path(
         "account_activation_sent/",
-        views.account_activation_sent,
+        auth_user_view.account_activation_sent,
         name="account_activation_sent",
     ),
-    path("activate/<uidb64>/<token>/", views.activate, name="activate"),
+    path("activate/<uidb64>/<token>/", auth_user_view.activate, name="activate"),
     #
     path("pars_up/<str:value>", views.pars_up, name="pars_up"),  # 1
 ]
