@@ -1,9 +1,15 @@
 from django.urls import path
+
+from main.auth import auth_user_view
 from . import views
-from . import auth_user_view
-from main import views, auth_user_view
+from .auth import auth_user_view
+from main import views
 
 from . import rrr
+from main.image import image
+
+# from main.user_profile import user_profile_up
+# from main.user_profile_update import user_profile_up
 
 urlpatterns = [
     #
@@ -24,7 +30,19 @@ urlpatterns = [
     #
     #
     path("user/<str:username>/", views.user_profile, name="user_profile"),
-    path("user/<str:username>/edit_profile/", views.edit_profile, name="edit_profile"),
+    #
+    #
+    #
+    #
+    path(
+        "user/<str:username>/edit_profile/",
+        views.edit_profile,
+        name="edit_profile",
+    ),
+    #
+    #
+    #
+    #
     path(
         "user/<int:answer_id>/<str:choice>/",
         views.answer_update_delete,
@@ -50,7 +68,7 @@ urlpatterns = [
     #
     path("help/rating/", views.rating, name="rating"),
     #
-    path("upload/", views.image_upload_view, name="upload"),
+    path("upload/", image.image_upload_view, name="upload"),
     #
     #
     path("signup/", auth_user_view.signup, name="signup"),

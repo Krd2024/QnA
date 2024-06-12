@@ -14,9 +14,9 @@
   <form action="" method="post">
     {% csrf_token %}
     {{ form.as_div }}
-
     <input type="submit" value="Отправить" />
   </form>
+    <a href="#"><button>Предпросмотр</button></a>
 
   {% comment %} <select name="fruits" id="fruits">
     {% for teg in tegs %}

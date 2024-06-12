@@ -1,0 +1,54 @@
+import math
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect
+
+from main.models import Question, Answer, Rection, Teg, User, Image
+from main.forms import ProfileEditForm, QForm, UserRegisterForm
+from django.db.models import Count
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+
+import os
+import shutil
+
+import time
+from datetime import datetime
+import main.settings
+from django.contrib import messages
+
+# =================================================================
+# views.py
+
+from django.shortcuts import render, redirect
+
+
+def edit_profile(request, **kwargs):
+    if request.method == "POST":
+        form = ProfileEditForm(request.POST)
+        if form.is_valid():
+            form.save(commit=False)
+
+            first = form.cleaned_data["first_name"]
+            last = form.cleaned_data["last_name"]
+            email = form.cleaned_data["email"]
+            pro = form.cleaned_data["profession"]
+
+            edit_user = User.objects.get(pk=request.user.id)
+            if first != "":
+                edit_user.first_name = first
+            if last != "":
+                edit_user.last_name = last
+            if email != "":
+                edit_user.email = email
+            if pro != "":
+                edit_user.profession = pro
+            edit_user.save()
+
+            return redirect("user_profile", request.user.username)
+            # return HttpResponse(1)
+
+        print()
+    form = ProfileEditForm
+
+    return render(request, "editProfile.html", {"form": form})
