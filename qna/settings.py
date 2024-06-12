@@ -119,7 +119,7 @@ DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
@@ -128,14 +128,14 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "")
 # MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-if not os.path.exists(STATIC_ROOT):
-    os.makedirs(STATIC_ROOT)
+# if not os.path.exists(STATIC_ROOT):
+#     os.makedirs(STATIC_ROOT)
 
-if not os.path.exists(MEDIA_ROOT):
-    os.makedirs(MEDIA_ROOT)
+# if not os.path.exists(MEDIA_ROOT):
+#     os.makedirs(MEDIA_ROOT)
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
 
 # LOGIN_REDIRECT_URL = "/"
 # Default primary key field type

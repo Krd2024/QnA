@@ -30,6 +30,7 @@ from django.shortcuts import render, redirect
 # from django.conf import settings
 # from .forms import UserRegisterForm
 
+
 # =================================================================
 from bs4 import BeautifulSoup
 import requests

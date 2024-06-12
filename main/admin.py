@@ -8,4 +8,3 @@ for name, obj in inspect.getmembers(models):
             admin.site.register(obj)
         except:
             ...
-# Register your models here.

@@ -1,21 +1,10 @@
-import math
-from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
-from main.models import Question, Answer, Rection, Teg, User, Image
-from main.forms import ProfileEditForm, QForm, UserRegisterForm
-from django.db.models import Count
-from django.contrib.auth.decorators import login_required
+from main.models import User
+from main.forms import ProfileEditForm
+
 from django.shortcuts import render
 
-
-import os
-import shutil
-
-import time
-from datetime import datetime
-import main.settings
-from django.contrib import messages
 
 # =================================================================
 # views.py
