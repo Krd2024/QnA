@@ -18,7 +18,6 @@ import main.settings
 from django.contrib import messages
 
 # =================================================================
-# views.py
 
 from django.shortcuts import render, redirect
 
