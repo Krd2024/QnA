@@ -125,8 +125,8 @@ STATICFILES_DIRS = [
 ]
 # Base url to serve media files
 MEDIA_URL = "/media/"
-# MEDIA_ROOT = os.path.join(BASE_DIR, "")
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "")
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 if not os.path.exists(STATIC_ROOT):
     os.makedirs(STATIC_ROOT)
