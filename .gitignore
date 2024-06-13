@@ -152,4 +152,5 @@ cython_debug/
 #.idea/
 static/img/
 db.sqlite3
+db.sqlite3.1
 staticfiles
