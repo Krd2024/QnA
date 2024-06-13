@@ -5,7 +5,7 @@
         {% csrf_token %}
         <input type="hidden" name="username" value="bright_sunshine" />
         <input type="hidden" name="password" value="1" />
-        <button type="submit">bright_sunshine</button>
+        <button type="submit" class="user_form">bright_sunshine</button>
       </form>
     </li>
 
@@ -14,7 +14,7 @@
         {% csrf_token %}
         <input type="hidden" name="username" value="Den" />
         <input type="hidden" name="password" value="1" />
-        <button type="submit">Den</button>
+        <button type="submit" class="user_form">Den</button>
       </form>
     </li>
     <li>
@@ -22,7 +22,7 @@
         {% csrf_token %}
         <input type="hidden" name="username" value="peaceful_ocean" />
         <input type="hidden" name="password" value="1" />
-        <button type="submit">peaceful_ocean</button>
+        <button type="submit" class="user_form">peaceful_ocean</button>
       </form>
     </li>
     <li>
@@ -30,7 +30,7 @@
     </li>
   </ul>
   <div></div>
-  <a class="a" href="{% url 'all_users' %}"><span>Пользователи</span></a>
+  <a class="a" href="{% url 'all_users' %}"><span id="users">Пользователи</span></a>
 
   <div>
     {% if request.user.is_authenticated %}
@@ -50,36 +50,54 @@
     <hr />
   </div>
 
-  <a class="pars" href="{% url 'pars_up' 'samoe' %}"><button>Самое интересное</button></a>
-  <a class="pars" href="{% url 'pars_up' 'it' %}"><button>Новости из мира IT</button></a>
-  <a class="pars" href="{% url 'pars_up' 'yandex' %}"><button>Яндекс маркет цены</button></a>
+  <a class="pars" href="{% url 'pars_up' 'samoe' %}"><button><p class="dop">Самое интересное</p></button></a>
+  <a class="pars" href="{% url 'pars_up' 'it' %}"><button><p class="dop">Новости из мира IT</p></button></a>
+  {% comment %} <a class="pars" href="{% url 'pars_up' 'yandex' %}"><button><p class="dop">Яндекс маркет цены</p><</button></a> {% endcomment %}
 </menu>
 
 <style>
-  .pars {
-    margin: 10px;
+  .user_form {
+    border-radius: 3px;
+    color: ;
+    padding: 0.5em;
+    font-size: 1.5vw;
+    text-align: center;
   }
+  
   #exit {
+    margin-left: 0.3em;
     color: beige;
+    padding: 0.2em;
+    width: 2vw;
+    height: 0.5vw;
   }
   #name {
-    font-size: 30px;
+    margin-left: 0.3em;
+    padding: 0.2em;
+    width: 2vw;
+    height: 0.5vw;
     color: beige;
   }
   .a {
-    margin: 10px;
-    color: antiquewhite;
+    color: beige;
+    padding: 0.5em;
+    font-size: 2vw;
+    text-align: center;
   }
   .loginForm {
-    margin: 10px;
-    width: 15vh;
+    margin: 0.5em;
+    width: 2vh;
     text-align: left;
   }
   menu {
-    width: 16vw;
+    width: 15vw;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     background-color: #4f5a6e;
+  }
+  .dop {
+    font-size: clamp(1.2vw, 2vw, 1vw);
+    text-align: center;
   }
 </style>

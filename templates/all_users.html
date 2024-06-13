@@ -49,35 +49,37 @@
       color: red;
     }
     .title {
-      padding: 10px;
-      font-size: 25px;
+      padding: 1vw;
+      font-size: 2.5vw;
       text-align: center;
     }
     .rating {
-      margin: 10px 0 10px 0;
+      margin: 0.2em 0 0.2em 0;
+      height: clamp(100px, 18vw, 200px);
+      font-size: clamp(1.2vw, 1.2vw, 1.5vw);
     }
     .user {
       display: flex;
     }
     .answer-question {
-      margin-bottom: 5px;
+      margin-bottom: 0.2em;
       display: flex;
       justify-content: space-around;
       align-items: flex-end;
     }
     .answer,
     .questions {
-      font-size: 15px;
+      font-size: 1.5vw;
       font-weight: 700;
     }
     
     .user {
-      font-size: 15px;
+      font-size: 1vw;
       background-color: greylathtml;
     }
     .container {
       display: flex;
-      padding: 10px;
+      padding: 0.1em;
       flex-wrap: wrap;
       justify-content: space-evenly;
     }
@@ -86,8 +88,9 @@
       padding: 5px;
       border: 1px solid lightgray;
       border-radius: 5px;
-      width: 200px;
-      height: 220px;
+    
+      width: clamp(50px, 18vw, 200px);
+      height: clamp(100px, 18vw, 200px);
     }
   </style>
 {% endblock %}
