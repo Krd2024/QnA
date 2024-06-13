@@ -28,20 +28,13 @@ urlpatterns = [
     path("login/", auth_user_view.CustomLoginView.as_view(), name="login"),
     path("logout/", auth_user_view.logoutPage, name="logout"),
     #
-    #
     path("user/<str:username>/", views.user_profile, name="user_profile"),
-    #
-    #
-    #
     #
     path(
         "user/<str:username>/edit_profile/",
         views.edit_profile,
         name="edit_profile",
     ),
-    #
-    #
-    #
     #
     path(
         "user/<int:answer_id>/<str:choice>/",
