@@ -23,10 +23,8 @@
                 {% endif %}
               {% endfor %}
             </div>
-            <hr />
 
             <div class="rating">рейтинг | {{ username.rating }}</div>
-            <hr />
           </div>
         </div>
       {% endfor %}
@@ -45,9 +43,12 @@
   </div>
 
   <style>
+    .answer-question {
+      font-size: clamp(1vw, 1vw, 1.5vw);
+    }
     .answer,
     .questions {
-      font-size: clamp(1.2vw, 1.2vw, 1.5vw);
+      font-size: clamp(1vw, 1, 5vw, 1.5vw);
     }
     .current {
       color: red;
@@ -59,22 +60,19 @@
     }
     .rating {
       margin: 0.2em 0 0.2em 0;
-      height: clamp(100px, 18vw, 200px);
-      font-size: clamp(1.2vw, 1.2vw, 1.5vw);
+    
+      font-size: clamp(0.2vw, 1vw, 1.5vw);
     }
     .user {
+      width: clamp(0.5vw, 1.2vw, 1.5vw);
       display: flex;
+      overflow-wrap: break-all;
     }
     .answer-question {
       margin-bottom: 0.2em;
       display: flex;
       justify-content: space-around;
       align-items: flex-end;
-    }
-    .answer,
-    .questions {
-      font-size: 1.5vw;
-      font-weight: 700;
     }
     
     .user {
@@ -87,14 +85,18 @@
       flex-wrap: wrap;
       justify-content: space-evenly;
     }
+    .user-list {
+      width: clamp(5%%, 18vw, 10%%);
+      height: clamp(0.5vw, 18vw, 170px);
+    }
     .box {
       margin-bottom: 10px;
       padding: 5px;
       border: 1px solid lightgray;
       border-radius: 5px;
     
-      width: clamp(50px, 18vw, 200px);
-      height: clamp(100px, 18vw, 200px);
+      width: clamp(10%%, 18vw, 20%%);
+      height: clamp(12vw, 12vw, 120px);
     }
   </style>
 {% endblock %}

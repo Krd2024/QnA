@@ -1,0 +1,12 @@
+{% extends 'wrapper/main.html' %}
+{% block content %}
+  <div>
+    {% for key_teg, quest_teg in tegs.items %}
+      <p>{{ key_teg }}</p>
+      {% for quest in quest_teg %}
+        <p>{{ quest }}</p>
+      {% endfor %}
+      <hr />
+    {% endfor %}
+  </div>
+{% endblock %}

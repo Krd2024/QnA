@@ -52,7 +52,9 @@ class Question(models.Model):
         related_name="question_set",
     )
     # teg = models.CharField(max_length=10, blank=False)
-    tegs = models.ForeignKey(Teg, on_delete=models.SET_NULL, null=True, blank=True)
+    tegs = models.ForeignKey(
+        Teg, on_delete=models.SET_NULL, null=True, blank=True, related_name="tegs_set"
+    )
     title = models.CharField(max_length=50, blank=False)
     text = models.TextField(max_length=200, blank=False)
     created_at = models.DateTimeField(auto_now_add=True, blank=False)

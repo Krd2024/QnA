@@ -14,7 +14,7 @@
         <span>{{ name }}</span>
         <span>{{ user.first_name }}</span>
       </strong>
-      <a href="{% url 'user_profile' user %}">@{{ user }}</a>
+      <a class="href_widget" href="{% url 'user_profile' user %}">@{{ user }}</a>
     </p>
     {% if user.profession != '' %}
       <p class="user-widget-info-title">{{ user.profession }}</p>
@@ -22,11 +22,17 @@
   </div>
 </div>
 <style>
+  .user-widget-info,
+  .href_widget {
+    width: clamp(1vw, 1.5vw, 1.5vw);
+  }
   .user-widget-img {
     border-radius: 50px;
+    width: clamp(2.3vw, 2vw, 3.5vw);
   }
   .user-widget {
-    margin: 10px;
+    width: clamp(0.7vw, 1.5vw, 1.5vw);
+    margin: 1vw;
     display: flex;
     align-items: flex-end;
     gap: 2px;

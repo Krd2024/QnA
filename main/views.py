@@ -21,6 +21,9 @@ from django.contrib import messages
 
 from django.shortcuts import render, redirect
 
+from bs4 import BeautifulSoup
+import requests
+
 # from django.contrib.sites.shortcuts import get_current_site
 # from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 # from django.template.loader import render_to_string
@@ -32,8 +35,55 @@ from django.shortcuts import render, redirect
 
 
 # =================================================================
-from bs4 import BeautifulSoup
-import requests
+def questions_in_tag(request, **kwargs):
+    """Показать вопросы по тегу"""
+    answers = (
+        Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
+    )
+    all_question = Question.objects.all().filter(
+        tegs=Teg.objects.filter(name=kwargs.get("tegs")).first()
+    )
+    # all_question = Question.objects.all().filter(tegs=kwargs.get("tegs"))
+
+    context = {
+        "all_question": all_question,
+        "answers": answers,
+    }
+    return render(request, "main/index_main.html", context)
+
+
+def tegs(request):
+    """Показать все теги"""
+
+    try:
+        tegs = {}
+        tegs_obj = Teg.objects.prefetch_related("tegs_set").all()
+        for teg in tegs_obj:
+            print(f"Название тега: {teg.name}")
+            print()
+            quest = teg.tegs_set.all()
+            questions = []
+            tegs_len = {}
+            for related in quest:
+                questions.append(related.text)
+
+                # print(f"Вопросы связанные с тегом: {related.text}")
+            tegs[teg.name] = questions
+            tegs_len[teg.name] = len(questions)
+            print("-----------------------------------------------------------")
+        # print(tegs)
+        for k, v in tegs.items():
+            print("teg: ", k, " длина: ", len(v))
+            for i in v:
+                print("вопрос: ", i)
+            print("-----------------------------------------------------------")
+
+        return render(request, "all_tegs.html", {"tegs": tegs, "tegs_len": tegs_len})
+
+    except Exception as e:
+        print(e, "------------ def tegs(request)")
+
+    return redirect("index")
 
 
 def pars_up(request, **kwargs):

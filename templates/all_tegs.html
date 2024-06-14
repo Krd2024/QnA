@@ -1,0 +1,37 @@
+{% extends 'wrapper/main.html' %}
+{% block content %}
+  <div class="conteiner">
+    {% for key_teg, quest_teg in tegs.items %}
+      {% with dict_length=quest_teg|length %}
+        <div class="box_teg">
+          <div>
+            <h3>{{ key_teg }}</h3>
+          </div>
+          <a class="box_teg_href" href="{% url 'questions_in_tag' key_teg %}"><div>{{ dict_length }}</div></a>
+          <a class="box_teg_href" href=""><div>podpiska</div></a>
+        </div>
+      {% endwith %}
+    {% endfor %}
+  </div>
+
+  <style>
+    .conteiner {
+      display: flex;
+      padding: 0.1em;
+      flex-wrap: wrap;
+      justify-content: space-evenly;
+    }
+    .box_teg {
+      margin-bottom: 1vw;
+      padding: 1vw;
+      border: 1px solid lightgray;
+      border-radius: 5px;
+    
+      width: clamp(10%%, 18vw, 20%%);
+      font-size: clamp(1rem, 18vw, 20%%);
+    }
+    .box_teg_href {
+      font-size: clamp(1rem, 18vw, 20%%);
+    }
+  </style>
+{% endblock %}

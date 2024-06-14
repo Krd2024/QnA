@@ -73,6 +73,8 @@ urlpatterns = [
     path("activate/<uidb64>/<token>/", auth_user_view.activate, name="activate"),
     #
     path("pars_up/<str:value>", views.pars_up, name="pars_up"),  # 1
+    path("tegs", views.tegs, name="tegs"),
+    path("tegs/<str:tegs>", views.questions_in_tag, name="questions_in_tag"),
 ]
 
 # terminal.integrated.fontSize
