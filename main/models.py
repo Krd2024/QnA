@@ -10,6 +10,27 @@ from .settings import CACH_UPDATE_MIN
 from PIL import Image as PilImage
 
 
+class Subscription(models.Model):
+    tag = models.ForeignKey(
+        "Teg",
+        related_name="tag_subscr_set",
+        max_length=10,
+        null=True,
+        blank=False,
+        on_delete=models.SET_NULL,
+    )
+    user = models.ForeignKey(
+        "User",
+        related_name="user_subscr_set",
+        null=True,
+        max_length=10,
+        on_delete=models.SET_NULL,
+    )
+
+    class Meta:
+        unique_together = ("tag", "user")
+
+
 class Teg(models.Model):
     name = models.CharField(max_length=10)
 

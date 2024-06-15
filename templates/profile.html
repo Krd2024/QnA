@@ -41,7 +41,7 @@
         <a href="{% url 'rating' %}"><button id="button3" onclick=""><h4><p>Вклад</p>{{ username.rating }}</h4></button></a>
       </div>
       <div>
-        <button id="button4" onclick=""><h4>Пусто</h4><p></p></button>
+        <button id="button4" onclick=""><h4>Пусто<p>123</p></h4></button>
       </div>
 
       <div>
@@ -93,18 +93,31 @@
       text-align: center;
     }
     h4 {
-      font-size: 1.7vw;
+      font-size: clamp(0.5rem, 1rem, 1vw);
     }
-    
-    #button1,
-    #button2,
-    #button3,
-    #button4 {
-      border-color: darkcyan;
-      margin: 20px 0 10px 0;
-      border-radius: 5px;
-      width: 9vw;
-      height: 7vw;
+    @media (max-width: 600px) {
+      #button1,
+      #button2,
+      #button3,
+      #button4 {
+        border-color: darkcyan;
+        margin: 20px 0 10px 0;
+        border-radius: 5px;
+        width: 12vw;
+        height: 7vw;
+      }
+    }
+    @media (min-width: 901px) {
+      #button1,
+      #button2,
+      #button3,
+      #button4 {
+        border-color: darkcyan;
+        margin: 20px 0 10px 0;
+        border-radius: 5px;
+        width: 5vw;
+        height: 3vw;
+      }
     }
     #answ {
       display: flex;

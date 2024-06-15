@@ -1,8 +1,8 @@
-# import random
-# from django.http import HttpResponse
+import random
+from django.http import HttpResponse
 
-# from .models import Answer, Question
-# from .models import User
+from .models import Answer, Question, Subscription
+from .models import User
 
 
 # def test2(req):
@@ -457,28 +457,43 @@
 #         },
 #     ]
 
-#     topics = [
-#         "Python",
-#         "C++",
-#         "Java",
-#         "JavaScript",
-#         "Ruby",
-#         "Python",
-#         "JavaScript",
-#         "Java",
-#         "C++",
-#         "C#",
-#         "Ruby",
-#         "Go",
-#         "Swift",
-#         "Kotlin",
-#         "PHP",
-#         "TypeScript",
-#         "R",
-#         "Objective-C",
-#         "Scala",
-#         "Rust",
-#     ]
+topics = [
+    "Python",
+    "C++",
+    "Java",
+    "JavaScript",
+    "Ruby",
+    "Python",
+    "JavaScript",
+    "Java",
+    "C++",
+    "C#",
+    "Ruby",
+    "Go",
+    "Swift",
+    "Kotlin",
+    "PHP",
+    "TypeScript",
+    "R",
+    "Objective-C",
+    "Scala",
+    "Rust",
+]
+
+
+# ============================= Создать подписку на тег =======================================
+def test2(request):
+    subsc = Subscription.objects.all()
+    users = User.objects.all()
+
+    for user in users:
+        try:
+            Subscription.objects.create(tag=random.choice(topics), user=user).save()
+        except Exception as e:
+            continue
+    return HttpResponse("OK")
+
+
 #     # ======================= Создать вопросы ==========================================
 #     # topics = Topic.objects.all()
 #     # users = User.objects.all()

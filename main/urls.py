@@ -13,10 +13,10 @@ from main.image import image
 
 urlpatterns = [
     #
-    # path(
-    #     "test/",
-    #     rrr.test2,
-    # ),  # 1
+    path(
+        "test/",
+        rrr.test2,
+    ),
     path("", views.index, name="index"),
     path("q/create/", views.create, name="question_create"),  # 1
     path("q/<int:question_id>/", views.question, name="question"),  # 1

@@ -37,6 +37,7 @@ import requests
 # =================================================================
 def questions_in_tag(request, **kwargs):
     """Показать вопросы по тегу"""
+
     answers = (
         Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
     )
