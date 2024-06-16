@@ -1,7 +1,7 @@
 import random
 from django.http import HttpResponse
 
-from .models import Answer, Question, Subscription
+from .models import Answer, Question, Subscription, Teg
 from .models import User
 
 
@@ -484,12 +484,16 @@ topics = [
 # ============================= Создать подписку на тег =======================================
 def test2(request):
     subsc = Subscription.objects.all()
+    tags = Teg.objects.all()
     users = User.objects.all()
 
     for user in users:
         try:
-            Subscription.objects.create(tag=random.choice(topics), user=user).save()
+            subsc = Subscription.objects.create(tag=random.choice(tags), user=user)
+            print(subsc)
+            subsc.save()
         except Exception as e:
+            print(e)
             continue
     return HttpResponse("OK")
 

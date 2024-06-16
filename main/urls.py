@@ -13,10 +13,10 @@ from main.image import image
 
 urlpatterns = [
     #
-    path(
-        "test/",
-        rrr.test2,
-    ),
+    # path(
+    #     "test/",
+    #     rrr.test2,
+    # ),
     path("", views.index, name="index"),
     path("q/create/", views.create, name="question_create"),  # 1
     path("q/<int:question_id>/", views.question, name="question"),  # 1
@@ -75,6 +75,7 @@ urlpatterns = [
     path("pars_up/<str:value>", views.pars_up, name="pars_up"),  # 1
     path("tegs", views.tegs, name="tegs"),
     path("tegs/<str:tegs>", views.questions_in_tag, name="questions_in_tag"),
+    path("tegs/add/", views.add_tag, name="add_tag"),
 ]
 
 # terminal.integrated.fontSize

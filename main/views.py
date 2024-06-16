@@ -2,7 +2,7 @@ import math
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
-from main.models import Question, Answer, Rection, Teg, User, Image
+from main.models import Question, Answer, Rection, Subscription, Teg, User, Image
 from .forms import ProfileEditForm, QForm, UserRegisterForm
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
@@ -34,6 +34,17 @@ import requests
 # from .forms import UserRegisterForm
 
 
+def add_tag(request):
+    print("tag add")
+    try:
+        tag_id = request.GET.get("tag_id")
+        return JsonResponse({"success": True, "answer": 123})
+    except Exception as e:
+        ...
+    print(tag_id)
+    # return redirect("tegs")
+
+
 # =================================================================
 def questions_in_tag(request, **kwargs):
     """Показать вопросы по тегу"""
@@ -59,31 +70,38 @@ def tegs(request):
     try:
         tegs = {}
         tegs_obj = Teg.objects.prefetch_related("tegs_set").all()
+
         for teg in tegs_obj:
-            print(f"Название тега: {teg.name}")
-            print()
+            # print(f"Название тега: {teg.name}")
             quest = teg.tegs_set.all()
             questions = []
-            tegs_len = {}
             for related in quest:
                 questions.append(related.text)
-
                 # print(f"Вопросы связанные с тегом: {related.text}")
             tegs[teg.name] = questions
-            tegs_len[teg.name] = len(questions)
-            print("-----------------------------------------------------------")
-        # print(tegs)
-        for k, v in tegs.items():
-            print("teg: ", k, " длина: ", len(v))
-            for i in v:
-                print("вопрос: ", i)
-            print("-----------------------------------------------------------")
 
-        return render(request, "all_tegs.html", {"tegs": tegs, "tegs_len": tegs_len})
+            #  ==================  Подписки =============================================
+
+        from django.db.models import Count
+
+        # Получение имени тега и количества пользователей, подписанных на него
+        tags_with_user_count = Teg.objects.annotate(user_count=Count("subscriptions"))
+        user_tegs = {}
+
+        # for tag in tags_with_user_count:
+        #     user_tegs[tag.name] = tag.user_count
+        #     print(f"Tag: {tag.name}, User Count: {tag.user_count}")
+        # print(user_tegs)
+
+        #  ==========================================================================
+        return render(
+            request,
+            "all_tegs.html",
+            {"tegs": tegs, "user_tegs": tags_with_user_count},
+        )
 
     except Exception as e:
-        print(e, "------------ def tegs(request)")
-
+        print(e, "< ------------ def tegs(request)")
     return redirect("index")
 
 

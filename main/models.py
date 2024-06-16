@@ -13,19 +13,21 @@ from PIL import Image as PilImage
 class Subscription(models.Model):
     tag = models.ForeignKey(
         "Teg",
-        related_name="tag_subscr_set",
-        max_length=10,
+        related_name="subscriptions",
         null=True,
         blank=False,
         on_delete=models.SET_NULL,
     )
     user = models.ForeignKey(
         "User",
-        related_name="user_subscr_set",
+        related_name="subscriptions",
         null=True,
-        max_length=10,
         on_delete=models.SET_NULL,
     )
+
+    # def user_collection_tegs(self, user):
+    #     collec_obj = Subscription.objects.filter(user=user)
+    #     return collec_obj
 
     class Meta:
         unique_together = ("tag", "user")

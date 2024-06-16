@@ -10,11 +10,17 @@
           <hr />
           <a class="box_teg_href" href="{% url 'questions_in_tag' key_teg %}"><div>Вопросов {{ dict_length }}</div></a>
           <hr />
-          <button id="rection" onclick="increaseCounter({{ answer.id }})">
-            <div>
-              <span id="counter">Подписаться | {{ dict_length }}</span>
-            </div>
-          </button>
+
+          {% for tag in user_tegs %}
+            {% if key_teg == tag.name %}
+              <div>
+                {% comment %} <button id="rection" onclick="func('{{ tag.id }}')"><span id="counter">Подписаться |{{ tag.user_count }}</span></button> {% endcomment %}
+                <button id="rection" onclick="func('{{ tag.id }}')"><span id="counter">Подписаться |<span id="tag_count{{ tag.id }}">{{ tag.user_count }}</span></span></button>
+              </div>
+            {% endif %}
+          {% endfor %}
+
+          <div id="tag_count">Initial</div>
         </div>
       {% endwith %}
     {% endfor %}
@@ -54,5 +60,35 @@
       border-radius: 5px;
       font-size: clamp(1rem, 1rem, 1vw);
     }
+    #rection:hover {
+      background-color: #45a049;
+    }
   </style>
+  <script>
+    async function func(tagId) {
+      try {
+        let response = await fetch(`/tegs/add/?tag_id=${tagId}`)
+    
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+    
+        let data = await response.json()
+    
+        console.log('Received data:', data)
+    
+        const tagCountElement = document.getElementById(`tag_count${tagId}`)
+    
+        if (tagCountElement) {
+          console.log('Element found:', tagCountElement)
+    
+          tagCountElement.innerHTML = data.answer
+        } else {
+          console.error(`Element with id 'tag_count${tagId}' not found`)
+        }
+      } catch (error) {
+        console.error('Error:', error)
+      }
+    }
+  </script>
 {% endblock %}
