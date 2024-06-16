@@ -151,6 +151,6 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 static/img/
-db.sqlite3
+# db.sqlite3
 db.sqlite3.1
 staticfiles
