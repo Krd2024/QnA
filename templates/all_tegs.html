@@ -5,30 +5,37 @@
       {% with dict_length=quest_teg|length %}
         <div class="box_teg">
           <div>
-            <h3>{{ key_teg }}</h3>
+            <h3 id="tag">{{ key_teg }}</h3>
           </div>
           <hr />
           <a class="box_teg_href" href="{% url 'questions_in_tag' key_teg %}"><div>Вопросов {{ dict_length }}</div></a>
           <hr />
 
-          {% for tag in user_tegs %}
+          {% for tag, user in tag_dict.items %}
             {% if key_teg == tag.name %}
-              <div>
-                {% comment %} <button id="rection" onclick="func('{{ tag.id }}')"><span id="counter">Подписаться |{{ tag.user_count }}</span></button> {% endcomment %}
-                <button id="rection" onclick="func('{{ tag.id }}')"><span id="counter">Подписаться |<span id="tag_count{{ tag.id }}">{{ tag.user_count }}</span></span></button>
-              </div>
+              {% with user_count=user|length %}
+                {% if request.user in user %}
+                  <div>
+                    <button id="rection_1"><span id="counter">Вы подписаны |<span id="tag_count{{ tag.id }}">{{ user_count }}</span></span></button>
+                  </div>
+                {% else %}
+                  <div>
+                    {% comment %} <button id="rection" onclick="func('{{ tag.id }}')"><span id="counter">Подписаться |{{ tag.user_count }}</span></button> {% endcomment %}
+                    <button id="rection_0" onclick="func('{{ tag.id }}')"><span id="counter">Подписаться |<span id="tag_count{{ tag.id }}">{{ user_count }}</span></span></button>
+                  </div>
+                {% endif %}
+              {% endwith %}
             {% endif %}
           {% endfor %}
-
-          <div id="tag_count">Initial</div>
         </div>
       {% endwith %}
     {% endfor %}
   </div>
 
   <style>
-    h3 {
-      margin-bottom: 1em;
+    #tag {
+      margin-bottom: 0.5vw;
+      font-size: clamp(2vw, 1vw, 2vw);
     }
     .conteiner {
       display: flex;
@@ -43,7 +50,7 @@
       border: 1px solid lightgray;
       border-radius: 5px;
     
-      width: clamp(10%%, 18vw, 20%%);
+      width: clamp(10%, 15% 20%);
       font-size: clamp(1rem, 18vw, 20%%);
     }
     .box_teg_href {
@@ -51,7 +58,7 @@
       color: #2d72d9;
     }
     
-    #rection {
+    #rection_0 {
       margin: 1em 0 2em 0;
       padding: 0 5px 0 5px;
       background-color: #65c178;
@@ -60,7 +67,17 @@
       border-radius: 5px;
       font-size: clamp(1rem, 1rem, 1vw);
     }
-    #rection:hover {
+    #rection_0:hover {
+      background-color: #45a049;
+    }
+    #rection_1 {
+      margin: 1em 0 2em 0;
+      padding: 0 5px 0 5px;
+      background-color: #65c178;
+      color: #fff;
+      border-color: transparent;
+      border-radius: 5px;
+      font-size: clamp(1rem, 1rem, 1vw);
       background-color: #45a049;
     }
   </style>

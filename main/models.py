@@ -37,6 +37,52 @@ class Teg(models.Model):
     name = models.CharField(max_length=10)
 
     # @property
+    # def tags_user_count(self):
+    #     from django.db.models import Count
+
+    #     tags_with_user_count = Teg.objects.annotate(user_count=Count("subscriptions"))
+    #     return tags_with_user_count
+
+    @property
+    def tag_questions(self):
+        try:
+            tegs = {}
+            tegs_obj = Teg.objects.prefetch_related("tegs_set").all()
+
+            for teg in tegs_obj:
+                # print(f"Название тега: {teg.name}")
+                quest = teg.tegs_set.all()
+                questions = []
+                for related in quest:
+                    questions.append(related.text)
+                    # print(f"Вопросы связанные с тегом: {related.text}")
+                tegs[teg.name] = questions
+            return tegs
+
+        except Exception as e:
+            print(e)
+
+    @property
+    def tag_subscription(self):
+        data = Subscription.objects.all()
+        tag_dict = {}
+
+        for entry in data:
+
+            user = entry.user
+            tag = entry.tag
+            # Если тег еще не существует в словаре, создаем для него пустой список
+            if tag not in tag_dict:
+                tag_dict[tag] = []
+
+            # Добавляем пользователя в список значений соответствующего тега
+            tag_dict[tag].append(user.id)
+        return tag_dict
+
+        # Выводим результат
+        for tag, users in tag_dict.items():
+            print(f"{tag}: {users}")
+
     def __str__(self):
         return self.name
 
