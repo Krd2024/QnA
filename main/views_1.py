@@ -5,7 +5,6 @@ from django.shortcuts import render, redirect
 from main.models import Question, Answer, Rection, Subscription, Teg, User, Image
 from .forms import ProfileEditForm, QForm, UserRegisterForm
 from django.db.models import Count
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
 
@@ -63,6 +62,7 @@ def tegs(request):
         tegs_obj = Teg.objects.prefetch_related("tegs_set").all()
 
         for teg in tegs_obj:
+            # tag_dict = teg.tag_subscription
             # print(f"Название тега: {teg.name}")
             quest = teg.tegs_set.all()
             questions = []
@@ -71,11 +71,20 @@ def tegs(request):
                 # print(f"Вопросы связанные с тегом: {related.text}")
             tegs[teg.name] = questions
 
-        #  ==================  Подписки =============================================
+            #  ==================  Подписки =============================================
 
-        # from django.db.models import Count
+            # from django.db.models import Count
+
+        # dict_tag = teg.tag_subscription
+        # data = Subscription.objects.all()
+        # for teg in data:
+        #     print(teg.tag_subscription)
 
         data = Subscription.objects.all()
+
+        # for subscription in data:
+        #     print(subscription.tag_subscription)
+
         tag_dict = {}
 
         for entry in data:
@@ -86,7 +95,7 @@ def tegs(request):
             if tag not in tag_dict:
                 tag_dict[tag] = []
 
-            # Добавляем пользователя в список значений соответствующего тега
+            #     # Добавляем пользователя в список значений соответствующего тега
             tag_dict[tag].append(user)
 
         # # Выводим результат

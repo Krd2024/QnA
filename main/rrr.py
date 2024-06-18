@@ -482,20 +482,20 @@ topics = [
 
 
 # ============================= Создать подписку на тег =======================================
-def test2(request):
-    subsc = Subscription.objects.all()
-    tags = Teg.objects.all()
-    users = User.objects.all()
+# def test2(request):
+#     subsc = Subscription.objects.all()
+#     tags = Teg.objects.all()
+#     users = User.objects.all()
 
-    for user in users:
-        try:
-            subsc = Subscription.objects.create(tag=random.choice(tags), user=user)
-            print(subsc)
-            subsc.save()
-        except Exception as e:
-            print(e)
-            continue
-    return HttpResponse("OK")
+#     for user in users:
+#         try:
+#             subsc = Subscription.objects.create(tag=random.choice(tags), user=user)
+#             print(subsc)
+#             subsc.save()
+#         except Exception as e:
+#             print(e)
+#             continue
+#     return HttpResponse("OK")
 
 
 #     # ======================= Создать вопросы ==========================================
@@ -617,116 +617,116 @@ def test2(request):
 #     return HttpResponse("test1")
 
 
-# # def test2(req):
-# #     # создаем тонну юзеров
-# #     usernames = [
-# #         "happy_daisy",
-# #         "friendly_fox",
-# #         "cheerful_bee",
-# #         "sunny_lemon",
-# #         "kind_dolphin",
-# #         "joyful_butterfly",
-# #         "gentle_rainbow",
-# #         "bright_sunshine",
-# #         "peaceful_ocean",
-# #         "smiling_flower",
-# #         "laughing_panda",
-# #         "calm_seashell",
-# #         "loving_kitten",
-# #         "hopeful_raindrop",
-# #         "warm_cuddle",
-# #         "playful_bunny",
-# #         "breezy_wind",
-# #         "soothing_waves",
-# #         "delightful_bird",
-# #         "grateful_tree",
-# #         "optimistic_star",
-# #         "radiant_moon",
-# #         "lovely_cloud",
-# #         "serene_river",
-# #         "gentle_whisper",
-# #         "kindhearted_fawn",
-# #         "tranquil_meadow",
-# #         "harmonious_song",
-# #         "serendipity_smile",
-# #         "cozy_blanket",
-# #         "giggling_squirrel",
-# #         "merry_garden",
-# #         "friendly_glow",
-# #         "compassionate_heart",
-# #         "whimsical_rain",
-# #         "sparkling_eyes",
-# #         "magical_spark",
-# #         "blissful_sunset",
-# #         "tender_leaf",
-# #         "chirpy_robin",
-# #         "dancing_buttercup",
-# #         "dreamy_wish",
-# #         "graceful_breeze",
-# #         "serenity_garden",
-# #         "happiness_hummingbird",
-# #         "mellow_melody",
-# #         "harmony_hug",
-# #         "lively_ladybug",
-# #         "radiant_breeze",
-# #         "smiling_sunflower",
-# #     ]
-# #     it_professions = [
-# #         "Software Developer",  # Разработчик программного обеспечения
-# #         "Web Developer",  # Веб-разработчик
-# #         "Mobile App Developer",  # Разработчик мобильных приложений
-# #         "Data Scientist",  # Специалист по данным
-# #         "Data Analyst",  # Аналитик данных
-# #         "DevOps Engineer",  # Инженер DevOps
-# #         "System Administrator",  # Системный администратор
-# #         "Network Engineer",  # Сетевой инженер
-# #         "Cybersecurity Specialist",  # Специалист по кибербезопасности
-# #         "Database Administrator",  # Администратор баз данных
-# #         "Cloud Engineer",  # Облачный инженер
-# #         "Machine Learning Engineer",  # Инженер машинного обучения
-# #         "AI Engineer",  # Инженер по искусственному интеллекту
-# #         "Frontend Developer",  # Фронтенд-разработчик
-# #         "Backend Developer",  # Бэкенд-разработчик
-# #         "Full Stack Developer",  # Разработчик полного стека
-# #         "IT Support Specialist",  # Специалист по IT-поддержке
-# #         "IT Project Manager",  # Менеджер IT-проектов
-# #         "QA Engineer",  # Инженер по качеству (тестировщик)
-# #         "UX/UI Designer",  # UX/UI дизайнер
-# #         "Scrum Master",  # Скрам-мастер
-# #         "Product Manager",  # Менеджер продукта
-# #         "IT Consultant",  # IT-консультант
-# #         "Security Analyst",  # Аналитик безопасности
-# #         "Technical Writer",  # Технический писатель
-# #         "Business Analyst",  # Бизнес-аналитик
-# #         "Blockchain Developer",  # Разработчик блокчейн
-# #         "Embedded Systems Engineer",  # Инженер встраиваемых систем
-# #         "Game Developer",  # Разработчик игр
-# #         "IT Architect",  # IT-архитектор
-# #         "",
-# #         "",
-# #         "",
-# #         "",
-# #         "",
-# #         "",
-# #         "",
-# #         "",
-# #         "",
-# #         "",
-# #         "",
-# #     ]
+def test2(req):
+    # создаем тонну юзеров
+    usernames = [
+        "happy_daisy",
+        "friendly_fox",
+        "cheerful_bee",
+        "sunny_lemon",
+        "kind_dolphin",
+        "joyful_butterfly",
+        "gentle_rainbow",
+        "bright_sunshine",
+        "peaceful_ocean",
+        "smiling_flower",
+        "laughing_panda",
+        "calm_seashell",
+        "loving_kitten",
+        "hopeful_raindrop",
+        "warm_cuddle",
+        "playful_bunny",
+        "breezy_wind",
+        "soothing_waves",
+        "delightful_bird",
+        "grateful_tree",
+        "optimistic_star",
+        "radiant_moon",
+        "lovely_cloud",
+        "serene_river",
+        "gentle_whisper",
+        "kindhearted_fawn",
+        "tranquil_meadow",
+        "harmonious_song",
+        "serendipity_smile",
+        "cozy_blanket",
+        "giggling_squirrel",
+        "merry_garden",
+        "friendly_glow",
+        "compassionate_heart",
+        "whimsical_rain",
+        "sparkling_eyes",
+        "magical_spark",
+        "blissful_sunset",
+        "tender_leaf",
+        "chirpy_robin",
+        "dancing_buttercup",
+        "dreamy_wish",
+        "graceful_breeze",
+        "serenity_garden",
+        "happiness_hummingbird",
+        "mellow_melody",
+        "harmony_hug",
+        "lively_ladybug",
+        "radiant_breeze",
+        "smiling_sunflower",
+    ]
+    it_professions = [
+        "Software Developer",  # Разработчик программного обеспечения
+        "Web Developer",  # Веб-разработчик
+        "Mobile App Developer",  # Разработчик мобильных приложений
+        "Data Scientist",  # Специалист по данным
+        "Data Analyst",  # Аналитик данных
+        "DevOps Engineer",  # Инженер DevOps
+        "System Administrator",  # Системный администратор
+        "Network Engineer",  # Сетевой инженер
+        "Cybersecurity Specialist",  # Специалист по кибербезопасности
+        "Database Administrator",  # Администратор баз данных
+        "Cloud Engineer",  # Облачный инженер
+        "Machine Learning Engineer",  # Инженер машинного обучения
+        "AI Engineer",  # Инженер по искусственному интеллекту
+        "Frontend Developer",  # Фронтенд-разработчик
+        "Backend Developer",  # Бэкенд-разработчик
+        "Full Stack Developer",  # Разработчик полного стека
+        "IT Support Specialist",  # Специалист по IT-поддержке
+        "IT Project Manager",  # Менеджер IT-проектов
+        "QA Engineer",  # Инженер по качеству (тестировщик)
+        "UX/UI Designer",  # UX/UI дизайнер
+        "Scrum Master",  # Скрам-мастер
+        "Product Manager",  # Менеджер продукта
+        "IT Consultant",  # IT-консультант
+        "Security Analyst",  # Аналитик безопасности
+        "Technical Writer",  # Технический писатель
+        "Business Analyst",  # Бизнес-аналитик
+        "Blockchain Developer",  # Разработчик блокчейн
+        "Embedded Systems Engineer",  # Инженер встраиваемых систем
+        "Game Developer",  # Разработчик игр
+        "IT Architect",  # IT-архитектор
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+    ]
 
-# #     for username in usernames:
-# #         try:
-# #             user = User.objects.create(username=username)
-# #             user.set_unusable_password()  # разрешаем устанавливать плохой пасспорт
-# #             user.set_password("1")  # всем юзерам ставим единицу в пароль
-# #             user.profession = random.choice(it_professions)
-# #             user.save()
-# #             print(user)
-# #         except Exception as e:
-# #             print(e)
+    for username in usernames:
+        try:
+            user = User.objects.create(username=username)
+            user.set_unusable_password()  # разрешаем устанавливать плохой пасспорт
+            user.set_password("1")  # всем юзерам ставим единицу в пароль
+            user.profession = random.choice(it_professions)
+            user.save()
+            print(user)
+        except Exception as e:
+            print(e)
 
-# #     return HttpResponse("test2")
+    return HttpResponse("test2")
 
 
-# # test2()
+# test2()

@@ -1,16 +1,21 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
+import datetime
 import uuid
 
+from django.forms import JSONField
 from django.utils import timezone
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from .settings import CACH_UPDATE_MIN
+from .settings import CACH_UPDATE_MIN, CACH_UPDATE_TAGS_MIN
 
 from PIL import Image as PilImage
 
 
 class Subscription(models.Model):
+    # subscr_cache_updated_at = models.DateTimeField(default=datetime.datetime.now)
+    subscr_cache_updated_at = models.DateTimeField(auto_now_add=True)
+
     tag = models.ForeignKey(
         "Teg",
         related_name="subscriptions",
@@ -24,6 +29,34 @@ class Subscription(models.Model):
         null=True,
         on_delete=models.SET_NULL,
     )
+    # tag_dict = models.JSONField()
+
+    def update_cache(self):
+        data = Subscription.objects.all()
+        tag_dict_user = {}
+
+        for entry in data:
+            user = entry.user.username  # Предполагая, что User имеет поле 'username'
+            tag = entry.tag.name  # Предполагая, что Teg имеет поле 'name'
+
+            if tag not in tag_dict_user:
+                tag_dict_user[tag] = []
+
+            tag_dict_user[tag].append(user)
+
+        self.subscr_cache_updated_at = timezone.now()
+
+        self.save()
+
+    @property
+    def tag_subscription(self):
+        # if (
+        #     self.subscr_cache_updated_at + timedelta(minutes=CACH_UPDATE_TAGS_MIN)
+        #     < timezone.now()
+        # ):
+        self.update_cache()
+
+        return self.tag_dict
 
     # def user_collection_tegs(self, user):
     #     collec_obj = Subscription.objects.filter(user=user)
@@ -35,6 +68,7 @@ class Subscription(models.Model):
 
 class Teg(models.Model):
     name = models.CharField(max_length=10)
+    tags_questions = JSONField()
 
     # @property
     # def tags_user_count(self):
@@ -57,31 +91,15 @@ class Teg(models.Model):
                     questions.append(related.text)
                     # print(f"Вопросы связанные с тегом: {related.text}")
                 tegs[teg.name] = questions
+
             return tegs
 
         except Exception as e:
             print(e)
 
-    @property
-    def tag_subscription(self):
-        data = Subscription.objects.all()
-        tag_dict = {}
-
-        for entry in data:
-
-            user = entry.user
-            tag = entry.tag
-            # Если тег еще не существует в словаре, создаем для него пустой список
-            if tag not in tag_dict:
-                tag_dict[tag] = []
-
-            # Добавляем пользователя в список значений соответствующего тега
-            tag_dict[tag].append(user.id)
-        return tag_dict
-
         # Выводим результат
-        for tag, users in tag_dict.items():
-            print(f"{tag}: {users}")
+        # for tag, users in tag_dict.items():
+        #     print(f"{tag}: {users}")
 
     def __str__(self):
         return self.name
