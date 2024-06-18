@@ -1,43 +1,43 @@
-from django.shortcuts import render, redirect
+# from django.shortcuts import render, redirect
 
-from main.models import User
-from main.forms import ProfileEditForm
+# from main.models import User
+# from main.forms import ProfileEditForm
 
-from django.shortcuts import render
-
-
-# =================================================================
-# views.py
-
-from django.shortcuts import render, redirect
+# from django.shortcuts import render
 
 
-def edit_profile(request, **kwargs):
-    if request.method == "POST":
-        form = ProfileEditForm(request.POST)
-        if form.is_valid():
-            form.save(commit=False)
+# # =================================================================
+# # views.py
 
-            first = form.cleaned_data["first_name"]
-            last = form.cleaned_data["last_name"]
-            email = form.cleaned_data["email"]
-            pro = form.cleaned_data["profession"]
+# from django.shortcuts import render, redirect
 
-            edit_user = User.objects.get(pk=request.user.id)
-            if first != "":
-                edit_user.first_name = first
-            if last != "":
-                edit_user.last_name = last
-            if email != "":
-                edit_user.email = email
-            if pro != "":
-                edit_user.profession = pro
-            edit_user.save()
 
-            return redirect("user_profile", request.user.username)
-            # return HttpResponse(1)
+# def edit_profile(request, **kwargs):
+#     if request.method == "POST":
+#         form = ProfileEditForm(request.POST)
+#         if form.is_valid():
+#             form.save(commit=False)
 
-        print()
-    form = ProfileEditForm
+#             first = form.cleaned_data["first_name"]
+#             last = form.cleaned_data["last_name"]
+#             email = form.cleaned_data["email"]
+#             pro = form.cleaned_data["profession"]
 
-    return render(request, "editProfile.html", {"form": form})
+#             edit_user = User.objects.get(pk=request.user.id)
+#             if first != "":
+#                 edit_user.first_name = first
+#             if last != "":
+#                 edit_user.last_name = last
+#             if email != "":
+#                 edit_user.email = email
+#             if pro != "":
+#                 edit_user.profession = pro
+#             edit_user.save()
+
+#             return redirect("user_profile", request.user.username)
+#             # return HttpResponse(1)
+
+#         print()
+#     form = ProfileEditForm
+
+#     return render(request, "editProfile.html", {"form": form})

@@ -1,4 +1,5 @@
 import math
+import random
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
@@ -56,7 +57,8 @@ def questions_in_tag(request, **kwargs):
 
 def tegs(request):
     """Показать все теги"""
-
+    autor = User.objects.get(id=random.randint(50, 1629))
+    print(autor)
     try:
         tegs = {}
         tegs_obj = Teg.objects.prefetch_related("tegs_set").all()
@@ -372,16 +374,18 @@ def generate_filename(instance, filename):
 def all_users(request, **kwargs):
     """Показать всех пользователей"""
     # ======================================================
-    answer_obj_1 = Rection.objects.select_related("answer")
-    for obj in answer_obj_1:
-        print(obj.answer.text)
+    # ======================================================
+    # answer_obj_1 = Rection.objects.select_related("answer")
+    # for obj in answer_obj_1:
+    #     print(obj.answer.text)
+
     # ======================================================
 
-    answer_obj = Answer.objects.prefetch_related("rection_set")
-    for answer in answer_obj:
-        ans_react = answer.rection_set.all()
-        for related in ans_react:
-            print(related.user)
+    # answer_obj = Answer.objects.prefetch_related("rection_set")
+    # for answer in answer_obj:
+    #     ans_react = answer.rection_set.all()
+    # for related in ans_react:
+    #     print(related.user)
     # ======================================================
     # ======================================================
 
