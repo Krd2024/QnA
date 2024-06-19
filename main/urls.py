@@ -77,5 +77,7 @@ urlpatterns = [
     path("tegs/<str:tegs>", views_1.questions_in_tag, name="questions_in_tag"),
     path("tegs/add/", views_1.add_tag, name="add_tag"),
 ]
-
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 # terminal.integrated.fontSize

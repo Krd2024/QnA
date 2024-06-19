@@ -26,6 +26,29 @@ SECRET_KEY = "django-insecure-6*lc=1gi((l(4j$st80s^n^_luud8po8e&x1yy$l)^q_!61f%e
 # SECURITY WARNING: don't run with debug turned on in production!
 
 
+DEBUG = False
+# DEBUG = True
+if DEBUG:
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = ["HOST IP", "DOMAIN NAIM", "localhost"]
+...
+STATIC_URL = "/static/"
+if DEBUG:
+    STATIC_DIR = os.path.join(BASE_DIR, "static")
+    STATICFILES_DIRS = [
+        STATIC_DIR,
+        "static",
+    ]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+    STATICFILES_FINDERS = (
+        "django.contrib.staticfiles.finders.FileSystemFinder",
+        "django.contrib.staticfiles.finders.AppDirectoriesFinder",
+    )
+MEDIA_URL = "/media/"
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -114,25 +137,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-DEBUG = True
-
-ALLOWED_HOSTS = ["*"]
-
-STATIC_URL = "/static/"
-# STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
-# Base url to serve media files
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "")
-# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-# if not os.path.exists(STATIC_ROOT):
-#     os.makedirs(STATIC_ROOT)
-
-# if not os.path.exists(MEDIA_ROOT):
-#     os.makedirs(MEDIA_ROOT)
 
 # CSRF_COOKIE_SECURE = True
 # SESSION_COOKIE_SECURE = True

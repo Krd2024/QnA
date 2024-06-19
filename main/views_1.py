@@ -575,7 +575,8 @@ def index(request):
     answers = (
         Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
     )
-    all_question = Question.objects.all()
+    # ИСПРАВИТЬ
+    all_question = Question.objects.all()[:20]
 
     context = {
         "all_question": all_question,

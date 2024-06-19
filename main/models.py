@@ -69,6 +69,8 @@ class Subscription(models.Model):
 class Teg(models.Model):
     name = models.CharField(max_length=10)
     tags_questions = JSONField()
+    # tags_user_count_cache = models.IntField()
+    # tags_user_count_cache = models.IntField()
 
     # @property
     # def tags_user_count(self):
