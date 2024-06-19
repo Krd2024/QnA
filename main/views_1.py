@@ -29,11 +29,17 @@ def add_tag(request):
     print("tag add")
     try:
         tag_id = request.GET.get("tag_id")
-        return JsonResponse({"success": True, "answer": 123})
+        subscr = Subscription.objects.filter(tag=tag_id, user=request.user)
+        tag_obj = Teg.objects.filter(id=tag_id)[0]
+        if not subscr.exists():
+            Subscription.objects.create(user=request.user, tag=tag_obj)
+            return JsonResponse({"success": True, "answer": 1})
+        else:
+            Subscription.objects.filter(user=request.user, tag=tag_obj).delete()
+            return JsonResponse({"success": True, "answer": -1})
     except Exception as e:
-        ...
-    print(tag_id)
-    # return redirect("tegs")
+        print(e)
+    return redirect("tegs")
 
 
 # =================================================================

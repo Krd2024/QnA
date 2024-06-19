@@ -16,12 +16,14 @@
               {% with user_count=user|length %}
                 {% if request.user in user %}
                   <div>
-                    <button id="rection_1"><span id="counter">Вы подписаны |<span id="tag_count{{ tag.id }}">{{ user_count }}</span></span></button>
+                    <button id="rection_1" onclick="func('{{ tag.id }}')"><span id="counter{{ tag.id }}">Вы подписаны |</span><span id="tag_count{{ tag.id }}">{{ user_count }}</span></button>
+                    {{ tag.id }}
                   </div>
                 {% else %}
                   <div>
                     {% comment %} <button id="rection" onclick="func('{{ tag.id }}')"><span id="counter">Подписаться |{{ tag.user_count }}</span></button> {% endcomment %}
-                    <button id="rection_0" onclick="func('{{ tag.id }}')"><span id="counter">Подписаться |<span id="tag_count{{ tag.id }}">{{ user_count }}</span></span></button>
+                    <button id="rection_0" onclick="func('{{ tag.id }}')"><span id="counter{{ tag.id }}">Подписаться</span>|<span id="tag_count{{ tag.id }}">{{ user_count }}</span></button>
+                    {{ tag.id }}
                   </div>
                 {% endif %}
               {% endwith %}
@@ -78,6 +80,8 @@
       border-color: transparent;
       border-radius: 5px;
       font-size: clamp(1rem, 1rem, 1vw);
+    }
+    #rection_1:hover {
       background-color: #45a049;
     }
   </style>
@@ -92,14 +96,20 @@
     
         let data = await response.json()
     
-        console.log('Received data:', data)
-    
         const tagCountElement = document.getElementById(`tag_count${tagId}`)
+        let currentCount = parseInt(tagCountElement.innerText)
+        let idCoun = document.getElementById('counter' + tagId)
     
         if (tagCountElement) {
           console.log('Element found:', tagCountElement)
     
-          tagCountElement.innerHTML = data.answer
+          tagCountElement.innerHTML = currentCount + data.answer
+    
+          if (data.answer === -1) {
+            idCoun.innerHTML = 'Подписаться' // Пример значения для обновления
+          } else if (data.answer === 1) {
+            idCoun.innerHTML = 'Вы подписаны'
+          }
         } else {
           console.error(`Element with id 'tag_count${tagId}' not found`)
         }
@@ -107,5 +117,5 @@
         console.error('Error:', error)
       }
     }
-  </script>
+  </script>idCoun.style.backgroundColor = 'grey'
 {% endblock %}
