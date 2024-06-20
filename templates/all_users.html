@@ -11,15 +11,11 @@
             </div>
             <div class="answer-question">
               <hr />
-              {% for key_ans, value_ans in count_answer_users.items %}
-                {% if key_ans == username %}
-                  <a href="/user/{{ username }}/"><div class="answer">Ответов | {{ value_ans }}</div></a>
-                  {% for key_quest, value_quest in count_questions_users.items %}
-                    {% if key_quest == username %}
-                      <div>.</div>
-                      <a href=""><div class="questions">Вопросов | {{ value_quest }}</div></a>
-                    {% endif %}
-                  {% endfor %}
+              {% for user_count in users_obj_count %}
+                {% if user_count.username == username.username %}
+                  <a href="/user/{{ username }}/"><div class="answer">Ответов | {{ user_count.answer_count }}</div></a>
+                  <div>.</div>
+                  <a href=""><div class="questions">Вопросов | {{ user_count.question_count }}</div></a>
                 {% endif %}
               {% endfor %}
             </div>

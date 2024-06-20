@@ -1,3 +1,6 @@
+from django.db.models import Count, OuterRef, Subquery
+
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import math
 import random
 from django.http import HttpResponse, JsonResponse
@@ -249,61 +252,6 @@ def edit_profile(request, **kwargs):
     return render(request, "editProfile.html", {"form": form})
 
 
-# from django.contrib.auth.models import User
-
-
-# def signup(request):
-#     if request.method == "POST":
-
-#         form = UserRegisterForm(request.POST)
-#         # form = ProfileEditForm(request.POST)
-#         if form.is_valid():
-#             user = form.save()
-
-#             current_site = get_current_site(request)
-#             subject = "Activate Your Account"
-#             message = render_to_string(
-#                 "email/account_activation_email.html",
-#                 {
-#                     "user": user,
-#                     "domain": current_site.domain,
-#                     "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-#                     "token": default_token_generator.make_token(user),
-#                 },
-#             )
-#             send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [user.email])
-#             return redirect("account_activation_sent")
-#     else:
-#         form = UserRegisterForm()
-#     return render(request, "email/signup.html", {"form": form})
-
-
-# def account_activation_sent(request):
-#     return render(request, "email/account_activation_sent.html")
-
-
-# views.py (добавьте эти функции)
-
-# from django.contrib.auth import login
-
-
-# def activate(request, uidb64, token):
-#     try:
-#         uid = force_str(urlsafe_base64_decode(uidb64))
-#         user = User.objects.get(pk=uid)
-#     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
-#         user = None
-
-#     if user is not None and default_token_generator.check_token(user, token):
-#         user.is_active = True
-#         user.save()
-#         login(request, user)
-#         return redirect("index")
-#     else:
-#         return render(request, "email/account_activation_invalid.html")
-
-
-# =================================================================
 # =================================================================
 #                 НЕ ИСПОЛЬЗУЕТСЯ
 import uuid
@@ -319,91 +267,42 @@ def generate_filename(instance, filename):
 
 
 # =================================================================
-
-
-# def delete_folder(folder_path):
-#     """Удалить текущую папку uuid перед созданием новой"""
-#     if os.path.exists(folder_path):
-#         shutil.rmtree(folder_path)
-#         print(f"Папка '{folder_path}' успешно удалена.")
-#     else:
-#         print(f"Папка '{folder_path}' не существует.")
-
-
-# def image_upload_view(request):
-#     """Загрузка фото пользователя"""
-
-#     def save_image_url_user(img_obj):
-#         User.objects.filter(
-#             username=request.user.username,
-#         ).update(image_url=str(img_obj)[23:59])
-
-#     if request.method == "POST":
-#         form = ImageForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             img_obj = Image.objects.filter(user_id=request.user)
-#             if img_obj is not None:
-#                 img_obj.delete()
-
-#             image = form.save(commit=False)
-#             image.user = request.user
-#             image.save()
-
-#             img_obj = form.instance
-#             #
-#             print(form.cleaned_data["image"])
-#             #
-#             if form.cleaned_data["image"] is None:
-#                 return render(request, "load_img.html", {"form": form})
-
-#             # Получить имя папки для удаления перед созданием новой (uuid)
-#             user_obj = User.objects.filter(username=request.user.username).first()
-#             dir_uuid = user_obj.image_url
-#             print(dir_uuid, "<<<<<< ---------- user_obj")
-
-#             if dir_uuid == "":
-#                 save_image_url_user(img_obj.image)
-#                 return redirect("user_profile", request.user.username)
-
-#             folder_path = f"static/profile/picture/{dir_uuid}"
-#             delete_folder(folder_path)
-
-#             save_image_url_user(img_obj.image)
-#             #
-#         return redirect("user_profile", request.user.username)
-#     else:
-#         form = ImageForm()
-#     return render(request, "load_img.html", {"form": form})
-
-
-# ======================================================
 def all_users(request, **kwargs):
     """Показать всех пользователей"""
-
-    users_obj_count = User.objects.annotate(
-        question_count=Count("question_set"), answer_count=Count("answer_set")
-    )
-    for user in users_obj_count:
-
-        print(
-            f"User: {user.username}, Questions: {user.question_count}, Answers: {user.answer_count}"
+    start_time_0 = time.perf_counter_ns()
+    try:
+        question_count_subquery = (
+            Question.objects.filter(autor=OuterRef("pk"))
+            .values("autor")
+            .annotate(count=Count("*"))
+            .values("count")
+        )
+        answer_count_subquery = (
+            Answer.objects.filter(autor=OuterRef("pk"))
+            .values("autor")
+            .annotate(count=Count("*"))
+            .values("count")
         )
 
-    # ======================================================
-    # ======================================================
-    # answer_obj_1 = Rection.objects.select_related("answer")
-    # for obj in answer_obj_1:
-    #     print(obj.answer.text)
+        # Выполните аннотированный запрос
+        users_obj_count = User.objects.annotate(
+            question_count=Subquery(question_count_subquery),
+            answer_count=Subquery(answer_count_subquery),
+        )
+    except Exception as e:
+        print(e, "< --------- all users")
+    end_time_0 = time.perf_counter_ns()
 
-    # ======================================================
+    execution_time_ns = end_time_0 - start_time_0
+    execution_time_s = execution_time_ns / 1_000_000_000
+    print(f"Время выполнения запроса к базе: {execution_time_s:.4f} секунд")
 
-    # answer_obj = Answer.objects.prefetch_related("rection_set")
-    # for answer in answer_obj:
-    #     ans_react = answer.rection_set.all()
-    # for related in ans_react:
-    #     print(related.user)
-    # ======================================================
-    # ======================================================
+    # users_obj_count = User.objects.annotate(
+    #     question_count=Count("question_set"), answer_count=Count("answer_set")
+    # )
+
+    # for user in users_obj_count:
+    #     print(user.answer_count, " ", user.question_count)
 
     page = kwargs.get("page")
 
@@ -418,8 +317,6 @@ def all_users(request, **kwargs):
         page = 1
 
     start_time_1 = time.perf_counter_ns()
-
-    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
     users_per_page = (
         main.settings.LIMIT_OF_USERS_ON_PAGE
@@ -453,27 +350,6 @@ def all_users(request, **kwargs):
         f"Время выполнения сортировки страниц в представлении: {total_time_ms_1:.4f} seconds"
     )
 
-    count_answer_users = {}
-    count_questions_users = {}
-
-    try:
-        start_time_2 = time.perf_counter_ns()
-
-        for user in users_obj:
-            question_obj = Question.objects.filter(autor=user)
-            answers_obj = Answer.objects.filter(autor=user)
-            #
-            count_answer_users[user] = len(answers_obj)
-            count_questions_users[user] = len(question_obj)
-
-        end_time_2 = time.perf_counter_ns()
-    except Exception as e:
-        print(e, "<<< e -------------- def all_users(request)")
-
-    execution_time_ns = end_time_2 - start_time_2
-    execution_time_s = execution_time_ns / 1_000_000_000
-    print(f"Время выполнения запроса к базе: {execution_time_s:.4f} секунд")
-
     start_time = time.time()
 
     response = render(
@@ -483,8 +359,8 @@ def all_users(request, **kwargs):
             "users": sorted_users,
             "pages_range": range(1, num_pages + 1),
             "page_number": page,
-            "count_answer_users": count_answer_users,
-            "count_questions_users": count_questions_users,
+            # "count_answer_users": count_answer_users,
+            # "count_questions_users": count_questions_users,
             "users_obj_count": users_obj_count,
         },
     )
