@@ -31,7 +31,7 @@ DEBUG = True
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = ["HOST IP", "DOMAIN NAIM", "localhost"]
+    ALLOWED_HOSTS = ["5.35.84.79", "localhost"]
 ...
 STATIC_URL = "/static/"
 if DEBUG:
