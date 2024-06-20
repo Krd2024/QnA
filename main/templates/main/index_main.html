@@ -10,6 +10,7 @@
           </div>
 
           <h4 id="teg">{{ quest.tegs }}</h4>
+
           <a href="{% url 'question' quest.id %}"><h3 class="title">{{ quest.title }}</h3></a>
         </div>
         <div class="date">
@@ -37,6 +38,16 @@
     </div>
     <hr />
   {% endfor %}
+  <div>
+    {% for num in pages_range %}
+      {% if page_number != num %}
+        <a href="{% url 'questions_in_tag' num %}">{{ num }}</a>
+      {% else %}
+        <span class="current">{{ num }}</span>
+      {% endif %}
+    {% endfor %}
+  </div>
+
   <style>
     #views {
       display: flex;

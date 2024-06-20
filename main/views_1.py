@@ -48,26 +48,66 @@ def add_tag(request):
 # =================================================================
 def questions_in_tag(request, **kwargs):
     """Показать вопросы по тегу"""
+    try:
+        page = request.GET.get("page", 1)
+        start_time_1 = time.perf_counter_ns()
+        #
+        answers = (
+            Answer.objects.all()
+            .values("question_id")
+            .annotate(total=Count("question_id"))
+        )
+        #
+        end_time_1 = time.perf_counter_ns()
+        execution_time_ns_1 = end_time_1 - start_time_1
+        total_time_ms_1 = execution_time_ns_1 / 1_000_000_000
+        print(f"Время получения кол-во ответов: {total_time_ms_1:.4f} seconds")
+        #
+        start_time_1 = time.perf_counter_ns()
+        #
+        all_question = Question.objects.filter(
+            tegs=Teg.objects.filter(name=kwargs.get("tegs")).first()
+        )
+        # ----------------------------------------------------------------
+        end_time_1 = time.perf_counter_ns()
+        execution_time_ns_1 = end_time_1 - start_time_1
+        total_time_ms_1 = execution_time_ns_1 / 1_000_000_000
+        print(f"Время получения вопросов: {total_time_ms_1:.4f} seconds")
+        #  ----------------------------------------------------------------
+        # all_question = Question.objects.all().filter(tegs=kwargs.get("tegs"))
+        num_pages = int(
+            math.ceil(len(all_question) / main.settings.LIMIT_OF_USERS_ON_PAGE)
+        )
+        users_per_page = main.settings.LIMIT_OF_USERS_ON_PAGE
+        paginator = Paginator(all_question, users_per_page)  # Создаем пагинатор
 
-    answers = (
-        Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
-    )
-    all_question = Question.objects.all().filter(
-        tegs=Teg.objects.filter(name=kwargs.get("tegs")).first()
-    )
-    # all_question = Question.objects.all().filter(tegs=kwargs.get("tegs"))
+        try:
+            sorted_users = paginator.page(page)
+        except PageNotAnInteger:
+            sorted_users = paginator.page(1)
+        except EmptyPage:
+            sorted_users = paginator.page(paginator.num_pages)
 
-    context = {
-        "all_question": all_question,
-        "answers": answers,
-    }
+        context = {
+            "page_number": page,
+            "pages_range": range(1, num_pages + 1),
+            "all_question": sorted_users,
+            "answers": answers,
+        }
+    except Exception as e:
+        print(e, "< ----- def questions_in_tag(): ")
+        return redirect("index")
+
     return render(request, "main/index_main.html", context)
+    #
+    #
 
 
 def tegs(request):
     """Показать все теги"""
-    autor = User.objects.get(id=random.randint(50, 1629))
-    print(autor)
+    # autor = User.objects.get(id=random.randint(50, 1629))
+    # print(autor)
+    start_time_0 = time.perf_counter_ns()
     try:
         tegs = {}
         tegs_obj = Teg.objects.prefetch_related("tegs_set").all()
@@ -81,20 +121,16 @@ def tegs(request):
                 questions.append(related.text)
                 # print(f"Вопросы связанные с тегом: {related.text}")
             tegs[teg.name] = questions
+        end_time_0 = time.perf_counter_ns()
 
-            #  ==================  Подписки =============================================
+        execution_time_ns = end_time_0 - start_time_0
+        execution_time_s = execution_time_ns / 1_000_000_000
+        print(f"Время выполнения Тег-вопросы: {execution_time_s:.4f} секунд")
 
-            # from django.db.models import Count
+        #  ==================  Подписки =============================================
+        start_time_1 = time.perf_counter_ns()
 
-        # dict_tag = teg.tag_subscription
-        # data = Subscription.objects.all()
-        # for teg in data:
-        #     print(teg.tag_subscription)
-
-        data = Subscription.objects.all()
-
-        # for subscription in data:
-        #     print(subscription.tag_subscription)
+        data = Subscription.objects.select_related("user", "tag").all()
 
         tag_dict = {}
 
@@ -108,6 +144,12 @@ def tegs(request):
 
             #     # Добавляем пользователя в список значений соответствующего тега
             tag_dict[tag].append(user)
+
+        end_time_1 = time.perf_counter_ns()
+
+        execution_time_ns = end_time_1 - start_time_1
+        execution_time_s = execution_time_ns / 1_000_000_000
+        print(f"Время выполнения  Тег-подписчики: {execution_time_s:.4f} секунд")
 
         # # Выводим результат
         # for tag, users in tag_dict.items():
@@ -291,6 +333,7 @@ def all_users(request, **kwargs):
         )
     except Exception as e:
         print(e, "< --------- all users")
+
     end_time_0 = time.perf_counter_ns()
 
     execution_time_ns = end_time_0 - start_time_0
@@ -499,7 +542,7 @@ def index(request):
         Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
     )
     # ИСПРАВИТЬ
-    all_question = Question.objects.all()[:20]
+    all_question = Question.objects.all()[:]
 
     context = {
         "all_question": all_question,
