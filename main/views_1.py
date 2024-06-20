@@ -379,6 +379,16 @@ def generate_filename(instance, filename):
 # ======================================================
 def all_users(request, **kwargs):
     """Показать всех пользователей"""
+
+    users_obj_count = User.objects.annotate(
+        question_count=Count("question_set"), answer_count=Count("answer_set")
+    )
+    for user in users_obj_count:
+
+        print(
+            f"User: {user.username}, Questions: {user.question_count}, Answers: {user.answer_count}"
+        )
+
     # ======================================================
     # ======================================================
     # answer_obj_1 = Rection.objects.select_related("answer")
@@ -407,22 +417,47 @@ def all_users(request, **kwargs):
     else:
         page = 1
 
+    start_time_1 = time.perf_counter_ns()
+
+    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+    users_per_page = (
+        main.settings.LIMIT_OF_USERS_ON_PAGE
+    )  # Ограничение пользователей на странице
+
+    # Сортировка и пагинация с использованием ORM
+    users_obj_pag = User.objects.order_by(
+        "-rating_cache"
+    )  # Сортируем по рейтингу по убыванию
+    paginator = Paginator(users_obj_pag, users_per_page)  # Создаем пагинатор
+
+    try:
+        sorted_users = paginator.page(page)
+    except PageNotAnInteger:
+        sorted_users = paginator.page(1)
+    except EmptyPage:
+        sorted_users = paginator.page(paginator.num_pages)
+
+    # sorted_users = sorted(users_obj, key=lambda u: u.rating, reverse=True)
+    # sorted_users = sorted_users[
+    #     (page - 1)
+    #     * main.settings.LIMIT_OF_USERS_ON_PAGE : (page)
+    #     * main.settings.LIMIT_OF_USERS_ON_PAGE
     users_obj = User.objects.all()
-
-    sorted_users = sorted(users_obj, key=lambda u: u.rating, reverse=True)
-    sorted_users = sorted_users[
-        (page - 1)
-        * main.settings.LIMIT_OF_USERS_ON_PAGE : (page)
-        * main.settings.LIMIT_OF_USERS_ON_PAGE
-    ]
-
     num_pages = int(math.ceil(len(users_obj) / main.settings.LIMIT_OF_USERS_ON_PAGE))
-    users_obj = users_obj
+
+    end_time_1 = time.perf_counter_ns()
+    execution_time_ns_1 = end_time_1 - start_time_1
+    total_time_ms_1 = execution_time_ns_1 / 1_000_000_000
+    print(
+        f"Время выполнения сортировки страниц в представлении: {total_time_ms_1:.4f} seconds"
+    )
 
     count_answer_users = {}
     count_questions_users = {}
 
     try:
+        start_time_2 = time.perf_counter_ns()
 
         for user in users_obj:
             question_obj = Question.objects.filter(autor=user)
@@ -431,12 +466,17 @@ def all_users(request, **kwargs):
             count_answer_users[user] = len(answers_obj)
             count_questions_users[user] = len(question_obj)
 
+        end_time_2 = time.perf_counter_ns()
     except Exception as e:
         print(e, "<<< e -------------- def all_users(request)")
 
-    # print(sorted_users, "<<<< sorted_users")
+    execution_time_ns = end_time_2 - start_time_2
+    execution_time_s = execution_time_ns / 1_000_000_000
+    print(f"Время выполнения запроса к базе: {execution_time_s:.4f} секунд")
 
-    return render(
+    start_time = time.time()
+
+    response = render(
         request,
         "all_users.html",
         {
@@ -445,8 +485,15 @@ def all_users(request, **kwargs):
             "page_number": page,
             "count_answer_users": count_answer_users,
             "count_questions_users": count_questions_users,
+            "users_obj_count": users_obj_count,
         },
     )
+    end_time = time.time()
+    total_time = end_time - start_time
+    total_time_ms = total_time / 1_000_000_000
+    print(f"Template render time: {total_time_ms:.4f} seconds")
+
+    return response
 
 
 def rating(request):
