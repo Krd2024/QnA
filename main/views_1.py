@@ -28,6 +28,11 @@ from bs4 import BeautifulSoup
 import requests
 
 
+def redirect_to_home(request, exception=None):
+    print("Redirecting to")
+    redirect("index")
+
+
 def add_tag(request):
     print("tag add")
     try:
@@ -48,57 +53,70 @@ def add_tag(request):
 # =================================================================
 def questions_in_tag(request, **kwargs):
     """Показать вопросы по тегу"""
+
+    page = kwargs.get("num_pages")
+
+    print(kwargs)
+
     try:
-        page = request.GET.get("page", 1)
-        start_time_1 = time.perf_counter_ns()
-        #
+        if page is not None:
+            try:
+                page = int(page)
+                if page < 1:
+                    raise ValueError()
+            except Exception as e:
+                print(e)
+                return redirect("tegs")
+        else:
+            page = 1
+
+        print(page, "< -- page")
+
         answers = (
             Answer.objects.all()
             .values("question_id")
             .annotate(total=Count("question_id"))
         )
-        #
-        end_time_1 = time.perf_counter_ns()
-        execution_time_ns_1 = end_time_1 - start_time_1
-        total_time_ms_1 = execution_time_ns_1 / 1_000_000_000
-        print(f"Время получения кол-во ответов: {total_time_ms_1:.4f} seconds")
-        #
-        start_time_1 = time.perf_counter_ns()
-        #
+
         all_question = Question.objects.filter(
-            tegs=Teg.objects.filter(name=kwargs.get("tegs")).first()
+            tegs=Teg.objects.filter(name=kwargs.get("tags")).first()
         )
         # ----------------------------------------------------------------
-        end_time_1 = time.perf_counter_ns()
-        execution_time_ns_1 = end_time_1 - start_time_1
-        total_time_ms_1 = execution_time_ns_1 / 1_000_000_000
-        print(f"Время получения вопросов: {total_time_ms_1:.4f} seconds")
+
         #  ----------------------------------------------------------------
         # all_question = Question.objects.all().filter(tegs=kwargs.get("tegs"))
         num_pages = int(
             math.ceil(len(all_question) / main.settings.LIMIT_OF_USERS_ON_PAGE)
         )
+
         users_per_page = main.settings.LIMIT_OF_USERS_ON_PAGE
         paginator = Paginator(all_question, users_per_page)  # Создаем пагинатор
 
         try:
-            sorted_users = paginator.page(page)
+            sorted_question = paginator.page(page)
         except PageNotAnInteger:
-            sorted_users = paginator.page(1)
+            sorted_question = paginator.page(1)
         except EmptyPage:
-            sorted_users = paginator.page(paginator.num_pages)
+            sorted_question = paginator.page(paginator.num_pages)
+
+        # print(len(sorted_question))
 
         context = {
             "page_number": page,
             "pages_range": range(1, num_pages + 1),
-            "all_question": sorted_users,
+            "all_question": sorted_question,
             "answers": answers,
+            "tags": kwargs.get("tags"),
         }
+
+        return render(request, "questions_tags.html", context)
+        # for user in sorted_question:
+        #     print(user.autor, user.tegs)
+
     except Exception as e:
         print(e, "< ----- def questions_in_tag(): ")
-        return redirect("index")
+        return redirect("tegs")
 
-    return render(request, "main/index_main.html", context)
     #
     #
 
@@ -150,22 +168,6 @@ def tegs(request):
         execution_time_ns = end_time_1 - start_time_1
         execution_time_s = execution_time_ns / 1_000_000_000
         print(f"Время выполнения  Тег-подписчики: {execution_time_s:.4f} секунд")
-
-        # # Выводим результат
-        # for tag, users in tag_dict.items():
-        #     print(f"{tag}: {users}")
-
-        # print(tag_dict)
-
-        # Получение имени тега и количества пользователей, подписанных на него
-        # tags_with_user_count = Teg.objects.annotate(user_count=Count("subscriptions"))
-        # subscription = Subscription.objects.all()
-        # user_tegs = {}
-        # for tag in tags_with_user_count:
-        #     user_tegs[tag.name] = tag.user_count
-        #     print(f"Tag: {tag.name}, User Count: {tag.user_count}")
-        #     print(tag)
-        # print(user_tegs)
 
         #  ==========================================================================
         return render(
@@ -371,6 +373,27 @@ def all_users(request, **kwargs):
     )  # Сортируем по рейтингу по убыванию
     paginator = Paginator(users_obj_pag, users_per_page)  # Создаем пагинатор
 
+    users_obj = User.objects.all()
+    num_pages = int(math.ceil(len(users_obj) / main.settings.LIMIT_OF_USERS_ON_PAGE))
+
+    if num_pages <= 15:
+        start = 1
+        end = num_pages + 1
+    else:
+        start = max(1, page - 5)
+        end = min(page + 5, num_pages + 1)
+
+        # Корректировка диапазона, если он выходит за пределы допустимых значений
+        if end - start < 10:
+            if start == 1:
+                end = 11
+            elif e == num_pages + 1:
+                end = num_pages - 9
+    if page > 5:
+        page_range = range(page - 5, min(page + 5, paginator.num_pages + 1))
+    else:
+        page_range = range(1, min(page + 10, paginator.num_pages + 1))
+
     try:
         sorted_users = paginator.page(page)
     except PageNotAnInteger:
@@ -383,8 +406,6 @@ def all_users(request, **kwargs):
     #     (page - 1)
     #     * main.settings.LIMIT_OF_USERS_ON_PAGE : (page)
     #     * main.settings.LIMIT_OF_USERS_ON_PAGE
-    users_obj = User.objects.all()
-    num_pages = int(math.ceil(len(users_obj) / main.settings.LIMIT_OF_USERS_ON_PAGE))
 
     end_time_1 = time.perf_counter_ns()
     execution_time_ns_1 = end_time_1 - start_time_1
@@ -400,7 +421,8 @@ def all_users(request, **kwargs):
         "all_users.html",
         {
             "users": sorted_users,
-            "pages_range": range(1, num_pages + 1),
+            "pages_range": page_range,
+            # "pages_range": range(1, num_pages + 1),
             "page_number": page,
             # "count_answer_users": count_answer_users,
             # "count_questions_users": count_questions_users,
@@ -520,6 +542,7 @@ def answer_update_delete(request, **kwargs):
     """Редактировать,удалить ответ"""
 
     try:
+
         data = kwargs.get("choice")
         answer_id = kwargs.get("answer_id")
 
@@ -537,17 +560,78 @@ def answer_update_delete(request, **kwargs):
         return redirect(f"/user/{request.user}/")
 
 
-def index(request):
-    answers = (
-        Answer.objects.all().values("question_id").annotate(total=Count("question_id"))
-    )
-    # ИСПРАВИТЬ
-    all_question = Question.objects.all()[:]
+def index(request, **kwargs):
+    """Главная страница - все вопросы"""
+
+    try:
+        page = kwargs.get("num")
+        # print(page)
+
+        if page is not None:
+            try:
+                page = int(page)
+                if page < 2:
+                    raise ValueError()
+            except:
+                return redirect("all_users")
+        else:
+            page = 1
+
+        answers = (
+            Answer.objects.all()
+            .values("question_id")
+            .annotate(total=Count("question_id"))
+        )
+        # ИСПРАВИТЬ
+        all_question = Question.objects.all()
+
+        num_pages = int(
+            math.ceil(len(all_question) / main.settings.LIMIT_OF_USERS_ON_PAGE)
+        )
+
+        users_per_page = main.settings.LIMIT_OF_USERS_ON_PAGE
+        paginator = Paginator(all_question, users_per_page)  # Создаем пагинатор
+    except Exception as e:
+        print(e)
+
+    if num_pages <= 15:
+        start = 1
+        end = num_pages + 1
+    else:
+        start = max(1, page - 5)
+        end = min(page + 5, num_pages + 1)
+
+        # Корректировка диапазона, если он выходит за пределы допустимых значений
+        if end - start < 10:
+            if start == 1:
+                end = 11
+            elif end == num_pages + 1:
+                end = num_pages - 9
+    if page > 5:
+        page_range = range(page - 5, min(page + 5, paginator.num_pages + 1))
+    else:
+        page_range = range(1, min(page + 10, paginator.num_pages + 1))
+
+    try:
+        sorted_users = paginator.page(page)
+    except PageNotAnInteger:
+        sorted_users = paginator.page(1)
+    except EmptyPage:
+        sorted_users = paginator.page(paginator.num_pages)
 
     context = {
-        "all_question": all_question,
+        "page_number": page,
+        "pages_range": page_range,
+        # "pages_range": range(1, num_pages + 1),
+        "all_question": sorted_users,
         "answers": answers,
     }
+    print(page, page_range, sorted_users)
+    for user in sorted_users:
+        print(
+            user,
+        )
+
     return render(request, "main/index_main.html", context)
 
 

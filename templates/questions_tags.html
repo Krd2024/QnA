@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
   {% for quest in all_question %}
-    {{ quest.tegs }}
+    with {{ quest.tegs }}
     <div id="conteiner">
       <div id="box">
         <div class="autor&title">
@@ -42,7 +42,7 @@
   <div>
     {% for num in pages_range %}
       {% if page_number != num %}
-        <a href="{% url 'index' num %}">{{ num }}</a>
+        <a href="{% url 'quest_in_tag' tags num %}">{{ num }}</a>
       {% else %}
         <span class="current">{{ num }}</span>
       {% endif %}
