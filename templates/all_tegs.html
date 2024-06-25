@@ -23,7 +23,6 @@
                   <div>
                     {% comment %} <button id="rection" onclick="func('{{ tag.id }}')"><span id="counter">Подписаться |{{ tag.user_count }}</span></button> {% endcomment %}
                     <button id="rection_0" onclick="func('{{ tag.id }}')"><span id="counter{{ tag.id }}">Подписаться</span>|<span id="tag_count{{ tag.id }}">{{ user_count }}</span></button>
-                    {{ tag.id }}
                   </div>
                 {% endif %}
               {% endwith %}
@@ -40,23 +39,46 @@
       font-size: clamp(2vw, 1vw, 2vw);
     }
     .conteiner {
-      display: flex;
+      display: grid;
+    
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 5px;
+    
       padding: 0.1em;
-      flex-wrap: wrap;
+    
       justify-content: space-evenly;
     }
+    @media (max-width: 600px) {
+      .box_teg {
+        padding: 10px;
+    
+        margin-top: 0.5vw;
+    
+        padding: 1vw;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        min-width: 10vw;
+        min-height: 10vw;
+        text-align: center;
+        font-size: 30px;
+      }
+      .box_teg_href {
+        font-size: 4vw;
+        color: #2d72d9;
+      }
+    }
+    
     .box_teg {
       margin-top: 0.5vw;
     
       padding: 1vw;
       border: 1px solid lightgray;
       border-radius: 5px;
-    
-      width: clamp(10%, 15% 20%);
-      font-size: clamp(1rem, 18vw, 20%%);
+      min-width: 8vw;
     }
+    
     .box_teg_href {
-      font-size: clamp(1rem, 18vw, 20%%);
+      font-size: 2vw;
       color: #2d72d9;
     }
     
@@ -67,7 +89,7 @@
       color: #fff;
       border-color: transparent;
       border-radius: 5px;
-      font-size: clamp(1rem, 1rem, 1vw);
+      font-size: 1.3vw;
     }
     #rection_0:hover {
       background-color: #45a049;
@@ -79,7 +101,7 @@
       color: #fff;
       border-color: transparent;
       border-radius: 5px;
-      font-size: clamp(1rem, 1rem, 1vw);
+      font-size: 1.3vw;
     }
     #rection_1:hover {
       background-color: #45a049;
@@ -117,5 +139,5 @@
         console.error('Error:', error)
       }
     }
-  </script>idCoun.style.backgroundColor = 'grey'
+  </script>
 {% endblock %}

@@ -26,7 +26,20 @@
         </div>
       </div>
     {% else %}
-      <div class="quest_div">{{ quest }}</div>
+      <div class="quest_div">
+        <div class="question-container">
+          <hr class="hr" />
+          <div>
+            <p class="teg">{{ quest.tegs }}</p>
+          </div>
+          <div class="title">
+            <a href="{% url 'question' quest.id %}"><h3>{{ quest.title }}</h3></a>
+          </div>
+          <div class="question">{{ quest.text }}</div>
+          <div class="create">Создано {{ quest.created_at|timesince }} назад</div>
+          <hr />
+        </div>
+      </div>
     {% endif %}
   </div>
   <hr />
