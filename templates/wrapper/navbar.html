@@ -35,16 +35,14 @@
 
   <div>
     {% if request.user.is_authenticated %}
-      <a href="{% url 'user_profile' request.user.username %}"><span id="name">{{ request.user.username }}</span></a>
+      <a href="{% url 'user_profile' request.user.username %}"><span class="a">{{ request.user.username }}</span></a>
       <hr />
-      <a id="exit" href="{% url 'logout' %}">Выход</a>
+      <a class="a" href="{% url 'logout' %}"><span>Выход</span></a>
     {% else %}
-      <a class="a" href="/signup/">Регистрация через Email</a>
-      <hr />
+      <a class="a" href="/signup/"><span>Регистрация</span></a>
 
-      <p>
-        <a class="a" href="/login_in/">Вход</a>
-      </p>
+      <a class="a" href="/login_in/"><span>Вход</span></a>
+
       <hr />
     {% endif %}
     <hr />
@@ -65,7 +63,7 @@
   }
   
   #exit {
-    margin-left: 0.3em;
+    margin: 0.3em;
     color: beige;
     padding: 0.2em;
     width: 2vw;
@@ -81,7 +79,7 @@
   .a {
     color: beige;
     padding: 0.5em;
-    font-size: clamp(3vw, 2vw, 5vw);
+    font-size: clamp(1.5vw, 2vw, 3vw);
     text-align: center;
   }
   .loginForm {
@@ -96,8 +94,12 @@
     align-items: flex-start;
     background-color: #4f5a6e;
   }
+  .pars {
+    margin: 0.2em;
+  }
   .dop {
-    font-size: 2vw;
+    font-size: clamp(1.5vw, 2vw, 1vw);
+    padding: 0.1em;
     text-align: center;
   }
 </style>
