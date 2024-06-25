@@ -76,16 +76,16 @@ def login_in(request):
     return render(request, "login.html")
 
 
-def register(request):
-    if request.method == "POST":
+# def register(request):
+#     if request.method == "POST":
 
-        form = UserRegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("login_in")
-    else:
-        form = UserRegisterForm()
-    return render(request, "main/register.html", {"form": form})
+#         form = UserRegisterForm(request.POST)
+#         if form.is_valid():
+#             form.save()
+#             return redirect("login_in")
+#     else:
+#         form = UserRegisterForm()
+#     return render(request, "main/register.html", {"form": form})
 
 
 class CustomLoginView(LoginView):

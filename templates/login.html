@@ -1,15 +1,25 @@
 {% extends 'wrapper/main.html' %}
 {% block content %}
+  <body>
+    <form action="/login/" method="post">
+      {% csrf_token %}
+      <label for="username">Логин:</label><br />
+      <input type="text" id="username" name="username" /><br />
+      <label for="password">Пароль:</label><br />
+      <input type="password" id="password" name="password" /><br /><br />
+      <input type="submit" value="Войти" />
+    </form>
+  </body>
   <style>
     body {
       font-family: Arial, sans-serif;
     }
     
     form {
-      margin: 20px auto;
-      padding: 20px;
+      margin: 1vw auto;
+      padding: 0.5em;
       border: 1px solid #ccc;
-      max-width: 300px;
+      max-width: 30vw;
     }
     
     label {
@@ -37,15 +47,4 @@
       background-color: #45a049;
     }
   </style>
-
-  <body>
-    <form action="/login/" method="post">
-      {% csrf_token %}
-      <label for="username">Логин:</label><br />
-      <input type="text" id="username" name="username" /><br />
-      <label for="password">Пароль:</label><br />
-      <input type="password" id="password" name="password" /><br /><br />
-      <input type="submit" value="Войти" />
-    </form>
-  </body>
 {% endblock %}

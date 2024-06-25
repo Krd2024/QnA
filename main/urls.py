@@ -27,7 +27,7 @@ urlpatterns = [
     path("q/<int:question_id>/update/", questions.update, name="question_update"),
     path("q/<int:question_id>/delete/", questions.delete, name="question_delete"),  # 1
     #
-    path("register/", auth_user_view.register, name="register"),
+    # path("register/", auth_user_view.register, name="register"),
     path("login_in/", auth_user_view.login_in, name="login_in"),
     path("login/", auth_user_view.CustomLoginView.as_view(), name="login"),
     path("logout/", auth_user_view.logoutPage, name="logout"),

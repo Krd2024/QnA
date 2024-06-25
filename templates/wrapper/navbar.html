@@ -41,8 +41,7 @@
     {% else %}
       <a class="a" href="/signup/">Регистрация через Email</a>
       <hr />
-      <a class="a" href="/register/">Регистрация</a>
-      <hr />
+
       <p>
         <a class="a" href="/login_in/">Вход</a>
       </p>
@@ -82,7 +81,7 @@
   .a {
     color: beige;
     padding: 0.5em;
-    font-size: 2vw;
+    font-size: clamp(3vw, 2vw, 5vw);
     text-align: center;
   }
   .loginForm {
@@ -98,7 +97,7 @@
     background-color: #4f5a6e;
   }
   .dop {
-    font-size: clamp(1.2vw, 2vw, 1vw);
+    font-size: 2vw;
     text-align: center;
   }
 </style>

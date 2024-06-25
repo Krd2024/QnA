@@ -1,8 +1,8 @@
 {% for quest in user_question %}
   <div>
     {% if request.user == quest.autor %}
-      <div id="del_upd">
-        <div id="quest_div">
+      <div class="del_upd">
+        <div class="quest_div">
           <div class="question-container">
             <hr class="hr" />
             <div>
@@ -15,12 +15,14 @@
             <div class="create">Создано {{ quest.created_at|timesince }} назад</div>
             <hr />
           </div>
-        </div>
-        <div>
-          <a href="{% url 'question_update' quest.id %}"><button id="">Редактировать</button></a>
-        </div>
-        <div>
-          <a href="{% url 'question_delete' quest.id %}"><button id="">Удалить</button></a>
+          <div class="button_del_up">
+            <div>
+              <a href="{% url 'question_update' quest.id %}"><button class="up">Редактировать</button></a>
+            </div>
+            <div>
+              <a href="{% url 'question_delete' quest.id %}"><button class="up">Удалить</button></a>
+            </div>
+          </div>
         </div>
       </div>
     {% else %}
@@ -31,21 +33,38 @@
 {% endfor %}
 
 <style>
+  .button_del_up {
+    margin: 5px 0 2px 0;
+    padding: 0.2em;
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+  }
+  .up {
+    display: flex;
+    padding: 0.5em;
+  
+    font-size: 0.5em;
+  }
   .create {
     margin: 5px 0 2px 0;
     font-size: 15px;
     color: cadetblue;
   }
-  #del_upd {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
+  .del_upd {
+    flex-direction: column;
+    align-items: baseline;
   }
-  #quest_div {
+  .question {
+    padding: 0.5em;
+    width: 70%%;
+    white-space: pre-wrap;
+  }
+  .quest_div {
     padding: 10px;
     border-radius: 5px;
-    margin: 5px;
-    width: 70%;
+    margin: 0.5em;
+    width: 80%;
     min-height: 50px;
     height: fit-content;
     background-color: silver;
