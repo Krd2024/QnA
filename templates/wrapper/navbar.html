@@ -1,3 +1,54 @@
+<style>
+  .user_form {
+    border-radius: 3px;
+    color: ;
+    padding: 0.5em;
+    font-size: 1.5vw;
+    text-align: center;
+  }
+  
+  #exit {
+    margin: 0.3em;
+    color: beige;
+    padding: 0.2em;
+    width: 2vw;
+    height: 0.5vw;
+  }
+  #name {
+    margin-left: 0.3em;
+    padding: 0.2em;
+    width: 2vw;
+    height: 0.5vw;
+    color: beige;
+  }
+  .a {
+    color: beige;
+    padding: 0.5em;
+    font-size: clamp(1.5vw, 2vw, 3vw);
+    text-align: center;
+  }
+  .loginForm {
+    margin: 0.5em;
+    width: 2vh;
+    text-align: left;
+  }
+  menu {
+    width: 15vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: #4f5a6e;
+  }
+  .pars {
+    margin: 0.2em;
+  }
+  .dop {
+    font-size: clamp(1.5vw, 2vw, 1vw);
+    padding: 0.1em;
+    text-align: center;
+  }
+</style>
+
 <menu>
   <ul>
     <li>
@@ -52,54 +103,3 @@
   <a class="pars" href="{% url 'pars_up' 'it' %}"><button><p class="dop">Новости из мира IT</p></button></a>
   {% comment %} <a class="pars" href="{% url 'pars_up' 'yandex' %}"><button><p class="dop">Яндекс маркет цены</p><</button></a> {% endcomment %}
 </menu>
-
-<style>
-  .user_form {
-    border-radius: 3px;
-    color: ;
-    padding: 0.5em;
-    font-size: 1.5vw;
-    text-align: center;
-  }
-  
-  #exit {
-    margin: 0.3em;
-    color: beige;
-    padding: 0.2em;
-    width: 2vw;
-    height: 0.5vw;
-  }
-  #name {
-    margin-left: 0.3em;
-    padding: 0.2em;
-    width: 2vw;
-    height: 0.5vw;
-    color: beige;
-  }
-  .a {
-    color: beige;
-    padding: 0.5em;
-    font-size: clamp(1.5vw, 2vw, 3vw);
-    text-align: center;
-  }
-  .loginForm {
-    margin: 0.5em;
-    width: 2vh;
-    text-align: left;
-  }
-  menu {
-    width: 15vw;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    background-color: #4f5a6e;
-  }
-  .pars {
-    margin: 0.2em;
-  }
-  .dop {
-    font-size: clamp(1.5vw, 2vw, 1vw);
-    padding: 0.1em;
-    text-align: center;
-  }
-</style>

@@ -1,3 +1,57 @@
+<style>
+  .answer-question {
+    font-size: clamp(1vw, 1vw, 1.5vw);
+  }
+  .answer,
+  .questions {
+    font-size: clamp(1vw, 1, 5vw, 1.5vw);
+  }
+  .current {
+    color: red;
+  }
+  .title {
+    padding: 1vw;
+    font-size: 2.5vw;
+    text-align: center;
+  }
+  .rating {
+    margin: 0.2em 0 0.2em 0;
+  
+    font-size: clamp(0.2vw, 1vw, 1.5vw);
+  }
+  .user {
+    display: flex;
+    overflow-wrap: break-all;
+  }
+  .answer-question {
+    margin-bottom: 0.2em;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+  }
+  
+  .user {
+    font-size: 1vw;
+    background-color: greylathtml;
+  }
+  .container {
+    display: flex;
+    padding: 0.1em;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+  }
+  
+  .box {
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+  
+    width: clamp(15vw, 15vw, 20%);
+    height: clamp(12vw, 12vw, 120px);
+  }
+</style>
+
 {% extends 'wrapper/main.html' %}
 {% block content %}
   <div class="users-container">
@@ -37,58 +91,4 @@
       {% endfor %}
     </div>
   </div>
-
-  <style>
-    .answer-question {
-      font-size: clamp(1vw, 1vw, 1.5vw);
-    }
-    .answer,
-    .questions {
-      font-size: clamp(1vw, 1, 5vw, 1.5vw);
-    }
-    .current {
-      color: red;
-    }
-    .title {
-      padding: 1vw;
-      font-size: 2.5vw;
-      text-align: center;
-    }
-    .rating {
-      margin: 0.2em 0 0.2em 0;
-    
-      font-size: clamp(0.2vw, 1vw, 1.5vw);
-    }
-    .user {
-      display: flex;
-      overflow-wrap: break-all;
-    }
-    .answer-question {
-      margin-bottom: 0.2em;
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-end;
-    }
-    
-    .user {
-      font-size: 1vw;
-      background-color: greylathtml;
-    }
-    .container {
-      display: flex;
-      padding: 0.1em;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-    }
-    
-    .box {
-      margin-bottom: 10px;
-      padding: 5px;
-      border: 1px solid lightgray;
-      border-radius: 5px;
-    
-      width: clamp(15vw, 15vw, 20%);
-      height: clamp(12vw, 12vw, 120px);
-    }
-  </style>
 {% endblock %}
