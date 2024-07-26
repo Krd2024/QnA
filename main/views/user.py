@@ -2,7 +2,16 @@ import math
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
-from main.models import Question, Answer, Rection, Subscription, Teg, User, Image
+from main.models import (
+    Notification,
+    Question,
+    Answer,
+    Rection,
+    Subscription,
+    Teg,
+    User,
+    Image,
+)
 from main.forms import ProfileEditForm
 from django.db.models import Count
 from django.shortcuts import render
@@ -11,6 +20,26 @@ from django.shortcuts import render
 # =================================================================
 
 from django.shortcuts import render, redirect
+
+
+def get_notification(request):
+    # print("Getting notification")
+    notific_all = Notification.objects.filter(recipient=request.user)
+    for noti in notific_all:
+        print(f"{noti.notification_type}:{noti.sender}")
+    # return JsonResponse({"notific_all": notific_all})
+    if notific_all.exists():
+        notific = "⚠️"
+    else:
+        notific = ""
+    return render(
+        request,
+        "notification.html",
+        {
+            "notific_all": notific_all,
+            "notific": notific,
+        },
+    )
 
 
 def user_profile(request, *args, **kwargs):

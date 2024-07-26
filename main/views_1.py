@@ -6,7 +6,16 @@ import random
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 
-from main.models import Question, Answer, Rection, Subscription, Teg, User, Image
+from main.models import (
+    Notification,
+    Question,
+    Answer,
+    Rection,
+    Subscription,
+    Teg,
+    User,
+    Image,
+)
 from .forms import ProfileEditForm, QForm, UserRegisterForm
 from django.db.models import Count
 from django.shortcuts import render
@@ -446,6 +455,7 @@ def rating(request):
 
 def correct(request, **kwargs):
     """Поставить отметку ответу 'корректный'"""
+
     if not request.user.is_authenticated:
         return HttpResponse()
     if request.method == "POST":
@@ -508,6 +518,9 @@ def search(request, **kwargs):
     return render(request, "question.html")
 
 
+from django.core.exceptions import ObjectDoesNotExist
+
+
 def increase_counter(request, **kwargs):
     """Поставить,убрать like"""
 
@@ -520,21 +533,43 @@ def increase_counter(request, **kwargs):
             answer = Answer.objects.get(id=answer_id)
 
             proverka = Rection.objects.filter(answer=answer, user=answer.autor)
-            if len(proverka) != 0:
+            if proverka.exists():
                 proverka.delete()
                 reac_count = answer.rection_set.count()
+                # удалить уведомление
+
+                Notification.objects.filter(
+                    sender=request.user,
+                    recipient=answer.autor,
+                    notification_type="like",
+                    related_object_id=answer.question.id,
+                ).delete()
+                # Notification.objects.get(id=notification_id).delete()
+
                 return JsonResponse({"success": True, "answer": reac_count})
+
             elif request.user == answer.autor:
                 return HttpResponse()
 
-            reaction = Rection.objects.create(answer=answer, user=answer.autor)
-            reaction.save()
+            Rection.objects.create(answer=answer, user=answer.autor).save()
             reac_count = answer.rection_set.count()
-            # print(reac_count)
+
+            # Запись в модель уведомлений
+            Notification.objects.create(
+                sender=request.user,
+                recipient=answer.autor,
+                notification_type="like",
+                related_object_id=answer.question.id,
+            )
+
+            print(reac_count)
             return JsonResponse({"success": True, "answer": reac_count})
 
         except Exception as e:
             print(e)
+        except ObjectDoesNotExist:
+            ...
+
     return HttpResponse()
 
 
@@ -553,6 +588,12 @@ def answer_update_delete(request, **kwargs):
 
         elif data == "ans_delete":
             answer_obj = Answer.objects.get(id=answer_id).delete()
+            # убрать уведомление
+            Notification.objects.create(
+                sender=request.user,
+                recipient=answer_obj.question.autor,
+                choices="answer",
+            ).delete()
             return redirect(f"/user/{request.user}/")
 
     except Exception as e:
@@ -619,18 +660,21 @@ def index(request, **kwargs):
     except EmptyPage:
         sorted_users = paginator.page(paginator.num_pages)
 
+    notific = Notification.objects.filter(recipient=request.user)
+    if notific.exists():
+        notific = "⚠️"
+    else:
+        notific = ""
+
     context = {
         "page_number": page,
         "pages_range": page_range,
         # "pages_range": range(1, num_pages + 1),
         "all_question": sorted_users,
         "answers": answers,
+        "notific": notific,
     }
-    print(page, page_range, sorted_users)
-    for user in sorted_users:
-        print(
-            user,
-        )
+    # print(page, page_range, sorted_users)
 
     return render(request, "main/index_main.html", context)
 

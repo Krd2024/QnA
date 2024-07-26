@@ -86,6 +86,9 @@
 
   <div>
     {% if request.user.is_authenticated %}
+      <a href="{% url 'get_notification' %}">{{ notific }}</a>
+      {% comment %} {{ notific_all }} {% endcomment %}
+
       <a href="{% url 'user_profile' request.user.username %}"><span class="a">{{ request.user.username }}</span></a>
       <hr />
       <a class="a" href="{% url 'logout' %}"><span>Выход</span></a>
@@ -102,4 +105,9 @@
   <a class="pars" href="{% url 'pars_up' 'samoe' %}"><button><p class="dop">Самое интересное</p></button></a>
   <a class="pars" href="{% url 'pars_up' 'it' %}"><button><p class="dop">Новости из мира IT</p></button></a>
   {% comment %} <a class="pars" href="{% url 'pars_up' 'yandex' %}"><button><p class="dop">Яндекс маркет цены</p><</button></a> {% endcomment %}
+  {% comment %} <div>
+    {% block notific_all %}
+
+    {% endblock %}
+  </div> {% endcomment %}
 </menu>

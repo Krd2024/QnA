@@ -1,6 +1,7 @@
 {% extends 'wrapper/main.html' %}
 {% load static %}
 {% block content %}
+  {% comment %} <span class="notific">{{ notific }}</span> {% endcomment %}
   {% for quest in all_question %}
     <div id="conteiner">
       <div id="box">
@@ -49,6 +50,10 @@
   </div>
 
   <style>
+    .notific {
+      padding: 5px;
+      color: brown;
+    }
     #views {
       display: flex;
       justify-content: space-between;

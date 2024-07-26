@@ -2,7 +2,7 @@ import math
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from main.models import Question, Answer, Teg, User
+from main.models import Notification, Question, Answer, Teg, User
 from main.forms import ProfileEditForm, QForm, UserRegisterForm
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
@@ -111,6 +111,15 @@ def question(request, **kwargs):
                 autor=autor_obj, question=question_obj, text=text, correct=0
             )
             answer_add.save()
+
+            # создать уведомление о создании ответа
+            Notification.objects.create(
+                sender=request.user,
+                recipient=question_obj.autor,
+                notification_type="answer",
+                related_object_id=kwargs["question_id"],
+            )
+
             return redirect("question", kwargs["question_id"])
         # ---------------------------------------------
         answers = question_obj.answers.all()

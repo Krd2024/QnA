@@ -1,0 +1,12 @@
+{% extends 'wrapper/main.html' %}
+{% block content %}
+  <h4>
+    {% for data in notific_all %}
+      {% if data.notification_type == 'answer' %}
+        <a href="{% url 'question' data.related_object_id %}">{{ data.notification_type }}</a> от {{ data.sender }}<br />
+      {% else %}
+        <a href="{% url 'question' data.related_object_id %}">{{ data.notification_type }}</a> от {{ data.sender }}<br />
+      {% endif %}
+    {% endfor %}
+  </h4>
+{% endblock %}
