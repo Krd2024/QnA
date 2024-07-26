@@ -3,10 +3,17 @@
   <h4>
     {% for data in notific_all %}
       {% if data.notification_type == 'answer' %}
-        <a href="{% url 'question' data.related_object_id %}">{{ data.notification_type }}</a> от {{ data.sender }}<br />
+        <a href="{% url 'question' data.related_object_id %}">Ответ</a> на Ваш вопрос от {{ data.sender }}<br />
       {% else %}
-        <a href="{% url 'question' data.related_object_id %}">{{ data.notification_type }}</a> от {{ data.sender }}<br />
+        <a href="{% url 'question' data.related_object_id %}">Лайк</a> на Ваш ответ от {{ data.sender }}<br />
       {% endif %}
     {% endfor %}
   </h4>
+  <h4><a href="{% url 'get_notification' read='1' %}">Пометить прочитанным</a></h4>
+  <h4><a href="{% url 'get_notification' read='0' %}">Отменить Пометить прочитанным</a></h4>
+  <style>
+    h4 {
+      padding: 10px;
+    }
+  </style>
 {% endblock %}

@@ -113,12 +113,15 @@ def question(request, **kwargs):
             answer_add.save()
 
             # создать уведомление о создании ответа
-            Notification.objects.create(
-                sender=request.user,
-                recipient=question_obj.autor,
-                notification_type="answer",
-                related_object_id=kwargs["question_id"],
-            )
+            try:
+                Notification.objects.create(
+                    sender=request.user,
+                    recipient=question_obj.autor,
+                    notification_type="answer",
+                    related_object_id=kwargs["question_id"],
+                )
+            except:
+                ...
 
             return redirect("question", kwargs["question_id"])
         # ---------------------------------------------

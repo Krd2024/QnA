@@ -22,12 +22,26 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 
 
-def get_notification(request):
+def get_notification(request, **kwargs):
+    print(kwargs)
     # print("Getting notification")
-    notific_all = Notification.objects.filter(recipient=request.user)
+    notific_all = Notification.objects.filter(recipient=request.user, is_read=False)
     for noti in notific_all:
         print(f"{noti.notification_type}:{noti.sender}")
+    if kwargs.get("read") == str(1):
+        for noti in notific_all:
+            noti.is_read = True
+            noti.save()
+
+    elif kwargs.get("read") == str(0):
+        notific_all = Notification.objects.filter(recipient=request.user)
+
+        for noti in notific_all:
+
+            noti.is_read = False
+            noti.save()
     # return JsonResponse({"notific_all": notific_all})
+
     if notific_all.exists():
         notific = "⚠️"
     else:

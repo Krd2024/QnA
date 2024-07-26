@@ -264,6 +264,8 @@ class Notification(models.Model):
     class Meta:
         ordering = ["-created_at"]
 
+        unique_together = ("notification_type", "related_object_id", "sender")
+
     def __str__(self):
         return f"{self.get_notification_type_display()} для {self.recipient.username}"
 

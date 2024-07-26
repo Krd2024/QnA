@@ -86,7 +86,7 @@
 
   <div>
     {% if request.user.is_authenticated %}
-      <a href="{% url 'get_notification' %}">{{ notific }}</a>
+      <a href="{% url 'get_notification' read='False' %}">{{ notific }}</a>
       {% comment %} {{ notific_all }} {% endcomment %}
 
       <a href="{% url 'user_profile' request.user.username %}"><span class="a">{{ request.user.username }}</span></a>

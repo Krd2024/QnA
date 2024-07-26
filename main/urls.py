@@ -32,7 +32,9 @@ urlpatterns = [
     path("login/", auth_user_view.CustomLoginView.as_view(), name="login"),
     path("logout/", auth_user_view.logoutPage, name="logout"),
     #
-    path("user/notification/", user.get_notification, name="get_notification"),
+    path(
+        "user/notification/<str:read>/", user.get_notification, name="get_notification"
+    ),
     path("user/<str:username>/", user.user_profile, name="user_profile"),
     path(
         "user/<str:username>/edit_profile/",
