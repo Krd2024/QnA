@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_redis",
+    #
     "main",
 ]
 
@@ -73,6 +75,14 @@ MIDDLEWARE = [
     "qna.middleware.RenderTimeMiddleware",
 ]
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+    },
+}
+
+
 ROOT_URLCONF = "qna.urls"
 
 TEMPLATES = [
@@ -86,6 +96,8 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                #
+                "main.notific_context.context.latest_notific",
             ],
         },
     },

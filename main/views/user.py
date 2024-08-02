@@ -1,7 +1,8 @@
 import math
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-
+import redis
+from decor.decorator import notific_
 from main.models import (
     Notification,
     Question,
@@ -21,10 +22,15 @@ from django.shortcuts import render
 
 from django.shortcuts import render, redirect
 
+from redis_.db_redis import get_notifications_for_user
+
 
 def get_notification(request, **kwargs):
+    """Показать все не прочитанные уведомления + изменить статус 'is_read'"""
     print(kwargs)
-    # print("Getting notification")
+
+    # notific_all = get_notifications_for_user(request.user.id)
+
     notific_all = Notification.objects.filter(recipient=request.user, is_read=False)
     for noti in notific_all:
         print(f"{noti.notification_type}:{noti.sender}")
@@ -40,19 +46,14 @@ def get_notification(request, **kwargs):
 
             noti.is_read = False
             noti.save()
-    # return JsonResponse({"notific_all": notific_all})
 
-    if notific_all.exists():
-        notific = "⚠️"
-    else:
-        notific = ""
+    context = {
+        "notific_all": notific_all,
+    }
     return render(
         request,
         "notification.html",
-        {
-            "notific_all": notific_all,
-            "notific": notific,
-        },
+        context,
     )
 
 
@@ -155,7 +156,21 @@ def answer_update_delete(request, **kwargs):
             return render(request, "questions.html", context)
 
         elif data == "ans_delete":
-            answer_obj = Answer.objects.get(id=answer_id).delete()
+
+            answer_obj = Answer.objects.get(id=answer_id)
+            print(answer_obj.autor)
+            print(answer_obj.id)
+            try:
+                obj = Notification.objects.filter(
+                    # sender=request.user,
+                    # sender=answer_obj.autor,
+                    # notification_type="answer",
+                    related_object_id=answer_obj.id,
+                ).delete()
+
+            except Exception as e:
+                print(e, "<<< ----- e")
+            answer_obj.delete()
             return redirect(f"/user/{request.user}/")
 
     except Exception as e:

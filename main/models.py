@@ -202,7 +202,9 @@ class Rection(models.Model):
     )
     value = models.IntegerField(default=0)
 
-    from django.db import models
+    # def save(self, *args, **kwargs):
+    #     n = Notification.objects.create()
+    #     super( self).save(*args, **kwargs)
 
 
 def user_directory_path(instance, filename) -> str:
@@ -264,7 +266,11 @@ class Notification(models.Model):
     class Meta:
         ordering = ["-created_at"]
 
-        unique_together = ("notification_type", "related_object_id", "sender")
+        unique_together = (
+            "notification_type",
+            "related_object_id",
+            "sender",
+        )
 
     def __str__(self):
         return f"{self.get_notification_type_display()} для {self.recipient.username}"

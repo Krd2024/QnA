@@ -83,10 +83,17 @@
   <div></div>
   <a class="a" href="{% url 'all_users' %}"><span id="users">Пользователи</span></a>
   <a class="a" href="{% url 'tegs' %}"><span id="users">Все теги</span></a>
-
-  <div>
-    {% if request.user.is_authenticated %}
-      <a href="{% url 'get_notification' read='False' %}">{{ notific }}</a>
+  {% comment %} <div>
+    {% for notific in latest_notific %}
+      {{ notific }}
+    {% endfor %}
+  </div> {% endcomment %}
+  <div class="navbar_is_auth">
+    {% if request.user.is_authenticated and latest_notific %}
+      <div class="notific">
+        <a href="{% url 'get_notification' read='False' %}">⚠️</a>
+      </div>
+      {% comment %} <a href="{% url 'get_notification' read='False' %}">{{ notific }}</a> {% endcomment %}
       {% comment %} {{ notific_all }} {% endcomment %}
 
       <a href="{% url 'user_profile' request.user.username %}"><span class="a">{{ request.user.username }}</span></a>
@@ -111,3 +118,19 @@
     {% endblock %}
   </div> {% endcomment %}
 </menu>
+<style>
+  .navbar_is_auth {
+    text-align: center;
+  }
+  .notific {
+    width: 40px;
+    height: 40px;
+    border-radius: 30px;
+    background-color: brown;
+    text-align: center;
+    padding-top: 3px;
+  }
+  a {
+    text-align: center;
+  }
+</style>

@@ -274,6 +274,8 @@ def pars_up(request, **kwargs):
 
 
 # =================================================================
+
+
 def edit_profile(request, **kwargs):
     if request.method == "POST":
         form = ProfileEditForm(request.POST)
@@ -322,6 +324,7 @@ def generate_filename(instance, filename):
 # =================================================================
 def all_users(request, **kwargs):
     """Показать всех пользователей"""
+
     start_time_0 = time.perf_counter_ns()
     try:
         question_count_subquery = (
@@ -537,12 +540,14 @@ def increase_counter(request, **kwargs):
                 proverka.delete()
                 reac_count = answer.rection_set.count()
                 # удалить уведомление
-
+                print(request.user)
+                print(answer.autor)
+                print(answer.id)
                 Notification.objects.filter(
                     sender=request.user,
                     recipient=answer.autor,
                     notification_type="like",
-                    related_object_id=answer.question.id,
+                    related_object_id=answer.question.id + 1,
                 ).delete()
                 # Notification.objects.get(id=notification_id).delete()
 
@@ -554,12 +559,14 @@ def increase_counter(request, **kwargs):
             Rection.objects.create(answer=answer, user=answer.autor).save()
             reac_count = answer.rection_set.count()
 
+            print(answer.question.id, "< ------------")
+
             # Запись в модель уведомлений
             Notification.objects.create(
                 sender=request.user,
                 recipient=answer.autor,
                 notification_type="like",
-                related_object_id=answer.question.id,
+                related_object_id=answer.question.id + 1,
             )
 
             print(reac_count)
@@ -601,6 +608,9 @@ def answer_update_delete(request, **kwargs):
         return redirect(f"/user/{request.user}/")
 
 
+from decor.decorator import notific_
+
+
 def index(request, **kwargs):
     """Главная страница - все вопросы"""
 
@@ -629,8 +639,8 @@ def index(request, **kwargs):
         num_pages = int(
             math.ceil(len(all_question) / main.settings.LIMIT_OF_USERS_ON_PAGE)
         )
-
         users_per_page = main.settings.LIMIT_OF_USERS_ON_PAGE
+
         paginator = Paginator(all_question, users_per_page)  # Создаем пагинатор
     except Exception as e:
         print(e)
@@ -660,19 +670,13 @@ def index(request, **kwargs):
     except EmptyPage:
         sorted_users = paginator.page(paginator.num_pages)
 
-    notific = Notification.objects.filter(recipient=request.user)
-    if notific.exists():
-        notific = "⚠️"
-    else:
-        notific = ""
-
     context = {
         "page_number": page,
         "pages_range": page_range,
         # "pages_range": range(1, num_pages + 1),
         "all_question": sorted_users,
         "answers": answers,
-        "notific": notific,
+        # "notific": notific,
     }
     # print(page, page_range, sorted_users)
 

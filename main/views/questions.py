@@ -42,10 +42,12 @@ def create(request, **kwargs):
                 str_time = i.created_at
                 x = datetime.fromisoformat(str(str_time))
                 time_question = x.strftime("%Y-%m-%d")
+
                 if time_question == limit_time:
                     lst_time.append(time_question)
             # y = x.strftime("%Y-%m-%d %H:%M")
             print(len(lst_time))
+
             if len(lst_time) >= main.settings.MAX_QUESTIONS:
                 print("Не части с вопросами")
                 return True
@@ -77,7 +79,7 @@ def create(request, **kwargs):
 
 
 def question(request, **kwargs):
-    """Выводит один вопрос и ответы к нему"""
+    """Выводит один вопрос и ответы к нему + создать ответ + уведомление"""
     # ----------------------------------------------------------------
     question_obj = Question.objects.get(id=kwargs["question_id"])
     # ----------------------------------------------------------------
@@ -118,7 +120,7 @@ def question(request, **kwargs):
                     sender=request.user,
                     recipient=question_obj.autor,
                     notification_type="answer",
-                    related_object_id=kwargs["question_id"],
+                    related_object_id=question_obj.id,
                 )
             except:
                 ...
@@ -164,6 +166,7 @@ def update(request, **kwargs):
 
 
 def delete(request, **kwargs):
+    """Удалить вопрос"""
     try:
         Question.objects.filter(id=kwargs["question_id"]).delete()
         return redirect(f"/user/{request.user}/")

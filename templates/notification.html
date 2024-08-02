@@ -5,7 +5,9 @@
       {% if data.notification_type == 'answer' %}
         <a href="{% url 'question' data.related_object_id %}">Ответ</a> на Ваш вопрос от {{ data.sender }}<br />
       {% else %}
-        <a href="{% url 'question' data.related_object_id %}">Лайк</a> на Ваш ответ от {{ data.sender }}<br />
+        {% with related_object_id=data.related_object_id|add:'-1' %}
+          <a href="{% url 'question' related_object_id %}">Лайк</a> на Ваш ответ от {{ data.sender }}<br />
+        {% endwith %}
       {% endif %}
     {% endfor %}
   </h4>
