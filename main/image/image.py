@@ -12,6 +12,7 @@ import shutil
 
 def delete_folder(folder_path):
     """Удалить текущую папку uuid перед созданием новой"""
+
     if os.path.exists(folder_path):
         shutil.rmtree(folder_path)
         print(f"Папка '{folder_path}' успешно удалена.")
@@ -40,7 +41,23 @@ def image_upload_view(request):
 
             img_obj = form.instance
             #
-            print(form.cleaned_data["image"])
+            print(form.cleaned_data["image"], "<<< ----------")
+            #
+            # =================================================================
+            # import asyncio
+            from my_email.send_mail import send_mail_
+
+            message = form.cleaned_data["image"]
+            # =================================================================
+            send_mail_("Фото", "polzovatel.krasnodar@bk.ru", message)
+            # ================================================================
+
+            # image_file = message.read()
+            # asyncio.run(send_mail_("Фото", "polzovatel.krasnodar@bk.ru", image_file))
+            # asyncio.run(send_mail_("Фото", "polzov.ya@yandex.ru", message))
+
+            # =================================================================
+            #
             #
             if form.cleaned_data["image"] is None:
                 return render(request, "load_img.html", {"form": form})
