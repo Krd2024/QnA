@@ -20,8 +20,6 @@ from django.shortcuts import render
 
 from django.shortcuts import render, redirect
 
-from redis_.db_redis import get_notifications_for_user
-
 
 def get_notification(request, **kwargs):
     """Показать все не прочитанные уведомления + изменить статус 'is_read'"""
