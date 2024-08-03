@@ -1,7 +1,6 @@
 import math
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-import redis
 from decor.decorator import notific_
 from main.models import (
     Notification,
