@@ -8,4 +8,4 @@ def latest_notific(request):
         )
         return {"latest_notific": latest_notific}
     except:
-        ...
+        return {"latest_notific": "Войдите"}
