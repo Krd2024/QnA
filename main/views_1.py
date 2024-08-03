@@ -608,9 +608,6 @@ def answer_update_delete(request, **kwargs):
         return redirect(f"/user/{request.user}/")
 
 
-from decor.decorator import notific_
-
-
 def index(request, **kwargs):
     """Главная страница - все вопросы"""
 
