@@ -54,6 +54,8 @@ def get_notification(request, **kwargs):
 
 
 def user_profile(request, *args, **kwargs):
+    """Профиль пользователя"""
+
     try:
         user = kwargs["username"]
         objects_user = User.objects.get(username=user)
@@ -66,13 +68,15 @@ def user_profile(request, *args, **kwargs):
         context = {
             "user_question": user_question,
         }
-
         return render(request, "user_questions.html", context)
+
+    objects_user = User.objects.get(username=user)
+    user_question = Question.objects.filter(autor=objects_user)
+    answers = Answer.objects.filter(autor=objects_user)
 
     if request.GET.get("q") == "answers":
 
         try:
-            answers = Answer.objects.filter(autor=objects_user)
             lst = []
             for answer in answers:
                 lst.append(answer.question_id)
@@ -88,9 +92,6 @@ def user_profile(request, *args, **kwargs):
             print(e, "<<< ----------- e --- def user_profile()")
             return render(render, "user__answers.html", {"out": "Нет ответ"})
     # ----------------------------------------------------------------
-    objects_user = User.objects.get(username=user)
-    user_question = Question.objects.filter(autor=objects_user)
-    answers = Answer.objects.filter(autor=objects_user)
 
     correct_answer = Answer.objects.filter(autor=objects_user, correct=True).count()
 

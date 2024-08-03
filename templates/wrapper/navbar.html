@@ -89,9 +89,13 @@
     {% endfor %}
   </div> {% endcomment %}
   <div class="navbar_is_auth">
-    {% if request.user.is_authenticated and latest_notific %}
-      <div class="notific">
-        <a href="{% url 'get_notification' read='False' %}">⚠️</a>
+    {% if request.user.is_authenticated %}
+      <div class="box_auth">
+        {% if latest_notific %}
+          <div class="notific">
+            <a href="{% url 'get_notification' read='False' %}">⚠️</a>
+          </div>
+        {% endif %}
       </div>
       {% comment %} <a href="{% url 'get_notification' read='False' %}">{{ notific }}</a> {% endcomment %}
       {% comment %} {{ notific_all }} {% endcomment %}
@@ -119,6 +123,11 @@
   </div> {% endcomment %}
 </menu>
 <style>
+  .box_auth {
+    width: 200px;
+    height: 50px;
+    text-align: center;
+  }
   .navbar_is_auth {
     text-align: center;
   }
@@ -129,6 +138,7 @@
     background-color: brown;
     text-align: center;
     padding-top: 3px;
+    margin-left: 5vw;
   }
   a {
     text-align: center;

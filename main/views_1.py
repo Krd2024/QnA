@@ -527,15 +527,17 @@ from django.core.exceptions import ObjectDoesNotExist
 def increase_counter(request, **kwargs):
     """Поставить,убрать like"""
 
-    print("пришло")
+    print("пришло - 1")
     if not request.user.is_authenticated:
         return HttpResponse()
     answer_id = kwargs.get("answer_id")
+
     if request.method == "POST":
         try:
             answer = Answer.objects.get(id=answer_id)
 
-            proverka = Rection.objects.filter(answer=answer, user=answer.autor)
+            proverka = Rection.objects.filter(answer=answer, user=request.user)
+            # proverka = Rection.objects.filter(answer=answer, user=answer.autor)
             if proverka.exists():
                 proverka.delete()
                 reac_count = answer.rection_set.count()
@@ -543,30 +545,32 @@ def increase_counter(request, **kwargs):
                 print(request.user)
                 print(answer.autor)
                 print(answer.id)
-                Notification.objects.filter(
+
+                x = Notification.objects.filter(
                     sender=request.user,
                     recipient=answer.autor,
                     notification_type="like",
-                    related_object_id=answer.question.id + 1,
+                    related_object_id=answer.id,
+                    # related_object_id=answer.question.id + 1,
                 ).delete()
+                print(x)
                 # Notification.objects.get(id=notification_id).delete()
-
                 return JsonResponse({"success": True, "answer": reac_count})
 
             elif request.user == answer.autor:
-                return HttpResponse()
+                return HttpResponse("Щас")
 
-            Rection.objects.create(answer=answer, user=answer.autor).save()
+            Rection.objects.create(answer=answer, user=request.user).save()
+            # Rection.objects.create(answer=answer, user=answer.autor).save()
             reac_count = answer.rection_set.count()
-
-            print(answer.question.id, "< ------------")
 
             # Запись в модель уведомлений
             Notification.objects.create(
                 sender=request.user,
                 recipient=answer.autor,
                 notification_type="like",
-                related_object_id=answer.question.id + 1,
+                related_object_id=answer.id,
+                # related_object_id=answer.question.id + 1,
             )
 
             print(reac_count)

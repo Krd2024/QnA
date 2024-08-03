@@ -202,10 +202,6 @@ class Rection(models.Model):
     )
     value = models.IntegerField(default=0)
 
-    # def save(self, *args, **kwargs):
-    #     n = Notification.objects.create()
-    #     super( self).save(*args, **kwargs)
-
 
 def user_directory_path(instance, filename) -> str:
     return "static/profile/picture/{0}/{1}".format(uuid.uuid4(), "file-1.jpg")
@@ -270,6 +266,7 @@ class Notification(models.Model):
             "notification_type",
             "related_object_id",
             "sender",
+            "recipient",
         )
 
     def __str__(self):
